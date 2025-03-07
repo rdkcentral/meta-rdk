@@ -1,0 +1,14 @@
+
+Common targets are:
+    core-image-minimal
+    rdk-oss-image
+    rdk-generic-hybrid-image
+    rdk-generic-mediaclient-image
+    rdk-generic-broadband-image
+    rdk-generic-camera-image
+    rdk-generic-broadband-tdk-image
+    rdk-generic-broadband-dev-image
+    rdk-generic-hybrid-dev-image
+    rdk-generic-mediaclient-dev-image
+
+You can also run generated qemu images with a command like 'runqemu qemuarm'

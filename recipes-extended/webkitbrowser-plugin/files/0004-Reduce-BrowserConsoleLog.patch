@@ -1,0 +1,41 @@
+From 56efec1b2d012704ee3592b4f2801f4e43f2a229 Mon Sep 17 00:00:00 2001
+From: Ievgen Mutavchi <Ievgen_Mutavchi@comcast.com>
+Date: Wed, 7 Apr 2021 14:08:12 -0400
+Subject: [PATCH] Reduce BrowserConsoleLog
+
+---
+ WebKitBrowser/Extension/main.cpp       | 4 ++++
+ WebKitBrowser/WebKitImplementation.cpp | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/WebKitBrowser/Extension/main.cpp b/WebKitBrowser/Extension/main.cpp
+index 5385eb93a..b234805ab 100644
+--- a/WebKitBrowser/Extension/main.cpp
++++ b/WebKitBrowser/Extension/main.cpp
+@@ -204,6 +204,10 @@ private:
+         string messageString = Core::ToString(webkit_console_message_get_text(message));
+         uint64_t line = static_cast<uint64_t>(webkit_console_message_get_line(message));
+ 
++#if 1
++        fprintf(stderr, "[%s]:%" PRIu64 " %s\n", host->_consoleLogPrefix.c_str(), line, messageString.c_str());
++        return;
++#endif
+         TRACE_GLOBAL(BrowserConsoleLog, (host->_consoleLogPrefix, messageString, line, 0));
+     }
+     static gboolean userMessageReceivedCallback(WebKitWebPage* page, WebKitUserMessage* message)
+diff --git a/WebKitBrowser/WebKitImplementation.cpp b/WebKitBrowser/WebKitImplementation.cpp
+index 275a7b5de..b96fb7118 100644
+--- a/WebKitBrowser/WebKitImplementation.cpp
++++ b/WebKitBrowser/WebKitImplementation.cpp
+@@ -610,7 +610,7 @@ static GSourceFuncs _handlerIntervention =
+                 , TCPKeepAlive(false)
+                 , ClientCert()
+                 , ClientCertKey()
+-                , LogToSystemConsoleEnabled(false)
++                , LogToSystemConsoleEnabled(true)
+                 , WatchDogCheckTimeoutInSeconds(0)
+                 , WatchDogHangThresholdInSeconds(0)
+                 , LoadBlankPageOnSuspendEnabled(false)
+-- 
+2.25.1
+

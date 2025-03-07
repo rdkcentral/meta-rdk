@@ -1,0 +1,18 @@
+- improve setup-environment script so that BSP layer can be made of
+  multiple layers, not just one. right now we are able to
+  automagically find the BSP layer containing to the machine, but if
+  the BSP layer in turns has dependencies we don't use them.
+- improve setup-environment so that it does not depend on
+  meta-rdk-comcast, the generic RDK should not know about any MSO
+  upper layer s/w
+- move away from SVN checkout, and use RDK Gerrit/Git instead
+- add meta-linaro only for ARM platforms. meta-linaro is not properly
+  designed, as soon as it's listed in bblayers.conf it will impact the
+  build (eglibc, gcc, ..) even for non ARM platforms.
+- better support for multiple architecture in rdk.conf. we have mostly
+  worked with ARM SoC so far, rdk.conf needs some improvements to
+  support non ARM equally
+- DEFAULTTUNE is set in machine .conf right now. this is wrong, as
+  DEFAULTUNE is a DISTRO setting. it should be set for each
+  architecture in rdk.conf instead.
+- migrate to OE core v1.6

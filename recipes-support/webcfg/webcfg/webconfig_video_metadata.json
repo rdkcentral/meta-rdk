@@ -1,0 +1,212 @@
+{
+        "skyxione" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "xione-sercomm" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "element-teone" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "hisense-a6gp" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "hisense-50a6gx" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "hisense-v2" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "pioneer-uhd" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "platco-cad15" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "platco-cad11" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+        "sky-llama-panel" : [
+              {
+                 "group_id": 1,
+	             "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+         "apache-2k" : [
+              {
+                 "group_id": 1,
+                     "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+         "apache-4k" : [
+              {
+                 "group_id": 1,
+                     "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+         "pioneer-v2-4k" : [
+              {
+                 "group_id": 1,
+                     "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+         "es1" : [
+              {
+                 "group_id": 1,
+                     "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+         "pioneer-v2-2k" : [
+              {
+                 "group_id": 1,
+                     "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ]
+}

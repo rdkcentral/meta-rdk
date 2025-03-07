@@ -1,0 +1,18 @@
+#####################################################################
+#                                                                   #
+# Enable Distro leak_sanitizer to include this utility to the image # 
+#                                                                   #
+#####################################################################
+
+leakcheck-msgq module is an utility to invoke LSAN leak check API for any component that is built 
+with gcc-sanitizers for runtime heap leak detection (LSAN)
+
+leakcheck-msgq Package contains 2 parts:
+1. Runtime library (libmsgq.so.0.0.0) that is linked with component being debugged for 
+heap leak detection. It creates a POSIX message queue "/mq_leak_<pid>" and waits for message to call
+lsan leak check API.
+2. Common utility (leakCheck_utility) that can be used to call lsan API for any process that has
+linkage to the runtime library.
+
+
+NOTE: Utility shall be enhanced for receiving other types of messages

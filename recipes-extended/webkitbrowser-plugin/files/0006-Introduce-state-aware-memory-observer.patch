@@ -1,0 +1,156 @@
+From 0ea82314a52e85f8f88d3fda515ccb562eee5e36 Mon Sep 17 00:00:00 2001
+From: Eugene Mutavchi <Ievgen_Mutavchi@comcast.com>
+Date: Mon, 16 Aug 2021 18:53:41 +0000
+Subject: [PATCH] Introduce state aware memory observer
+From: 0ca5225942bc473cc9d917de66802d4e69dbb008 Mon Sep 17 00:00:00 2001
+Source: COMCAST
+Upstream-Status: N/A
+Signed-off-by: Eugene Mutavchi <Ievgen_Mutavchi@comcast.com>
+
+---
+ WebKitBrowser/StateAwareMemoryObserver.h | 84 ++++++++++++++++++++++++
+ WebKitBrowser/WebKitBrowser.cpp          | 13 +++-
+ 2 files changed, 92 insertions(+), 2 deletions(-)
+ create mode 100644 WebKitBrowser/StateAwareMemoryObserver.h
+
+diff --git a/WebKitBrowser/StateAwareMemoryObserver.h b/WebKitBrowser/StateAwareMemoryObserver.h
+new file mode 100644
+index 000000000..8a4e4728b
+--- /dev/null
++++ b/WebKitBrowser/StateAwareMemoryObserver.h
+@@ -0,0 +1,81 @@
++#pragma once
++
++namespace WPEFramework {
++
++namespace WebKitBrowser {
++
++  class StateAwareMemoryObserver : public Exchange::IMemory,
++                                   public PluginHost::IStateControl::INotification {
++      Exchange::IMemory* _memory;
++      PluginHost::IStateControl::state _state;
++      uint64_t _holdOffTime;
++
++      const uint64_t DEFAULT_HOLDOFF_TIMEOUT_IN_MS = 3 * 1000;
++
++      uint32_t Multiplier() const {
++        if (_state != PluginHost::IStateControl::SUSPENDED)
++          return 1;
++        if (_holdOffTime > Core::Time::Now().Ticks())
++          return 1;
++        return 2;
++      }
++
++    public:
++      StateAwareMemoryObserver(Exchange::IMemory* memory)
++        : _memory(memory)
++        , _state(PluginHost::IStateControl::RESUMED)
++        , _holdOffTime(0)
++      {
++        _memory->AddRef();
++      }
++      ~StateAwareMemoryObserver()
++      {
++        _memory->Release();
++      }
++      uint64_t Resident() const override
++      {
++        return Multiplier() * _memory->Resident();
++      }
++      uint64_t Allocated() const override
++      {
++        return _memory->Allocated();
++      }
++      uint64_t Shared() const override
++      {
++        return _memory->Shared();
++      }
++      uint8_t Processes() const override
++      {
++        return _memory->Processes();
++      }
++#if defined(THUNDER_VERSION) && THUNDER_VERSION >= 4
++      bool IsOperational() const override
++#else
++      const bool IsOperational() const override
++#endif
++      {
++        return _memory->IsOperational();
++      }
++      void StateChange(const PluginHost::IStateControl::state state) override
++      {
++        _holdOffTime = Core::Time::Now().Add(DEFAULT_HOLDOFF_TIMEOUT_IN_MS).Ticks();
++        std::atomic_thread_fence(std::memory_order_seq_cst);
++        _state = state;
++      }
++
++      static Exchange::IMemory* Wrap(Exchange::IMemory* memory)
++      {
++        if (memory)
++          return Core::Service<StateAwareMemoryObserver>::Create<Exchange::IMemory>(memory);
++        return nullptr;
++      }
++
++      BEGIN_INTERFACE_MAP(StateAwareMemoryObserver)
++      INTERFACE_ENTRY(Exchange::IMemory)
++      INTERFACE_ENTRY(PluginHost::IStateControl::INotification)
++      END_INTERFACE_MAP
++    };
++
++}  // namespace WebKitBrowser
++
++}  // namespace WPEFramework
+diff --git a/WebKitBrowser/WebKitBrowser.cpp b/WebKitBrowser/WebKitBrowser.cpp
+index 32e8c0352..49a0164e1 100644
+--- a/WebKitBrowser/WebKitBrowser.cpp
++++ b/WebKitBrowser/WebKitBrowser.cpp
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include "WebKitBrowser.h"
++#include "StateAwareMemoryObserver.h"
+ 
+ #define API_VERSION_NUMBER_MAJOR 1
+ #define API_VERSION_NUMBER_MINOR 1
+@@ -79,7 +81,7 @@ namespace Plugin {
+                     _browser->Register(&_notification);
+ 
+                     const RPC::IRemoteConnection *connection = _service->RemoteConnection(_connectionId);
+-                    _memory = WPEFramework::WebKitBrowser::MemoryObserver(connection);
++                    _memory = WPEFramework::WebKitBrowser::StateAwareMemoryObserver::Wrap(WPEFramework::WebKitBrowser::MemoryObserver(connection));
+                     ASSERT(_memory != nullptr);
+                     if (connection != nullptr) {
+                         connection->Release();
+@@ -142,7 +144,6 @@ namespace Plugin {
+         // Make sure we get no longer get any notifications, we are deactivating..
+         _service->Unregister(&_notification);
+         _browser->Unregister(&_notification);
+-        _memory->Release();
+         _application->Release();
+         Exchange::JWebBrowser::Unregister(*this);
+         if (_browserScripting) {
+@@ -182,6 +183,7 @@ namespace Plugin {
+             connection->Terminate();
+             connection->Release();
+         }
++        _memory->Release();
+ 
+         _service = nullptr;
+         _browser = nullptr;
+@@ -348,6 +350,13 @@ namespace Plugin {
+         string message(string("{ \"suspended\": ") + (state == PluginHost::IStateControl::SUSPENDED ? _T("true") : _T("false")) + string(" }"));
+         _service->Notify(message);
+         event_statechange(state == PluginHost::IStateControl::SUSPENDED);
++        if (_memory) {
++          PluginHost::IStateControl::INotification* observer(_memory->QueryInterface<PluginHost::IStateControl::INotification>());
++          if (observer) {
++            observer->StateChange(state);
++            observer->Release();
++          }
++        }
+     }
+ 
+     void WebKitBrowser::Deactivated(RPC::IRemoteConnection* connection)
+-- 
+2.25.1
+

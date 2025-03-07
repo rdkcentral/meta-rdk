@@ -1,0 +1,22 @@
+[Unit]
+Description=Memcr checkpoint restore service
+
+After=disk-check.service
+Before=dobby.service
+
+[Service]
+Environment=DUMPSDIR_PERSIST=/media/apps/memcr
+Environment=DUMPSDIR_TEMP=/tmp/memcr
+Environment=LOCATOR=/tmp/memcrcom
+Environment=TIMEOUT=20
+Environment=LD_PRELOAD=/usr/lib/memcr/libencrypt.so
+
+ExecStartPre=/bin/sh -c '/bin/mkdir -p ${DUMPSDIR_PERSIST}; /bin/chmod -R 777 ${DUMPSDIR_PERSIST}'
+ExecStartPre=/usr/bin/find ${DUMPSDIR_PERSIST} -mindepth 1 -exec rm {} \;
+ExecStartPre=/bin/sh -c '/bin/mkdir -p ${DUMPSDIR_TEMP}; /bin/chmod -R 777 ${DUMPSDIR_TEMP}'
+ExecStartPre=/usr/bin/find ${DUMPSDIR_TEMP} -mindepth 1 -exec rm {} \;
+ExecStart=/usr/bin/memcr -d "${DUMPSDIR_PERSIST};${DUMPSDIR_TEMP}" -N -l ${LOCATOR} -f -z -e -t ${TIMEOUT}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

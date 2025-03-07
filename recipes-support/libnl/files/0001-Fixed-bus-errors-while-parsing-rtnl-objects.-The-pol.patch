@@ -1,0 +1,78 @@
+From 4ca16fbc966d3f4ae996434b8e2a8bb1207aa5a2 Mon Sep 17 00:00:00 2001
+From: Balaji Punnuru <balaji_punnuru@cable.comcast.com>
+Date: Mon, 4 Oct 2021 15:58:49 -0400
+Subject: [PATCH] Fixed bus errors while parsing rtnl objects. The policy added
+ doesnot have all the attributes. It is trying to validate policy of non
+ existing nodes which is causing issue. For wireless  devices we see a lot of
+ wireless messages that are being sent out before the link is up which is
+ causing randim crashes. For that reason we have taken out the policy checking
+ completely for link, addr and route objects.
+
+Source: COMCAST
+Upstream-Status: Pending
+
+Signed-off-by: Balaji Punnuru <balaji_punnuru@cable.comcast.com>
+---
+ lib/cache_mngr.c      | 2 ++
+ lib/route/addr.c      | 2 +-
+ lib/route/link.c      | 2 +-
+ lib/route/route_obj.c | 2 +-
+ 4 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/lib/cache_mngr.c b/lib/cache_mngr.c
+index 3d51b2a..e97815b 100644
+--- a/lib/cache_mngr.c
++++ b/lib/cache_mngr.c
+@@ -175,8 +175,10 @@ int nl_cache_mngr_alloc(struct nl_sock *sk, int protocol, int flags,
+ 	if ((err = nl_connect(mngr->cm_sock, protocol)) < 0)
+ 		goto errout;
+ 
++    /*
+ 	if ((err = nl_socket_set_nonblocking(mngr->cm_sock)) < 0)
+ 		goto errout;
++    */
+ 
+ 	/* Create and allocate socket for sync cache fills */
+ 	mngr->cm_sync_sock = nl_socket_alloc();
+diff --git a/lib/route/addr.c b/lib/route/addr.c
+index 7d3ff39..ec5854a 100644
+--- a/lib/route/addr.c
++++ b/lib/route/addr.c
+@@ -209,7 +209,7 @@ static int addr_msg_parser(struct nl_cache_ops *ops, struct sockaddr_nl *who,
+ 
+ 	addr->ce_msgtype = nlh->nlmsg_type;
+ 
+-	err = nlmsg_parse(nlh, sizeof(*ifa), tb, IFA_MAX, addr_policy);
++	err = nlmsg_parse(nlh, sizeof(*ifa), tb, IFA_MAX, NULL);
+ 	if (err < 0)
+ 		goto errout;
+ 
+diff --git a/lib/route/link.c b/lib/route/link.c
+index 4840c23..3aa43c5 100644
+--- a/lib/route/link.c
++++ b/lib/route/link.c
+@@ -616,7 +616,7 @@ static int link_msg_parser(struct nl_cache_ops *ops, struct sockaddr_nl *who,
+ 		link->l_af_ops = af_ops;
+ 	}
+ 
+-	err = nlmsg_parse(n, sizeof(*ifi), tb, IFLA_MAX, real_link_policy);
++	err = nlmsg_parse(n, sizeof(*ifi), tb, IFLA_MAX, NULL);
+ 	if (err < 0)
+ 		goto errout;
+ 
+diff --git a/lib/route/route_obj.c b/lib/route/route_obj.c
+index b8e9f77..43d6708 100644
+--- a/lib/route/route_obj.c
++++ b/lib/route/route_obj.c
+@@ -1024,7 +1024,7 @@ int rtnl_route_parse(struct nlmsghdr *nlh, struct rtnl_route **result)
+ 
+ 	route->ce_msgtype = nlh->nlmsg_type;
+ 
+-	err = nlmsg_parse(nlh, sizeof(struct rtmsg), tb, RTA_MAX, route_policy);
++	err = nlmsg_parse(nlh, sizeof(struct rtmsg), tb, RTA_MAX, NULL);
+ 	if (err < 0)
+ 		goto errout;
+ 
+-- 
+2.1.4
+

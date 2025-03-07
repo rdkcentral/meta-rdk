@@ -1,0 +1,80 @@
+From: "S, Karthick" <KARTHICK_S@comcast.com>
+Date: Mon, 22 Jan 2024 18:26:12 +0530
+Subject: [PATCH 1/3] Update dobby.inc
+
+Source: Comcast
+Upstream-Status: Inappropriate [Comcast specific]
+
+Signed-off-by:  Karthick S <karthick_s@comcast.com>
+---
+
+diff --git a/rdkPlugins/Networking/source/MulticastForwarder.cpp b/rdkPlugins/Networking/source/MulticastForwarder.cpp
+index 1cb174c..55e92fa 100644
+--- a/rdkPlugins/Networking/source/MulticastForwarder.cpp
++++ b/rdkPlugins/Networking/source/MulticastForwarder.cpp
+@@ -40,6 +40,7 @@
+ #include <netdb.h>
+ #include <fstream>
+ #include <algorithm>
++#include "secure_wrapper.h"
+
+ #define SMCROUTECTL_PATH "/usr/sbin/smcroutectl"
+ #define EBTABLES_PATH "/sbin/ebtables"
+@@ -306,14 +307,14 @@ int checkAddressFamily(const std::string &address)
+ bool executeCommand(const std::string &command)
+ {
+     std::string noOutputCommand = command + " &> /dev/null";
+-    FILE* pipe = popen(noOutputCommand.c_str(), "r");
++    FILE* pipe = v_secure_popen("r", "%s", noOutputCommand.c_str());
+     if (!pipe)
+     {
+         AI_LOG_SYS_ERROR_EXIT(errno, "popen failed");
+         return false;
+     }
+
+-    int returnCode = pclose(pipe);
++    int returnCode = v_secure_pclose(pipe);
+     if (returnCode < 0)
+     {
+         AI_LOG_SYS_ERROR_EXIT(errno, "failed to exec command `%s`",
+diff --git a/utils/source/DobbyUtils.cpp b/utils/source/DobbyUtils.cpp
+index 4c803a3..0b542bc 100644
+--- a/utils/source/DobbyUtils.cpp
++++ b/utils/source/DobbyUtils.cpp
+@@ -42,6 +42,7 @@
+ #include <sys/wait.h>
+ #include <sys/types.h>
+ #include <sys/ioctl.h>
++#include "secure_wrapper.h"
+
+ #if defined(__linux__)
+ #include <linux/loop.h>
+@@ -1639,14 +1640,14 @@ bool DobbyUtils::executeCommand(const std::string &command) const
+ {
+     std::string noOutputCommand = command + " &> /dev/null";
+
+-    FILE* pipe = popen(noOutputCommand.c_str(), "re");
++    FILE* pipe = v_secure_popen("r", "%s", noOutputCommand.c_str());
+     if (!pipe)
+     {
+         AI_LOG_SYS_ERROR(errno, "popen failed");
+         return false;
+     }
+
+-    int returnCode = pclose(pipe);
++    int returnCode = v_secure_pclose(pipe);
+     if (returnCode < 0)
+     {
+         AI_LOG_SYS_ERROR(errno, "failed to exec command `%s`",
+diff --git a/utils/CMakeLists.txt b/utils/CMakeLists.txt
+index 93ae3b7..e48b33e 100644
+--- a/utils/CMakeLists.txt
++++ b/utils/CMakeLists.txt
+@@ -25,6 +25,7 @@ add_library(${PROJECT_NAME} SHARED
+     source/DobbyFileAccessFixer.cpp
+ )
+
++target_link_libraries(${PROJECT_NAME} secure_wrapper)
+ target_include_directories(${PROJECT_NAME}
+     PUBLIC
+     include

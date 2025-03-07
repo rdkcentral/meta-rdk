@@ -1,0 +1,34 @@
+From 8bfed147aa1418a417e0b6617d8fe2b10125d5ac Mon Sep 17 00:00:00 2001
+From: Filipe Norte <filipe.norte@sky.uk>
+Date: Mon, 20 Feb 2023 17:01:31 +0000
+Subject: [PATCH] Enable mixed content
+
+---
+ WebKitBrowser/WebKitImplementation.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/WebKitBrowser/WebKitImplementation.cpp b/WebKitBrowser/WebKitImplementation.cpp
+index b96fb7118..072349bad 100644
+--- a/WebKitBrowser/WebKitImplementation.cpp
++++ b/WebKitBrowser/WebKitImplementation.cpp
+@@ -2961,13 +2961,13 @@ static GSourceFuncs _handlerIntervention =
+ #if WEBKIT_CHECK_VERSION(2, 38, 0)
+             g_object_set(G_OBJECT(preferences),
+                      "disable-web-security", !enableWebSecurity,
+-                     "allow-running-of-insecure-content", !enableWebSecurity,
+-                     "allow-display-of-insecure-content", !enableWebSecurity, nullptr);
++                     "allow-running-of-insecure-content", true,
++                     "allow-display-of-insecure-content", true, nullptr);
+ #else
+             g_object_set(G_OBJECT(preferences),
+                      "enable-websecurity", enableWebSecurity,
+-                     "allow-running-of-insecure-content", !enableWebSecurity,
+-                     "allow-display-of-insecure-content", !enableWebSecurity, nullptr);
++                     "allow-running-of-insecure-content", true,
++                     "allow-display-of-insecure-content", true, nullptr);
+ #endif
+             _view = WEBKIT_WEB_VIEW(g_object_new(WEBKIT_TYPE_WEB_VIEW,
+                 "backend", webkit_web_view_backend_new(wpe_view_backend_create(), nullptr, nullptr),
+-- 
+2.25.1
+

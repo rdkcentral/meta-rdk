@@ -1,0 +1,634 @@
+From 4a936ec89777add56fd6c9758b163ce3cf7b1e50 Mon Sep 17 00:00:00 2001
+From: Manoj Bhatta <manoj_bhatta@comcast.com>
+Date: Thu, 31 Aug 2023 13:25:15 +0000
+Subject: [PATCH] gamepad using libmanette
+
+1: gamepad backend using libmanette
+2: stop monitroing devices only when provider is destroyed( WPE Webkkit does not call startmonitor() after stopmonitor() )
+3: log info that the device has a gamepad database mapping or not
+4: if no database mapping found for the device, its works as default( linux gamepad way )
+---
+ CMakeLists.txt                         |  13 +
+ cmake/FindLibManette.cmake             |  47 +++
+ src/loader-impl.cpp                    |   8 +-
+ src/manettegamepad/CMakeLists.txt      |   5 +
+ src/manettegamepad/interfaces.h        |  36 ++
+ src/manettegamepad/manette_gamepad.cpp | 442 +++++++++++++++++++++++++
+ 6 files changed, 549 insertions(+), 2 deletions(-)
+ create mode 100644 cmake/FindLibManette.cmake
+ create mode 100644 src/manettegamepad/CMakeLists.txt
+ create mode 100644 src/manettegamepad/interfaces.h
+ create mode 100644 src/manettegamepad/manette_gamepad.cpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index de8352c..fbc30d7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -27,6 +27,7 @@ option(USE_INPUT_LIBINPUT "Whether to enable support for the libinput input back
+ option(USE_INPUT_UDEV "Whether to enable support for the libinput input udev lib" ON)
+ option(USE_INPUT_WAYLAND "Whether to enable support for the wayland input backend" OFF)
+ option(USE_GENERIC_GAMEPAD "Use generic gamepad implementation" OFF)
++option(USE_LIBMANETTE_GAMEPAD "Use libmanette gamepad implementation" OFF)
+ 
+ find_package(WPE REQUIRED)
+ find_package(EGL REQUIRED)
+@@ -106,6 +107,18 @@ if (USE_GENERIC_GAMEPAD)
+     include(src/gamepad_test/CMakeLists.txt)
+ endif()
+ 
++if (USE_LIBMANETTE_GAMEPAD)
++    find_package(LibManette REQUIRED)
++    list(APPEND WPE_PLATFORM_INCLUDE_DIRECTORIES
++            ${LIBMANETTE_INCLUDE_DIRS}
++            )
++    list(APPEND WPE_PLATFORM_LIBRARIES
++            ${LIBMANETTE_LIBRARIES}
++            )
++    include(src/manettegamepad/CMakeLists.txt)
++    include(src/gamepad_test/CMakeLists.txt)
++endif ()
++
+ if (USE_BACKEND_BCM_NEXUS)
+     include(src/bcm-nexus/CMakeLists.txt)
+ endif ()
+diff --git a/cmake/FindLibManette.cmake b/cmake/FindLibManette.cmake
+new file mode 100644
+index 0000000..3bdca83
+--- /dev/null
++++ b/cmake/FindLibManette.cmake
+@@ -0,0 +1,47 @@
++# - Try to find libmanette.
++# Once done, this will define
++#
++#  LIBMANETTE_FOUND - system has libmanette.
++#  LIBMANETTE_INCLUDE_DIRS - the libmanette include directories
++#  LIBMANETTE_LIBRARIES - link these to use libmanette.
++#
++# If not stated otherwise in this file or this component's Licenses.txt file the
++# following copyright and licenses apply:
++#
++# Copyright 2020 RDK Management
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++# http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++
++if(LibManette_FIND_QUIETLY)
++    set(_LIBMANETTE_MODE QUIET)
++elseif(LibManette_FIND_REQUIRED)
++    set(_LIBMANETTE_MODE REQUIRED)
++endif()
++
++find_package(PkgConfig)
++pkg_check_modules(LIBMANETTE ${_LIBMANETTE_MODE} manette-0.2)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Libudev DEFAULT_MSG LIBMANETTE_FOUND LIBMANETTE_INCLUDE_DIRS LIBMANETTE_LIBRARIES)
++mark_as_advanced(LIBMANETTE_INCLUDE_DIRS LIBMANETTE_LIBRARIES)
++
++if(LibManette_FOUND AND NOT TARGET LibManette::LibManette)
++    add_library(LibManette::LibManette UNKNOWN IMPORTED)
++    set_target_properties(LibManette::LibManette PROPERTIES
++            IMPORTED_LOCATION "${LIBMANETTE_LIBRARY}"
++            INTERFACE_LINK_LIBRARIES "${LIBMANETTE_LIBRARIES}"
++            INTERFACE_COMPILE_OPTIONS "${LIBMANETTE_DEFINITIONS}"
++            INTERFACE_INCLUDE_DIRECTORIES "${LIBMANETTE_INCLUDE_DIRS}"
++            )
++endif()
+diff --git a/src/loader-impl.cpp b/src/loader-impl.cpp
+index d4f2566..e137d78 100644
+--- a/src/loader-impl.cpp
++++ b/src/loader-impl.cpp
+@@ -70,16 +70,20 @@
+ #include "gamepad/interfaces.h"
+ #endif
+ 
++#ifdef ENABLE_MANETTE_GAMEPAD
++#include "manettegamepad/interfaces.h"
++#endif
++
+ extern "C" {
+ 
+-#ifdef ENABLE_GAMEPAD
++#if defined (ENABLE_GAMEPAD) || defined (ENABLE_MANETTE_GAMEPAD)
+ __attribute__ ((constructor))
+ void constructor(void) {
+     // From libwpe side gamepad interfaces are not querried with "load_object" of wpe_loader_interface.
+     // We need to set functions explicitly
+     wpe_gamepad_set_handler(&gamepad_provider_interface, &gamepad_interface);
+ }
+-#endif // ENABLE_GAMEPAD
++#endif // ENABLE_GAMEPAD || ENABLE_MANETTE_GAMEPAD
+ 
+ struct wpe_renderer_host_interface noop_renderer_host_interface = {
+     // create
+diff --git a/src/manettegamepad/CMakeLists.txt b/src/manettegamepad/CMakeLists.txt
+new file mode 100644
+index 0000000..e7e15b7
+--- /dev/null
++++ b/src/manettegamepad/CMakeLists.txt
+@@ -0,0 +1,5 @@
++add_definitions(-DENABLE_MANETTE_GAMEPAD=1)
++
++list(APPEND WPE_PLATFORM_SOURCES
++    src/manettegamepad/manette_gamepad.cpp
++)
+diff --git a/src/manettegamepad/interfaces.h b/src/manettegamepad/interfaces.h
+new file mode 100644
+index 0000000..f495548
+--- /dev/null
++++ b/src/manettegamepad/interfaces.h
+@@ -0,0 +1,36 @@
++/*
++ * If not stated otherwise in this file or this component's Licenses.txt file the
++ * following copyright and licenses apply:
++ *
++ * Copyright 2020 RDK Management
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#ifndef linux_gamepad_interfaces_h
++#define linux_gamepad_interfaces_h
++
++#include <wpe/wpe.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++extern struct wpe_gamepad_provider_interface gamepad_provider_interface;
++extern struct wpe_gamepad_interface gamepad_interface;
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* linux_gamepad_interfaces_h */
+diff --git a/src/manettegamepad/manette_gamepad.cpp b/src/manettegamepad/manette_gamepad.cpp
+new file mode 100644
+index 0000000..71ee82a
+--- /dev/null
++++ b/src/manettegamepad/manette_gamepad.cpp
+@@ -0,0 +1,442 @@
++/*
++ * If not stated otherwise in this file or this component's Licenses.txt file the
++ * following copyright and licenses apply:
++ *
++ * Copyright 2020 RDK Management
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++#include <wpe/wpe.h>
++#include <utility>
++#include <map>
++#include <vector>
++#include <memory>
++#include <cstring>
++#include <algorithm>
++#include <functional>
++#include <glib.h>
++#include <glib-unix.h>
++#include <libmanette/libmanette.h>
++#include <linux/input.h>
++
++struct GamepadProxy;
++
++struct GamepadProvider
++{
++  struct wpe_gamepad_provider* provider { nullptr };
++  struct MonitorDeleter
++  {
++    void operator()(ManetteMonitor * ptr)
++    {
++        if (ptr)
++           g_object_unref (ptr);
++    }
++  };
++  std::unique_ptr <ManetteMonitor,MonitorDeleter>  mtMonitor;
++  std::map<uint32_t /* id */, ManetteDevice  *> gamepadsInfo;
++  std::map<ManetteDevice *  /* id*/, uint32_t > manetteDevices;
++  std::map<uint32_t /* id */, struct GamepadProxy*> gamepadProxies;
++  gboolean monitoring = false;
++  static enum wpe_gamepad_axis  toStandardGamepadAxis(uint16_t axis)
++  {
++    switch (axis) {
++    case ABS_X:
++        return WPE_GAMEPAD_AXIS_LEFT_STICK_X;
++    case ABS_Y:
++        return WPE_GAMEPAD_AXIS_LEFT_STICK_Y;
++    case ABS_RX:
++        return WPE_GAMEPAD_AXIS_RIGHT_STICK_X;
++    case ABS_RY:
++        return WPE_GAMEPAD_AXIS_RIGHT_STICK_Y;
++    default:
++        g_warning("ManetteGamepad: Unsupported Gamepad axis=[%d]. Change gamecontrollerdb to map correctly\n",axis);
++        break;
++    }
++    return WPE_GAMEPAD_AXIS_COUNT; //Should have been unknown
++  }
++  static void onAbsoluteAxisEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
++  {
++    uint16_t axis;
++    double value;
++    if (!manette_event_get_absolute(event, &axis, &value))
++      return;
++    //gamecontrollerdb should map this,if not we treat as trigger (ABS_Z & ABS_RZ)
++    switch (axis) {
++      case ABS_Z:
++        provider->buttonPressedOrReleased(device, WPE_GAMEPAD_BUTTON_LEFT_TRIGGER, (value <= -1.0) ? false : true);
++        break;
++      case ABS_RZ:
++        provider->buttonPressedOrReleased(device, WPE_GAMEPAD_BUTTON_RIGHT_TRIGGER, (value <= -1.0) ? false : true);
++        break;
++      default:
++        provider->absoluteAxisChanged(device, toStandardGamepadAxis(axis), value);
++        break;
++    }
++  }
++  static enum wpe_gamepad_button toStandardGamepadButton(uint16_t manetteButton)
++  {
++    switch (manetteButton) {
++      case BTN_A:
++        return WPE_GAMEPAD_BUTTON_BOTTOM;
++      case BTN_B:
++        return WPE_GAMEPAD_BUTTON_RIGHT;
++      case BTN_X:
++        return WPE_GAMEPAD_BUTTON_LEFT;
++      case BTN_Y:
++        return WPE_GAMEPAD_BUTTON_TOP;
++      case BTN_TL:
++        return WPE_GAMEPAD_BUTTON_LEFT_SHOULDER;
++      case BTN_TR:
++        return WPE_GAMEPAD_BUTTON_RIGHT_SHOULDER;
++      case BTN_TL2:
++        return WPE_GAMEPAD_BUTTON_LEFT_TRIGGER;
++      case BTN_TR2:
++        return WPE_GAMEPAD_BUTTON_RIGHT_TRIGGER;
++      case BTN_SELECT:
++        return WPE_GAMEPAD_BUTTON_SELECT;
++      case BTN_START:
++        return WPE_GAMEPAD_BUTTON_START;
++      case BTN_THUMBL:
++        return WPE_GAMEPAD_BUTTON_LEFT_STICK;
++      case BTN_THUMBR:
++        return WPE_GAMEPAD_BUTTON_RIGHT_STICK;
++      case BTN_DPAD_UP:
++        return WPE_GAMEPAD_BUTTON_D_PAD_TOP;
++      case BTN_DPAD_DOWN:
++        return WPE_GAMEPAD_BUTTON_D_PAD_BOTTOM;
++      case BTN_DPAD_LEFT:
++        return WPE_GAMEPAD_BUTTON_D_PAD_LEFT;
++      case BTN_DPAD_RIGHT:
++        return WPE_GAMEPAD_BUTTON_D_PAD_RIGHT;
++      case BTN_MODE:
++        return WPE_GAMEPAD_BUTTON_CENTER;
++      default:
++        g_warning(" ManetteGamepad: Unsupported button %d",manetteButton);
++        break;
++    }
++    return WPE_GAMEPAD_BUTTON_COUNT; //Should have been unknown
++  }
++
++  // Send Analog HAT as Digital DPad button
++  // ABS values negative is left/up, positive is right/down
++  static void onHatAxisEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
++  {
++    guint16 hatAxis;
++    gint8 value;
++    if (!manette_event_get_hat (event, &hatAxis, &value))
++       return;
++
++    switch (hatAxis) {
++       case ABS_HAT0X:
++           if (value < 0) //negative is LEFT on HAT0X
++               provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_LEFT), true);
++           if (value == 0) { //Nothing pressed on HAT0X ,it could be either left or right
++               provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_LEFT), false);
++               provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_RIGHT), false);
++            }
++           if (value == 1)
++              provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_RIGHT), true);
++         break;
++       case ABS_HAT0Y:
++          if (value < 0) // negative is UP on HAT0Y
++             provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_UP), true);
++          if (value == 0) { //Nothing pressed on HAT0Y, it could be either left or right
++             provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_UP), false);
++             provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_DOWN), false);
++          }
++          if (value == 1) // positive is DOWN
++             provider->buttonPressedOrReleased(device, toStandardGamepadButton(BTN_DPAD_DOWN), true);
++         break;
++       default:
++         g_warning("ManetteGamepad: Unsupported HAT Axis %d\n",hatAxis);
++         break;
++    }
++  }
++
++  static void onButtonPressEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
++  {
++    uint16_t button;
++    if (!manette_event_get_button(event, &button))
++        return;
++    provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), true);
++  }
++
++  static void onButtonReleaseEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
++  {
++    uint16_t button;
++    if (!manette_event_get_button(event, &button))
++        return;
++    provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), false);
++  }
++
++  void listentoManetteDevice(ManetteDevice * device)
++  {
++     g_signal_connect(device, "button-press-event", G_CALLBACK(onButtonPressEvent), this);
++     g_signal_connect(device, "button-release-event", G_CALLBACK(onButtonReleaseEvent), this);
++     g_signal_connect(device, "absolute-axis-event", G_CALLBACK(onAbsoluteAxisEvent), this);
++     g_signal_connect(device, "hat-axis-event", G_CALLBACK(onHatAxisEvent), this);
++  }
++
++  void buttonPressedOrReleased(ManetteDevice* device, enum wpe_gamepad_button  button, bool pressed)
++  {
++    if (button == WPE_GAMEPAD_BUTTON_COUNT)
++      return;
++    auto it = manetteDevices.find(device);
++    if (it != manetteDevices.end()) {
++       updateGamepadButton(it->second,button,pressed);
++    }
++  }
++
++  void absoluteAxisChanged(ManetteDevice* device, enum wpe_gamepad_axis axis, double value)
++  {
++    if (axis == WPE_GAMEPAD_AXIS_COUNT)
++      return;
++    auto it = manetteDevices.find(device);
++    if (it != manetteDevices.end()) {
++       updateGamepadAxis(it->second,axis,value);
++     }
++  }
++
++  static void onDeviceConnected(ManetteMonitor*, ManetteDevice* device, GamepadProvider* provider)
++  {
++    provider->deviceConnected(device);
++  }
++  static void onDeviceDisconnected(ManetteMonitor*, ManetteDevice* device, GamepadProvider* provider)
++  {
++    provider->deviceDisconnected(device);
++  }
++
++  GamepadProvider(struct wpe_gamepad_provider* provider)
++    : provider(provider)
++  {
++    monitoring = false;
++  }
++
++  ~GamepadProvider();
++
++  void addGamepadProxy(uint32_t id, struct GamepadProxy* gamepad)
++  {
++   gamepadProxies[id] = gamepad;
++  }
++
++  void removeGamepadProxy(uint32_t id, struct GamepadProxy*)
++  {
++    gamepadProxies.erase(id);
++  }
++
++  const char* getDeviceName(uint32_t gamepadId)
++  {
++    auto it = gamepadsInfo.find(gamepadId);
++    if (it == gamepadsInfo.end())
++      return nullptr;
++    return manette_device_get_name(it->second);
++  }
++  void deviceDisconnected( ManetteDevice * device )
++  {
++    auto it = manetteDevices.find(device);
++    if (it == manetteDevices.end()) {
++      g_warning("ManetteGamepad: Gamepad device [%s] was not connected address[%p]", manette_device_get_name(device),device);
++      return ;
++    }
++    closeGamepad(it->second);
++    manetteDevices.erase(it);
++  }
++  uint32_t getUniqueId()
++  {
++    //FIXME getting guid also not unique
++    static uint32_t index = 1; //start with
++    ++index;
++    return index;
++  }
++  void deviceConnected( ManetteDevice * device )
++  {
++     uint32_t gamepadId = getUniqueId() ;
++     listentoManetteDevice(device);
++     gamepadsInfo[gamepadId] = device;
++     manetteDevices[device] = gamepadId;
++     wpe_gamepad_provider_dispatch_gamepad_connected(provider, gamepadId);
++     g_print("ManetteGamepad: %s guid(%s) gamecontrollerdb is mapped %s\n", manette_device_get_name(device),
++             manette_device_get_guid(device), manette_device_has_user_mapping(device) ? "Yes": "No");
++  }
++  gboolean discoverGamePads()
++  {
++    struct IterDeleter
++    {
++       void operator()(ManetteMonitorIter * ptr)
++       {
++         if (ptr)
++           manette_monitor_iter_free( ptr);
++       }
++    };
++    std::unique_ptr <ManetteMonitorIter, IterDeleter> iter;
++    ManetteDevice *device;
++    if (!monitoring) {
++        mtMonitor.reset((ManetteMonitor*) manette_monitor_new());
++        g_signal_connect(mtMonitor.get(), "device-connected", G_CALLBACK(onDeviceConnected), this);
++        g_signal_connect(mtMonitor.get(), "device-disconnected", G_CALLBACK(onDeviceDisconnected), this);
++        iter.reset((ManetteMonitorIter *) manette_monitor_iterate (mtMonitor.get()));
++        while (manette_monitor_iter_next (iter.get(), &device)) {
++          deviceConnected(device);
++        }
++     monitoring = true;
++    }
++    return true;
++  }
++  void start()
++  {
++    discoverGamePads();
++  }
++  void stop()
++  {
++    //Nothing needed, will handle in stopManetteMonitor()
++  }
++  void stopManetteMonitor()
++  {
++    while(!gamepadsInfo.empty())
++      closeGamepad(gamepadsInfo.begin()->first);
++    manetteDevices.clear();
++    if (mtMonitor.get()) {
++      g_signal_handlers_disconnect_by_data (mtMonitor.get(), this);
++    }
++  }
++  void closeGamepad(uint32_t gamepadId)
++  {
++    auto it = gamepadsInfo.find(gamepadId);
++    if (it == gamepadsInfo.end())
++      return;
++    gamepadsInfo.erase(it);
++    wpe_gamepad_provider_dispatch_gamepad_disconnected(provider, gamepadId);
++  }
++ void updateGamepadButton(uint32_t gamepadId, enum wpe_gamepad_button button, bool pressed);
++ void updateGamepadAxis(uint32_t gamepadId, enum wpe_gamepad_axis axis, double value);
++};
++
++struct GamepadProxy
++{
++  struct GamepadProvider* provider;
++  struct wpe_gamepad* gamepad;
++  uint32_t gamepadId;
++
++  GamepadProxy(GamepadProvider* provider, struct wpe_gamepad* gamepad, uint32_t id)
++    : provider(provider)
++    , gamepad(gamepad)
++    , gamepadId(id)
++  {
++    provider->addGamepadProxy(gamepadId, this);
++  }
++
++  ~GamepadProxy()
++  {
++    if (provider)
++      provider->removeGamepadProxy(gamepadId, this);
++  }
++  void cleanUp()
++  {
++    provider = nullptr;
++    gamepad = nullptr;
++    gamepadId = 0;
++  }
++
++  const char* getDeviceName() {
++    const char* result = nullptr;
++    if (provider)
++      result = provider->getDeviceName(gamepadId);
++    return result ? result: "Unknown";
++  }
++
++  void dispatchButtonChanged(enum wpe_gamepad_button button, bool pressed)
++  {
++    if (gamepad)
++      wpe_gamepad_dispatch_button_changed(gamepad, button, pressed);
++  }
++
++  void dispatchAxisChanged(enum wpe_gamepad_axis axis, double value)
++  {
++    if (gamepad)
++      wpe_gamepad_dispatch_axis_changed(gamepad, axis, value);
++  }
++
++};
++
++GamepadProvider::~GamepadProvider()
++{
++  if(monitoring) {
++     stopManetteMonitor();
++     monitoring = false;
++  }
++  for(const auto &kv : gamepadProxies)
++    kv.second->cleanUp();
++}
++
++void GamepadProvider::updateGamepadButton( uint32_t gamepadId, enum wpe_gamepad_button button, bool pressed )
++{
++  auto iter = gamepadProxies.find(gamepadId);
++  if (iter != gamepadProxies.end()) {
++     auto *proxy = iter->second;
++     proxy->dispatchButtonChanged(button,pressed);
++  }
++}
++void GamepadProvider::updateGamepadAxis( uint32_t gamepadId,enum wpe_gamepad_axis axis, double value)
++{
++  auto iter = gamepadProxies.find(gamepadId);
++  if (iter != gamepadProxies.end()) {
++     auto *proxy = iter->second;
++     proxy->dispatchAxisChanged(axis, value);
++  }
++}
++
++struct wpe_gamepad_provider_interface gamepad_provider_interface = {
++  // create
++  [](struct wpe_gamepad_provider* provider) -> void* {
++    GamepadProvider* impl = new GamepadProvider(provider);
++    return impl;
++  },
++  // destroy
++  [](void *data) {
++    GamepadProvider* impl = (struct GamepadProvider*)data;
++    delete impl;
++  },
++  // start
++  [](void *data) {
++    GamepadProvider* impl = (struct GamepadProvider*)data;
++    impl->start();
++  },
++  // stop
++  [](void *data) {
++    GamepadProvider* impl = (struct GamepadProvider*)data;
++    impl->stop();
++  },
++  // get_view_backend
++  [](void*, void*) -> struct wpe_view_backend* {
++    return nullptr;
++  }
++};
++
++struct wpe_gamepad_interface gamepad_interface = {
++  // create
++  [] (struct wpe_gamepad* gamepad, struct wpe_gamepad_provider* provider, uintptr_t id) -> void* {
++    GamepadProvider* provider_priv = (GamepadProvider*)wpe_gamepad_provider_get_backend(provider);
++    GamepadProxy* proxy = new GamepadProxy(provider_priv, gamepad, id);
++    return proxy;
++  },
++  // destroy
++  [](void* data) {
++    GamepadProxy* proxy = (GamepadProxy*) data;
++    delete proxy;
++  },
++  // get_id
++  [](void* data) -> const char* {
++    GamepadProxy* proxy = (GamepadProxy*) data;
++    return proxy->getDeviceName();
++  }
++};

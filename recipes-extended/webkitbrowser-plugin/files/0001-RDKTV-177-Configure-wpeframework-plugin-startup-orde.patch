@@ -1,0 +1,25 @@
+From 69f0c45654931b3fe7e46a6f16861dde8b95116b Mon Sep 17 00:00:00 2001
+From: Tony Paul <Tony_Paul@comcast.com>
+Date: Wed, 2 Dec 2020 14:52:14 +0000
+Subject: [PATCH] RDKTV-177:Configure wpeframework plugin startup order
+Source: Comcast
+Upstream-Status: Inappropriate [Comcast specific]
+Signed-off-by: Tony Paul <Tony_Paul@comcast.com>
+Signed-off-by: Eugene Mutavchi <Ievgen_Mutavchi@comcast.com>
+
+---
+ WebKitBrowser/ResidentApp.config | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/WebKitBrowser/ResidentApp.config b/WebKitBrowser/ResidentApp.config
+index c5fe1bb6..a308324e 100644
+--- a/WebKitBrowser/ResidentApp.config
++++ b/WebKitBrowser/ResidentApp.config
+@@ -1,3 +1,4 @@
++set(startuporder ${PLUGIN_RESIDENT_APP_STARTUPORDER})
+ set(autostart ${PLUGIN_RESIDENT_APP_AUTOSTART})
+ set(resumed true)
+ 
+-- 
+2.25.1
+

@@ -1,0 +1,25 @@
+{
+    "paths": {
+      "workspaceDir": "/var/volatile/rdk",
+      "persistentDir": "/opt/persistent/rdk"
+    },
+  
+    "logging": {
+      "consoleSocket": "/tmp/dobbyPty.sock"
+    },
+  
+    "network": {
+      "externalInterfaces": [ "eth0", "wlan0" ],
+      "addressRange": "100.64.11.0"
+    },
+    "logRelay": {
+        "syslog": {
+          "enable": true,
+          "socketPath": "/tmp/dobby-syslog"
+        },
+        "journald": {
+          "enable": true,
+          "socketPath": "/tmp/dobby-journald"
+        }
+      }
+  }

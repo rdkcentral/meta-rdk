@@ -1,0 +1,15 @@
+[Unit]
+Description=LAN Interface
+#Wants=nvram.service
+After=nvram.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=/etc/device.properties
+ExecStartPre=/sbin/ifconfig eth0 up
+ExecStart=/sbin/udhcpc -i eth0 -p /tmp/udhcpc.eth0.pid
+ExecStop=/sbin/ifconfig eth0 down
+
+[Install]
+WantedBy=multi-user.target

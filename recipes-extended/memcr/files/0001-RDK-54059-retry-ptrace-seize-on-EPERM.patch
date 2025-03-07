@@ -1,0 +1,47 @@
+From ac085fc2825d6b89b23d6f6ea4f0aa84fd439f27 Mon Sep 17 00:00:00 2001
+From: Adrian Muzyka <Adrian_Muzyka@comcast.com>
+Date: Wed, 11 Dec 2024 08:44:27 +0000
+Subject: [PATCH] RDK-54059: retry ptrace seize on EPERM
+
+---
+ memcr.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/memcr.c b/memcr.c
+index 3dc4b15..5c38429 100644
+--- a/memcr.c
++++ b/memcr.c
+@@ -212,6 +212,7 @@ static int checkpoint_service_socket = SOCKET_INVALID;
+ #define FALSE		0
+ 
+ #define MAX_CLIENT_CONNECTIONS		8
++#define PTRACE_SEIZE_RETRY_MAX         3
+ 
+ struct service_command_ctx {
+ 	struct service_command svc_cmd;
+@@ -488,13 +489,22 @@ static int seize_pid(pid_t pid)
+ 	int ret;
+ 	int status;
+ 	siginfo_t si;
++	int cnt = 0;
+ 
++ptrace_seize_retry:
+ 	ret = ptrace(PTRACE_SEIZE, pid, NULL, 0);
+ 	if (ret) {
+ 		if (errno == ESRCH) {
+ 			fprintf(stderr, "ptrace(PTRACE_SEIZE) pid %d: %m, ignoring\n", pid);
+ 			return 0;
+ 		}
++		else if (errno == EPERM) {
++			if (cnt++ < PTRACE_SEIZE_RETRY_MAX)	{
++				fprintf(stderr, "ptrace(PTRACE_SEIZE) errno %d retry %d pid %d: %m\n", errno, cnt, pid);
++				usleep(100 * 1000); // 100 milliseconds
++				goto ptrace_seize_retry;
++			}
++		}
+ 
+ 		fprintf(stderr, "ptrace(PTRACE_SEIZE) %d pid %d: %m\n", errno, pid);
+ 		return 1;
+-- 
+2.43.0
+

@@ -1,0 +1,940 @@
+From 649f15be7f202bee917eb5fb6ffc0b8be290e1d8 Mon Sep 17 00:00:00 2001
+From: Andrzej Surdej <Andrzej_Surdej@comcast.com>
+Date: Wed, 25 Jan 2023 13:07:32 +0000
+Subject: [PATCH] Naive gamepad support
+
+original patch: 0005-Naive-gamepad-support.patch
+Signed-off-by:  Manoj Bhatta <manoj_bhatta@comcast.com>
+
+Updated for libwpe-1.14.0
+Signed-off-by: Andrzej Surdej <Andrzej_Surdej@comcast.com>
+---
+ CMakeLists.txt                    |   6 +
+ src/gamepad/CMakeLists.txt        |   5 +
+ src/gamepad/interfaces.h          |  36 ++
+ src/gamepad/linux_gamepad.cpp     | 681 ++++++++++++++++++++++++++++++
+ src/gamepad_test/CMakeLists.txt   |  13 +
+ src/gamepad_test/gamepad_test.cpp |  97 +++++
+ src/loader-impl.cpp               |  13 +
+ 7 files changed, 851 insertions(+)
+ create mode 100644 src/gamepad/CMakeLists.txt
+ create mode 100644 src/gamepad/interfaces.h
+ create mode 100644 src/gamepad/linux_gamepad.cpp
+ create mode 100644 src/gamepad_test/CMakeLists.txt
+ create mode 100644 src/gamepad_test/gamepad_test.cpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9f5f48c..de8352c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,6 +26,7 @@ option(USE_BACKEND_WESTEROS_MESA "Whether to enable support for the gbm based of
+ option(USE_INPUT_LIBINPUT "Whether to enable support for the libinput input backend" ON)
+ option(USE_INPUT_UDEV "Whether to enable support for the libinput input udev lib" ON)
+ option(USE_INPUT_WAYLAND "Whether to enable support for the wayland input backend" OFF)
++option(USE_GENERIC_GAMEPAD "Use generic gamepad implementation" OFF)
+ 
+ find_package(WPE REQUIRED)
+ find_package(EGL REQUIRED)
+@@ -100,6 +101,11 @@ elseif (USE_VIRTUAL_KEYBOARD)
+             )
+ endif()
+ 
++if (USE_GENERIC_GAMEPAD)
++    include(src/gamepad/CMakeLists.txt)
++    include(src/gamepad_test/CMakeLists.txt)
++endif()
++
+ if (USE_BACKEND_BCM_NEXUS)
+     include(src/bcm-nexus/CMakeLists.txt)
+ endif ()
+diff --git a/src/gamepad/CMakeLists.txt b/src/gamepad/CMakeLists.txt
+new file mode 100644
+index 0000000..f6627a6
+--- /dev/null
++++ b/src/gamepad/CMakeLists.txt
+@@ -0,0 +1,5 @@
++add_definitions(-DENABLE_GAMEPAD=1)
++
++list(APPEND WPE_PLATFORM_SOURCES
++    src/gamepad/linux_gamepad.cpp
++)
+diff --git a/src/gamepad/interfaces.h b/src/gamepad/interfaces.h
+new file mode 100644
+index 0000000..f495548
+--- /dev/null
++++ b/src/gamepad/interfaces.h
+@@ -0,0 +1,36 @@
++/*
++ * If not stated otherwise in this file or this component's Licenses.txt file the
++ * following copyright and licenses apply:
++ *
++ * Copyright 2020 RDK Management
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#ifndef linux_gamepad_interfaces_h
++#define linux_gamepad_interfaces_h
++
++#include <wpe/wpe.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++extern struct wpe_gamepad_provider_interface gamepad_provider_interface;
++extern struct wpe_gamepad_interface gamepad_interface;
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* linux_gamepad_interfaces_h */
+diff --git a/src/gamepad/linux_gamepad.cpp b/src/gamepad/linux_gamepad.cpp
+new file mode 100644
+index 0000000..bcae3f8
+--- /dev/null
++++ b/src/gamepad/linux_gamepad.cpp
+@@ -0,0 +1,681 @@
++/*
++ * If not stated otherwise in this file or this component's Licenses.txt file the
++ * following copyright and licenses apply:
++ *
++ * Copyright 2020 RDK Management
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#include <wpe/wpe.h>
++
++#include <utility>
++#include <map>
++#include <vector>
++#include <memory>
++#include <cstring>
++#include <algorithm>
++#include <functional>
++#include <string>
++#include <stdlib.h>
++#include <unistd.h>
++#include <ctype.h>
++#include <errno.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <sys/ioctl.h>
++#include <fcntl.h>
++#include <linux/input.h>
++#include <stddef.h>
++#include <time.h>
++#include <limits.h>
++
++#include <glib.h>
++#include <glib-unix.h>
++
++#define BITS_PER_LONG (sizeof(unsigned long) * CHAR_BIT)
++#define NBITS(x) (((x) + BITS_PER_LONG - 1) / BITS_PER_LONG)
++
++#define INVALID_SOURCE_ID (-1U)
++
++static bool getEvDevBits(int fd, unsigned int type, void* buf, unsigned int size)
++{
++    if (ioctl(fd, EVIOCGBIT(type, size), buf) < 0)
++        return false;
++    return true;
++}
++
++static bool testBitIsSet(const unsigned long* data, int bit)
++{
++    return data[bit / BITS_PER_LONG] & (1UL << (bit % BITS_PER_LONG));
++}
++
++static bool hasGamepadButtons(const unsigned long* ev_bits, const unsigned long* key_bits)
++{
++    if (!testBitIsSet(ev_bits, EV_KEY))
++        return false;
++    for (int key = BTN_GAMEPAD; key <= BTN_THUMBR; ++key) {
++        if (testBitIsSet(key_bits, key)) {
++            return true;
++        }
++    }
++    return false;
++}
++
++static enum wpe_gamepad_button mapButtonId(int32_t code)
++{
++/**
++ * wpe_gamepad_button:
++ * @WPE_GAMEPAD_BUTTON_BOTTOM: Bottom button in right cluster.
++ * @WPE_GAMEPAD_BUTTON_RIGHT: Right button in right cluster.
++ * @WPE_GAMEPAD_BUTTON_LEFT: Left button in right cluster.
++ * @WPE_GAMEPAD_BUTTON_TOP: Top button in right cluster.
++ * @WPE_GAMEPAD_BUTTON_LEFT_SHOULDER: Top left front button.
++ * @WPE_GAMEPAD_BUTTON_RIGHT_SHOULDER: Top right front button.
++ * @WPE_GAMEPAD_BUTTON_LEFT_TRIGGER: Bottom left front button.
++ * @WPE_GAMEPAD_BUTTON_RIGHT_TRIGGER: Bottom right front button.
++ * @WPE_GAMEPAD_BUTTON_SELECT: Left button in center cluster.
++ * @WPE_GAMEPAD_BUTTON_START: Right button in center cluster.
++ * @WPE_GAMEPAD_BUTTON_LEFT_STICK: Left stick pressed button.
++ * @WPE_GAMEPAD_BUTTON_RIGHT_STICK: Right stick pressed button.
++ * @WPE_GAMEPAD_BUTTON_D_PAD_TOP: Top button in left cluster.
++ * @WPE_GAMEPAD_BUTTON_D_PAD_BOTOM: Bottom button in left cluster
++ * @WPE_GAMEPAD_BUTTON_D_PAD_LEFT: Left button in left cluster.
++ * @WPE_GAMEPAD_BUTTON_D_PAD_RIGHT: Right button in left cluster.
++ * @WPE_GAMEPAD_BUTTON_CENTER: Center button in center cluster.
++ * @WPE_GAMEPAD_BUTTON_COUNT: Max number of buttons.
++ *
++ * Standard mapping.
++ * Refer https://www.w3.org/TR/gamepad/#gamepadbutton-interface
++ */
++
++  struct MapEntry {
++    const int32_t code;
++    const enum wpe_gamepad_button id;
++  };
++
++  static const MapEntry map[] = {
++    { BTN_A,      WPE_GAMEPAD_BUTTON_BOTTOM },
++    { BTN_B,      WPE_GAMEPAD_BUTTON_RIGHT },
++    { BTN_X,      WPE_GAMEPAD_BUTTON_LEFT },
++    { BTN_Y,      WPE_GAMEPAD_BUTTON_TOP },
++    { BTN_TL,     WPE_GAMEPAD_BUTTON_LEFT_SHOULDER },
++    { BTN_TR,     WPE_GAMEPAD_BUTTON_RIGHT_SHOULDER },
++    { BTN_TL2,    WPE_GAMEPAD_BUTTON_LEFT_TRIGGER },
++    { BTN_TR2,    WPE_GAMEPAD_BUTTON_RIGHT_TRIGGER },
++    { BTN_SELECT, WPE_GAMEPAD_BUTTON_SELECT },
++    { BTN_START,  WPE_GAMEPAD_BUTTON_START },
++    { BTN_THUMBL, WPE_GAMEPAD_BUTTON_LEFT_STICK }, // stick pressed button
++    { BTN_THUMBR, WPE_GAMEPAD_BUTTON_RIGHT_STICK }, // stick pressed button
++    { ABS_HAT0Y,  WPE_GAMEPAD_BUTTON_D_PAD_TOP },
++    { ABS_HAT0X,  WPE_GAMEPAD_BUTTON_D_PAD_LEFT },
++    { BTN_MODE,   WPE_GAMEPAD_BUTTON_CENTER },
++    { KEY_HOMEPAGE,   WPE_GAMEPAD_BUTTON_CENTER },
++
++    // TODO: Add configurable re-mapping for any controller
++    //
++    // Append:  XBOX Wireless Controller
++    //
++    { ABS_Z,       WPE_GAMEPAD_BUTTON_LEFT_TRIGGER },  // trigger
++    { ABS_BRAKE,   WPE_GAMEPAD_BUTTON_LEFT_TRIGGER },  // trigger
++    { ABS_RZ,      WPE_GAMEPAD_BUTTON_RIGHT_TRIGGER },  // trigger
++    { ABS_GAS,     WPE_GAMEPAD_BUTTON_RIGHT_TRIGGER },  // trigger
++    { KEY_BACK,    WPE_GAMEPAD_BUTTON_SELECT }   // Left center "menu/start" button
++
++  };
++
++  static const size_t mapSize = sizeof(map)/sizeof(map[0]);
++
++  for (int i = 0; i < mapSize; ++i)
++  {
++    if (code == map[i].code)
++      return map[i].id;
++  }
++  return WPE_GAMEPAD_BUTTON_COUNT;
++}
++
++static enum wpe_gamepad_axis mapAxisId(int32_t code)
++{
++/**
++ * wpe_gamepad_axis:
++ * @WPE_GAMEPAD_AXIS_LEFT_STICK_X: Horizontal axis for left stick (negative left/positive right).
++ * @WPE_GAMEPAD_AXIS_LEFT_STICK_Y: Vertical axis for left stick (negative up/positive down).
++ * @WPE_GAMEPAD_AXIS_RIGHT_STICK_X: Horizontal axis for right stick (negative left/positive right).
++ * @WPE_GAMEPAD_AXIS_RIGHT_STICK_Y: Vertical axis for right stick (negative up/positive down).
++ * @WPE_GAMEPAD_AXIS_COUNT: max number of axis.
++ *
++ * Standard mapping.
++ * Refer https://www.w3.org/TR/gamepad/#gamepadbutton-interface
++ */
++  struct MapEntry {
++    const int32_t code;
++    const enum wpe_gamepad_axis id;
++  };
++
++  static const MapEntry map[] = {
++    { ABS_X,  WPE_GAMEPAD_AXIS_LEFT_STICK_X },
++    { ABS_Y,  WPE_GAMEPAD_AXIS_LEFT_STICK_Y },
++    { ABS_RX, WPE_GAMEPAD_AXIS_RIGHT_STICK_X },
++    { ABS_RY, WPE_GAMEPAD_AXIS_RIGHT_STICK_Y },
++  };
++
++  static const size_t mapSize = sizeof(map)/sizeof(map[0]);
++
++  for (int i = 0; i < mapSize; ++i)
++    if (code == map[i].code)
++      return map[i].id;
++
++  return WPE_GAMEPAD_AXIS_COUNT;
++}
++
++static double clamp(double d, double min, double max)
++{
++  const double t = d < min ? min : d;
++  return t > max ? max : t;
++}
++
++static double mapAxisValue(int32_t val, int32_t min, int32_t max)
++{
++    const double kMappedMax = 1.0;
++    const double kMappedMin = -1.0;
++
++    double scale = (kMappedMax - kMappedMin) / (max - min);
++    double offset = (max + min) / (kMappedMax - kMappedMin) * scale * kMappedMin;
++    double mappedVal = val * scale + offset;
++    mappedVal = clamp(mappedVal, kMappedMin, kMappedMax);
++    if (mappedVal < 0.009 && mappedVal > -0.009)
++        mappedVal = 0.0;
++
++    return mappedVal;
++}
++
++struct GamepadProxy;
++
++struct GamepadProvider
++{
++  struct GamepadInfo
++  {
++    int32_t gamepad_id;
++    int fd;
++    std::string name;
++    std::string path;
++    guint source_id;
++    std::map<int, input_absinfo> axisInfo;
++  };
++
++  struct wpe_gamepad_provider* provider { nullptr };
++
++  std::map<uintptr_t /* id */, struct GamepadProxy*> gamepadProxies;
++  std::map<uintptr_t /* id */, struct GamepadInfo > gamepadsInfo;
++  guint discoverySourceId { INVALID_SOURCE_ID };
++
++  GamepadProvider(struct wpe_gamepad_provider* provider)
++    : provider(provider)
++  { }
++
++  ~GamepadProvider();
++
++  void addGamepadProxy(uintptr_t id, struct GamepadProxy* gamepad)
++  {
++    gamepadProxies[id] = gamepad;
++  }
++
++  void removeGamepadProxy(uintptr_t id, struct GamepadProxy*)
++  {
++    gamepadProxies.erase(id);
++  }
++
++  const char* getDeviceName(uintptr_t gamepad_id)
++  {
++    auto it = gamepadsInfo.find(gamepad_id);
++    if (it == gamepadsInfo.end())
++      return nullptr;
++    return it->second.name.c_str();
++  }
++
++  gboolean discoverGamePads()
++  {
++    GDir* dir;
++    GPatternSpec* pspec;
++    const char* basePath = "/dev/input/";
++
++    dir = g_dir_open(basePath, 0, nullptr);
++    if (dir) {
++      pspec = g_pattern_spec_new("event*");
++      while (const char* name = g_dir_read_name(dir)) {
++        if (!g_pattern_match_string(pspec, name))
++          continue;
++
++        gchar* devPath = g_build_filename(basePath, name, nullptr);
++        tryOpenGamePad(devPath);
++        g_free(devPath);
++      }
++      g_pattern_spec_free(pspec);
++      g_dir_close(dir);
++    }
++    return G_SOURCE_CONTINUE;
++  }
++
++  void startDiscovery()
++  {
++    if (discoverySourceId != INVALID_SOURCE_ID)
++      return;
++
++    auto *src = g_timeout_source_new_seconds(1);
++    g_source_set_callback(
++      src,
++      [](gpointer data) {
++        GamepadProvider* impl = static_cast<GamepadProvider*>(data);
++        return impl->discoverGamePads();
++      },
++      this,
++      NULL);
++
++    discoverySourceId= g_source_attach(src, g_main_context_get_thread_default());
++    g_source_unref (src);
++  }
++
++  void stopDiscovery()
++  {
++    if (discoverySourceId != INVALID_SOURCE_ID) {
++      g_source_remove(discoverySourceId);
++      discoverySourceId = INVALID_SOURCE_ID;
++    }
++  }
++
++  void start()
++  {
++    startDiscovery();
++  }
++
++  void stop()
++  {
++    stopDiscovery();
++    while(!gamepadsInfo.empty())
++      closeGamepad(gamepadsInfo.begin()->first);
++  }
++
++  bool tryOpenGamePad(const char* path)
++  {
++    using ValueType = decltype(gamepadsInfo)::value_type;
++    bool alreadyOpen = std::any_of(
++      gamepadsInfo.begin(), gamepadsInfo.end(),
++      [path](const ValueType& kv) {
++        return kv.second.path == path;
++      });
++    if (alreadyOpen)
++      return false;
++
++    int fd = open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
++    if (fd < 0)
++      return false;
++
++    unsigned long ev_bits[NBITS(EV_CNT)] = {0};
++    unsigned long key_bits[NBITS(KEY_CNT)] = {0};
++    unsigned long abs_bits[NBITS(ABS_CNT)] = {0};
++
++    if (!getEvDevBits(fd, 0, ev_bits, sizeof(ev_bits))) {
++      close(fd);
++      return false;
++    }
++    if (!getEvDevBits(fd, EV_KEY, key_bits, sizeof(key_bits))) {
++      close(fd);
++      return false;
++    }
++    if (!getEvDevBits(fd, EV_ABS, abs_bits, sizeof(abs_bits))) {
++      close(fd);
++      return false;
++    }
++    if (!hasGamepadButtons(ev_bits, key_bits)) {
++      close(fd);
++      return false;
++    }
++
++    std::map<int, input_absinfo> axisInfo;
++    for (int32_t code = ABS_X; code < ABS_CNT; ++code) {
++      if (!testBitIsSet(abs_bits, code))
++        continue;
++
++      struct input_absinfo absinfo;
++      if (ioctl(fd, EVIOCGABS(code), &absinfo) < 0)
++        continue;
++
++      axisInfo[code] = absinfo;
++    }
++
++    char name[256] = {'\0'};
++    if (ioctl(fd, EVIOCGNAME(sizeof(name)), name) < 0)
++      strncpy(name, "Unknown", sizeof(name));
++
++    // todo: figureout a better way to identify gamepad
++    int32_t gamepad_id = std::hash<std::string>{}(path) ^ std::hash<std::string>{}(name);
++
++    // oopsie
++    if (gamepadsInfo.find(gamepad_id) != gamepadsInfo.end()) {
++      close(fd);
++      g_warning("Gamepad ID already taken, ignoring '%s' \n", path);
++      return false;
++    }
++
++    auto &info = gamepadsInfo[gamepad_id];
++    info = GamepadInfo { gamepad_id, fd, name, path, INVALID_SOURCE_ID, axisInfo };
++
++    using SourceData = std::pair<GamepadProvider*, int32_t>;
++    SourceData *sourcedata = new SourceData(this, gamepad_id);
++
++    auto * src = g_unix_fd_source_new(fd, static_cast<GIOCondition>(G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL));
++
++    auto watchGamepad = [](gint fd, GIOCondition condition, gpointer user_data) -> gboolean {
++      SourceData *sourcedata = static_cast<SourceData*>(user_data);
++      GamepadProvider& self = *(sourcedata->first);
++      int32_t gamepad_id = sourcedata->second;
++      if (condition & (G_IO_HUP | G_IO_ERR | G_IO_NVAL)) {
++        self.closeGamepad(gamepad_id);
++        return G_SOURCE_REMOVE;
++      }
++      self.readAndDispatchEvents(fd, gamepad_id);
++      return G_SOURCE_CONTINUE;
++    };
++
++    g_source_set_callback(
++      src,
++      (GSourceFunc)(GUnixFDSourceFunc) watchGamepad,
++      sourcedata,
++      [](gpointer data)
++      {
++        SourceData *sourcedata = static_cast<SourceData*>(data);
++        delete sourcedata;
++      }
++    );
++
++    g_source_set_priority(src, G_PRIORITY_HIGH);
++    info.source_id = g_source_attach(src, g_main_context_get_thread_default());
++    g_source_unref(src);
++
++    wpe_gamepad_provider_dispatch_gamepad_connected(provider, gamepad_id);
++    return true;
++  }
++
++  void closeGamepad(uintptr_t gamepad_id)
++  {
++    auto it = gamepadsInfo.find(gamepad_id);
++    if (it == gamepadsInfo.end())
++      return;
++
++    const auto& info = it->second;
++    if (info.fd > 0)
++      close(info.fd);
++    g_source_remove(info.source_id);
++    gamepadsInfo.erase(it);
++
++    wpe_gamepad_provider_dispatch_gamepad_disconnected(provider, gamepad_id);
++  }
++
++  void readAndDispatchEvents(int fd, uintptr_t gamepad_id)
++  {
++    std::vector<input_event> events;
++    bool keepReading = true;
++    while(keepReading)
++    {
++      input_event input;
++      ssize_t read_size = read(fd, &input, sizeof(input));
++      if (read_size != sizeof(input)) {
++        if (errno == EINTR)
++          continue;
++        if (errno != EWOULDBLOCK)
++          perror("Gamepad read failed");
++        break;
++      }
++
++      switch(input.type) {
++        case EV_SYN:
++        {
++          if (input.code == SYN_REPORT)
++            keepReading = false;
++          break;
++        }
++        case EV_KEY:
++        case EV_ABS:
++        {
++          events.push_back(input);
++          break;
++        }
++        default:
++          break;
++      }
++    }
++
++    auto it = gamepadsInfo.find(gamepad_id);
++    if (it != gamepadsInfo.end()) {
++      auto &info = it->second;
++      updateGamepad(info, std::move(events));
++    }
++  }
++
++  void updateGamepad(GamepadInfo& info, std::vector<input_event> events);
++};
++
++struct GamepadProxy
++{
++  struct GamepadProvider* provider;
++  struct wpe_gamepad* gamepad;
++  uintptr_t gamepad_id;
++
++  GamepadProxy(GamepadProvider* provider, struct wpe_gamepad* gamepad, uintptr_t id)
++    : provider(provider)
++    , gamepad(gamepad)
++    , gamepad_id(id)
++  {
++    provider->addGamepadProxy(gamepad_id, this);
++  }
++
++  ~GamepadProxy()
++  {
++    if (provider)
++      provider->removeGamepadProxy(gamepad_id, this);
++  }
++
++  void cleanup()
++  {
++    provider = nullptr;
++    gamepad = nullptr;
++    gamepad_id = 0;
++  }
++
++  const char* getDeviceName() {
++    const char* result = nullptr;
++    if (provider)
++      result = provider->getDeviceName(gamepad_id);
++    return result ? result: "Unknown";
++  }
++
++  void dispatchButtonChanged(enum wpe_gamepad_button button, bool pressed)
++  {
++    if (gamepad)
++      wpe_gamepad_dispatch_button_changed(gamepad, button, pressed);
++  }
++
++  void dispatchAxisChanged(enum wpe_gamepad_axis axis, double value)
++  {
++    if (gamepad)
++      wpe_gamepad_dispatch_axis_changed(gamepad, axis, value);
++  }
++};
++
++GamepadProvider::~GamepadProvider()
++{
++  stop();
++  for(const auto &kv : gamepadProxies)
++    kv.second->cleanup();
++}
++
++void GamepadProvider::updateGamepad(GamepadInfo& info, std::vector<input_event> events)
++{
++  GamepadProxy* proxy = nullptr;
++  auto iter = gamepadProxies.find(info.gamepad_id);
++  if (iter != gamepadProxies.end()) {
++    proxy = iter->second;
++  }
++
++  if (!proxy) {
++    g_warning("no gamepad proxy found for id: %zu", info.gamepad_id);
++    return;
++  }
++
++  const auto updateButtonValue = [&proxy] (int32_t code, int32_t value)
++  {
++    const auto button_id = mapButtonId(code);
++    if (button_id >= WPE_GAMEPAD_BUTTON_COUNT) {
++      g_warning("unmapped button code: %d    0x%04X\n", code, code);
++      return;
++    }
++    proxy->dispatchButtonChanged(button_id, !!value);
++  };
++
++  const auto updateDpadButtonValue = [&proxy] (int32_t code, int32_t value)
++  {
++    // todo: figure out a better to handle dpad
++    if (code != ABS_HAT0X && code != ABS_HAT0Y) {
++      g_warning("not supported code: %d    0x%04X\n", code, code);
++      return;
++    }
++    const auto idx_base = mapButtonId(code);
++    const enum wpe_gamepad_button idx_next = (enum wpe_gamepad_button)(idx_base + 1);
++    if (idx_next >= WPE_GAMEPAD_BUTTON_COUNT) {
++      g_warning("unmapped button code: %d    0x%04X\n", code, code);
++      return;
++    }
++
++    // (for ABS values negative is left/up, positive is right/down)
++    if (value == 0) {
++      // nothing pressed
++      proxy->dispatchButtonChanged(idx_base, false);
++      proxy->dispatchButtonChanged(idx_next, false);
++    } else if (value > 0) {
++      // right/down
++      proxy->dispatchButtonChanged(idx_base, false);
++      proxy->dispatchButtonChanged(idx_next, true);
++    } else { // value < 0
++      // left/up
++      proxy->dispatchButtonChanged(idx_base, true);
++      proxy->dispatchButtonChanged(idx_next, false);
++    }
++  };
++
++  const auto updateTriggerValue = [&proxy, &info] (int32_t code, int32_t value)
++  {
++    const auto idx_base = mapButtonId(code);
++    if (idx_base >= WPE_GAMEPAD_BUTTON_COUNT) {
++      g_warning("unmapped trigger code: %d    0x%04X\n", code, code);
++      return;
++    }
++
++    auto info_iter = info.axisInfo.find(code);
++    if (info_iter == info.axisInfo.end()) {
++      g_warning("no trigger info: %d \n", code);
++      return;
++    }
++
++    const input_absinfo& axisInfo = info_iter->second;
++    // Trigger is treated as a binary button with libwpe
++    proxy->dispatchButtonChanged(idx_base, value > axisInfo.minimum);
++  };
++
++  const auto updateAxisValue = [&proxy, &info] (int32_t code, int32_t value)
++  {
++    auto info_iter = info.axisInfo.find(code);
++    if (info_iter == info.axisInfo.end()) {
++      g_warning("no axis info: %d \n", code);
++      return;
++    }
++    const auto axis_id = mapAxisId(code);
++    if (axis_id >= WPE_GAMEPAD_AXIS_COUNT) {
++      g_warning("unmapped axis code: %d \n", code);
++      return;
++    }
++    const input_absinfo& axisInfo = info_iter->second;
++    double mapped = mapAxisValue(value, axisInfo.minimum, axisInfo.maximum);
++    proxy->dispatchAxisChanged(axis_id, mapped);
++  };
++
++  for (const auto& event : events)
++  {
++    switch(event.type)
++    {
++      case EV_KEY:
++      {
++        updateButtonValue(event.code, event.value);
++        break;
++      }
++      case EV_ABS:
++      {
++        if (event.code == ABS_Z || event.code == ABS_RZ || event.code == ABS_BRAKE || event.code == ABS_GAS) // L/R triggers
++          updateTriggerValue(event.code, event.value);
++        else
++        if (event.code == ABS_HAT0X || event.code == ABS_HAT0Y)
++          updateDpadButtonValue(event.code, event.value);
++        else
++          updateAxisValue(event.code, event.value);
++        break;
++      }
++      default:
++        break;
++    }
++  }
++}
++
++struct wpe_gamepad_provider_interface gamepad_provider_interface = {
++  // create
++  [](struct wpe_gamepad_provider* provider) -> void* {
++    GamepadProvider* impl = new GamepadProvider(provider);
++    return impl;
++  },
++  // destroy
++  [](void *data) {
++    GamepadProvider* impl = (struct GamepadProvider*)data;
++    delete impl;
++  },
++  // start
++  [](void *data) {
++    GamepadProvider* impl = (struct GamepadProvider*)data;
++    impl->start();
++  },
++  // stop
++  [](void *data) {
++    GamepadProvider* impl = (struct GamepadProvider*)data;
++    impl->stop();
++  },
++  // get_view_backend
++  [](void*, void*) -> struct wpe_view_backend* {
++    return nullptr;
++  }
++};
++
++struct wpe_gamepad_interface gamepad_interface = {
++  // create
++  [] (struct wpe_gamepad* gamepad, struct wpe_gamepad_provider* provider, uintptr_t id) -> void* {
++    GamepadProvider* provider_priv = (GamepadProvider*)wpe_gamepad_provider_get_backend(provider);
++    GamepadProxy* proxy = new GamepadProxy(provider_priv, gamepad, id);
++    return proxy;
++  },
++  // destroy
++  [](void* data) {
++    GamepadProxy* proxy = (GamepadProxy*) data;
++    delete proxy;
++  },
++  // get_id
++  [](void* data) -> const char* {
++    GamepadProxy* proxy = (GamepadProxy*) data;
++    return proxy->getDeviceName();
++  }
++};
+diff --git a/src/gamepad_test/CMakeLists.txt b/src/gamepad_test/CMakeLists.txt
+new file mode 100644
+index 0000000..1ef9457
+--- /dev/null
++++ b/src/gamepad_test/CMakeLists.txt
+@@ -0,0 +1,13 @@
++add_executable(gamepad_test src/gamepad_test/gamepad_test.cpp)
++
++target_include_directories(gamepad_test PRIVATE
++  ${GLIB_INCLUDE_DIRS}
++  ${WPE_INCLUDE_DIRS})
++
++target_link_libraries(gamepad_test
++  ${GLIB_GIO_LIBRARIES}
++  ${GLIB_GOBJECT_LIBRARIES}
++  ${GLIB_LIBRARIES}
++  ${WPE_LIBRARIES})
++
++install(TARGETS gamepad_test DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+diff --git a/src/gamepad_test/gamepad_test.cpp b/src/gamepad_test/gamepad_test.cpp
+new file mode 100644
+index 0000000..775e3c1
+--- /dev/null
++++ b/src/gamepad_test/gamepad_test.cpp
+@@ -0,0 +1,97 @@
++/*
++ * If not stated otherwise in this file or this component's Licenses.txt file the
++ * following copyright and licenses apply:
++ *
++ * Copyright 2020 RDK Management
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#include <wpe/wpe.h>
++#include <glib.h>
++#include <glib-unix.h>
++#include <map>
++#include <algorithm>
++#include <cassert>
++
++static GMainLoop *loop;
++static struct wpe_gamepad_provider* provider;
++static std::map <uintptr_t, struct wpe_gamepad*> gamepads;
++
++static struct wpe_gamepad_client_interface s_gamepadClient =
++{
++  // button_values_changed
++  [](void* data, enum wpe_gamepad_button button, bool pressed) {
++    g_print("button %zu changed: %d\n", button, pressed);
++  },
++  // axis_values_changed
++  [] (void*, enum wpe_gamepad_axis axis, double value) {
++    g_print("axis %zu changed: %f\n", axis, value);
++  }
++};
++
++static struct wpe_gamepad_provider_client_interface s_providerClient =
++{
++  // connected
++  [](void*, uintptr_t gamepad_id) {
++    g_print("connected %u \n", gamepad_id);
++
++    struct wpe_gamepad* gamepad = wpe_gamepad_create(provider, gamepad_id);
++    wpe_gamepad_set_client(gamepad, &s_gamepadClient, nullptr);
++    gamepads[gamepad_id] = gamepad;
++
++    const char* name = wpe_gamepad_get_id(gamepad);
++    g_print("gamepad name = %s, WPE_GAMEPAD_BUTTON_COUNT=%zu\n", name, WPE_GAMEPAD_BUTTON_COUNT);
++  },
++  // disconnected
++  [](void*, uintptr_t gamepad_id) {
++    g_print("disconnected %u \n", gamepad_id);
++
++    auto iter = gamepads.find(gamepad_id);
++    if (iter != gamepads.end()) {
++      struct wpe_gamepad* gamepad = iter->second;
++      gamepads.erase(iter);
++      wpe_gamepad_destroy(gamepad);
++    }
++  }
++};
++
++static gboolean terminate_signal(gpointer)
++{
++  g_print("\nGot terminate signal\n");
++  g_main_loop_quit(loop);
++  return G_SOURCE_REMOVE;
++}
++
++int main(int argc, char *argv[])
++{
++  loop = g_main_loop_new(nullptr, FALSE);
++
++  g_unix_signal_add(SIGINT, terminate_signal, nullptr);
++  g_unix_signal_add(SIGTERM, terminate_signal, nullptr);
++
++  provider = wpe_gamepad_provider_create();
++  assert(provider != nullptr);
++
++  wpe_gamepad_provider_set_client(provider, &s_providerClient, nullptr);
++  wpe_gamepad_provider_start(provider);
++
++  g_main_loop_run(loop);
++
++  wpe_gamepad_provider_stop(provider);
++  wpe_gamepad_provider_destroy(provider);
++
++  g_main_loop_unref(loop);
++
++  return 0;
++}
+diff --git a/src/loader-impl.cpp b/src/loader-impl.cpp
+index 7571daa..d4f2566 100644
+--- a/src/loader-impl.cpp
++++ b/src/loader-impl.cpp
+@@ -66,8 +66,21 @@
+ #include "essos/interfaces.h"
+ #endif
+ 
++#ifdef ENABLE_GAMEPAD
++#include "gamepad/interfaces.h"
++#endif
++
+ extern "C" {
+ 
++#ifdef ENABLE_GAMEPAD
++__attribute__ ((constructor))
++void constructor(void) {
++    // From libwpe side gamepad interfaces are not querried with "load_object" of wpe_loader_interface.
++    // We need to set functions explicitly
++    wpe_gamepad_set_handler(&gamepad_provider_interface, &gamepad_interface);
++}
++#endif // ENABLE_GAMEPAD
++
+ struct wpe_renderer_host_interface noop_renderer_host_interface = {
+     // create
+     []() -> void*
+-- 
+2.17.1
+

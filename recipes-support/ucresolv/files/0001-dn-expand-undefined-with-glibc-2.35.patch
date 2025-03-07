@@ -1,0 +1,32 @@
+From 321e6014b03ef7621203f94719818af5ba3feec5 Mon Sep 17 00:00:00 2001
+From: mselva006c <mani_selvaraj@comcast.com>
+Date: Mon, 30 Jan 2023 22:30:18 +0000
+Subject: [PATCH] RDK-39819: Parodus build failure with glibc-2.35
+
+Reason for change: The "__dn_expand" has been replaced to "dn_expand" from glibc-2.34.
+Updated ucresolv source to make it work with glibc-2.35.
+Test Procedure: Ensure the build error is resolved
+Risks: Medium
+Priority: P1
+
+Signed-off-by: mselva006c <mani_selvaraj@comcast.com>
+---
+ src/ucresolv.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/ucresolv.h b/src/ucresolv.h
+index a1f8144..12b24db 100644
+--- a/src/ucresolv.h
++++ b/src/ucresolv.h
+@@ -269,7 +269,11 @@ __END_DECLS
+ #define b64_pton		__b64_pton  
+ #define dn_comp			__dn_comp
+ #define dn_count_labels		__dn_count_labels
++
++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 32
+ #define dn_expand		__dn_expand
++#endif
++
+ #define dn_skipname		__dn_skipname
+ #define fp_resstat		__fp_resstat
+ #define loc_aton		__loc_aton

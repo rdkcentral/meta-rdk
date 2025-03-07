@@ -1,0 +1,384 @@
+From 27c6526729f764bf5104c5a88799010e08856f25 Mon Sep 17 00:00:00 2001
+From: Eugene Mutavchi <Ievgen_Mutavchi@comcast.com>
+Date: Thu, 21 Mar 2024 21:24:30 +0000
+Subject: [PATCH] Legacy launch metrics
+
+---
+ WebKitBrowser/LegacyLaunchMetrics.h    | 314 +++++++++++++++++++++++++
+ WebKitBrowser/WebKitImplementation.cpp |   7 +
+ 2 files changed, 321 insertions(+)
+ create mode 100644 WebKitBrowser/LegacyLaunchMetrics.h
+
+diff --git a/WebKitBrowser/LegacyLaunchMetrics.h b/WebKitBrowser/LegacyLaunchMetrics.h
+new file mode 100644
+index 000000000..5b4fef3bb
+--- /dev/null
++++ b/WebKitBrowser/LegacyLaunchMetrics.h
+@@ -0,0 +1,325 @@
++/*
++ * If not stated otherwise in this file or this component's LICENSE file the
++ * following copyright and licenses apply:
++ *
++ * Copyright 2022 RDK Management
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#pragma once
++
++#include <sys/sysinfo.h>
++#include <fstream>
++
++namespace WPEFramework {
++namespace Plugin {
++
++#if THUNDER_VERSION >= 4
++
++struct LaunchMetrics {
++  void Reset(const string&) {}
++  void Initialize(Core::IUnknown*,std::function<pid_t()> &&) {}
++};
++
++#else
++
++class LaunchMetrics : public Exchange::IWebBrowser::INotification, public PluginHost::IStateControl::INotification {
++public:
++  LaunchMetrics() = default;
++
++  void VisibilityChange(const bool hidden) override {  }
++  void PageClosure() override {  }
++  void BridgeQuery(const string& message) override {  }
++
++  void LoadFinished(const string& url, int32_t code) override
++  {
++    if (url != "about:blank")
++        logLaunchMetrics();
++    _webProcessState = WebProcessWarm;
++    _loadFailed = false;
++    _pageLoadStart = -1;
++    _url = url;
++  }
++
++  void LoadFailed(const string&) override
++  {
++    _loadFailed = true;
++  }
++
++  void URLChange(const string& url, bool loaded) override
++  {
++    if (loaded || url == "about:blank" || _pageLoadStart > 0 || _didLogLaunchMetrics)
++      return;
++
++    ++_pageLoadNum;
++    _pageLoadStart = g_get_monotonic_time();
++    _url = url;
++
++    collectMetricsOnLoadStart();
++  }
++
++  void StateChange(const PluginHost::IStateControl::state state) override
++  {
++    switch(state) {
++      case PluginHost::IStateControl::SUSPENDED:
++        _loadFailed = false;
++        _didLogLaunchMetrics= false;
++        break;
++      case PluginHost::IStateControl::RESUMED:
++      default:
++        break;
++    }
++  }
++
++  void Reset(const string& initUrl)
++  {
++    _pageLoadStart = -1;
++    _loadFailed = false;
++    _didLogLaunchMetrics= false;
++    _url = initUrl;
++    _metrics = { };
++  }
++
++  void Initialize(Core::IUnknown *impl, std::function<pid_t()> && getPIDCallback)
++  {
++    PluginHost::IStateControl* stateControl(impl->QueryInterface<PluginHost::IStateControl>());
++    stateControl->Register(this);
++    stateControl->Release();
++
++    Exchange::IWebBrowser* webBrowser(impl->QueryInterface<Exchange::IWebBrowser>());
++    webBrowser->Register(this);
++    webBrowser->Release();
++
++    _getPIDCallback = std::move(getPIDCallback);
++    _loadFailed = false;
++    _didLogLaunchMetrics= false;
++    _pageLoadNum = 0;
++  }
++
++  BEGIN_INTERFACE_MAP(LaunchMetrics)
++  INTERFACE_ENTRY(Exchange::IWebBrowser::INotification)
++  INTERFACE_ENTRY(PluginHost::IStateControl::INotification)
++  END_INTERFACE_MAP
++
++private:
++  std::vector<std::string> splitString(const std::string &s, char delim)
++  {
++    std::vector<std::string> elems;
++    std::stringstream ss(s);
++    std::string item;
++    while (std::getline(ss, item, delim)) {
++      elems.push_back(std::move(item));
++    }
++    return elems;
++  }
++
++  void collectMetricsOnLoadStart()
++  {
++    if (_didLogLaunchMetrics)
++      return;
++
++    auto getProcessLaunchStateString = [&]() -> std::string
++    {
++      switch(_webProcessState)
++      {
++        case WebProcessCold: return "Cold";
++        case WebProcessWarm:  return "Warm";
++      }
++      return "Unknown";
++    };
++
++    auto addSystemInfo = [&](_Metrics &metrics)
++    {
++      struct sysinfo info;
++      if (sysinfo(&info) != 0)
++      {
++        SYSLOG(Logging::Error, (_T("Failed to get sysinfo error=%d."), errno));
++        return;
++      }
++
++      static const long NPROC_ONLN = sysconf(_SC_NPROCESSORS_ONLN);
++      static const float LA_SCALE = static_cast<float>(1 << SI_LOAD_SHIFT);
++      metrics.MemTotal = std::to_string((info.totalram * info.mem_unit)/(1024*1024));
++      metrics.MemFree = std::to_string((info.freeram * info.mem_unit)/(1024*1024));
++      metrics.MemSwapped = std::to_string(((info.totalswap - info.freeswap) * info.mem_unit)/(1024*1024));
++      metrics.Uptime = std::to_string(info.uptime);
++      metrics.LoadAvg = std::to_string(info.loads[0] / LA_SCALE).substr(0,4) + " " +
++                  std::to_string(info.loads[1] / LA_SCALE).substr(0,4) + " " +
++                  std::to_string(info.loads[2] / LA_SCALE).substr(0,4);
++      metrics.NProc = std::to_string(NPROC_ONLN);
++    };
++
++    auto parseRssFromStatmLine = [&](const std::string &statmLine, uint32_t &inBytes)
++    {
++      std::vector<std::string> items = splitString(statmLine, ' ');
++      if (items.size() < 7)
++      {
++        SYSLOG(Logging::Error, (_T("Unexpected size(%u) of 'statm' line."), items.size()));
++        return;
++      }
++      static const long PageSize = sysconf(_SC_PAGE_SIZE);
++      unsigned long rssPageNum = std::stoul(items[1]);
++      inBytes = rssPageNum * PageSize;
++      return;
++    };
++
++    auto readStatmLine = [&] (pid_t pid, std::string &statmLine) -> bool
++    {
++      if (pid <= 1)
++      {
++        SYSLOG(Logging::Error, (_T("Cannot get stats for process id = %u"), pid));
++        return false;
++      }
++      std::string procPath = std::string("/proc/") + std::to_string(pid) + "/statm";
++      std::ifstream statmStream(procPath);
++      if (!statmStream.is_open() || !std::getline(statmStream, statmLine))
++      {
++        SYSLOG(Logging::Error, (_T("Cannot read process 'statm' file for process id = %u"), pid));
++        return false;
++      }
++      return true;
++    };
++
++    auto getHostName = [&] () -> std::string
++    {
++      std::size_t startIdx = _url.find("://");
++      if(startIdx == std::string::npos)
++        return _url;
++      else {
++        startIdx += 3; // skip "://"
++        size_t endIdx = _url.find("/",startIdx);
++        if(endIdx == std::string::npos)
++          return _url.substr(startIdx);
++        else
++          return _url.substr(startIdx, endIdx - startIdx);
++      }
++    };
++
++    auto addProcessInfo = [&](_Metrics &metrics)
++    {
++      uint32_t rssInBytes = 0;
++      std::string statmLine;
++      if (readStatmLine(_webprocessPID, statmLine))
++      {
++        parseRssFromStatmLine(statmLine, rssInBytes);
++      }
++
++      metrics.ProcessRSS = std::to_string(rssInBytes);
++      metrics.ProcessPID = std::to_string(_webprocessPID);
++      metrics.AppName = getHostName();
++      metrics.webProcessStatmLine = statmLine;
++    };
++
++    if (!_webprocessPID)
++      _webprocessPID = _getPIDCallback();
++
++    _Metrics metrics;
++    metrics.LaunchState = getProcessLaunchStateString();
++    metrics.AppType = "Web";
++
++    addSystemInfo(metrics);
++    addProcessInfo(metrics);
++
++    std::swap(_metrics, metrics);
++  }
++
++  void logLaunchMetrics()
++  {
++    if (_didLogLaunchMetrics)
++      return;
++
++    gint64 pageLoadTimeMs = (g_get_monotonic_time() - _pageLoadStart) / 1000;
++
++    _metrics.LaunchTime = std::to_string(pageLoadTimeMs);
++    _metrics.AppLoadSuccess = std::to_string(_loadFailed == false);
++    _metrics.webPageLoadNum = std::to_string(_pageLoadNum);
++
++    SYSLOG(Logging::Notification,
++           (_T( R"(Launch Metrics: {"%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s","%s":"%s"})"),
++            "LaunchState"         , _metrics.LaunchState.c_str(),
++            "AppType"             , _metrics.AppType.c_str(),
++            "MemTotal"            , _metrics.MemTotal.c_str(),
++            "MemFree"             , _metrics.MemFree.c_str(),
++            "MemSwapped"          , _metrics.MemSwapped.c_str(),
++            "Uptime"              , _metrics.Uptime.c_str(),
++            "LoadAvg"             , _metrics.LoadAvg.c_str(),
++            "NProc"               , _metrics.NProc.c_str(),
++            "ProcessRSS"          , _metrics.ProcessRSS.c_str(),
++            "ProcessPID"          , _metrics.ProcessPID.c_str(),
++            "AppName"             , _metrics.AppName.c_str(),
++            "webProcessStatmLine" , _metrics.webProcessStatmLine.c_str(),
++            "LaunchTime"          , _metrics.LaunchTime.c_str(),
++            "AppLoadSuccess"      , _metrics.AppLoadSuccess.c_str(),
++            "webPageLoadNum"      , _metrics.webPageLoadNum.c_str()));
++
++    SYSLOG(Logging::Notification, (_T( "Launch Metrics: (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"),
++                                   _metrics.LaunchState.c_str(),
++                                   _metrics.AppType.c_str(),
++                                   _metrics.MemTotal.c_str(),
++                                   _metrics.MemFree.c_str(),
++                                   _metrics.MemSwapped.c_str(),
++                                   _metrics.Uptime.c_str(),
++                                   _metrics.LoadAvg.c_str(),
++                                   _metrics.NProc.c_str(),
++                                   _metrics.ProcessRSS.c_str(),
++                                   _metrics.ProcessPID.c_str(),
++                                   _metrics.AppName.c_str(),
++                                   _metrics.webProcessStatmLine.c_str(),
++                                   _metrics.LaunchTime.c_str(),
++                                   _metrics.AppLoadSuccess.c_str(),
++                                   _metrics.webPageLoadNum.c_str()));
++
++    _pageLoadStart = -1;
++    _didLogLaunchMetrics = true;
++    _metrics = { };
++  }
++
++
++private:
++  enum WebProcessLaunchState {
++      WebProcessCold,   // the process is launching
++      WebProcessWarm    // the process is up and ready
++  };
++
++  WebProcessLaunchState _webProcessState { WebProcessCold };
++  std::function<pid_t()> _getPIDCallback;
++  pid_t  _webprocessPID { 0 };
++  bool   _didLogLaunchMetrics;
++  gint64 _pageLoadStart;
++  guint  _pageLoadNum;
++  bool   _loadFailed;
++  std::string _url;
++
++  struct _Metrics {
++    std::string LaunchState;
++    std::string AppType;
++    std::string MemTotal;
++    std::string MemFree;
++    std::string MemSwapped;
++    std::string Uptime;
++    std::string LoadAvg;
++    std::string NProc;
++    std::string ProcessRSS;
++    std::string ProcessPID;
++    std::string AppName;
++    std::string webProcessStatmLine;
++    std::string LaunchTime;
++    std::string AppLoadSuccess;
++    std::string webPageLoadNum;
++  } _metrics;
++};
++
++#endif
++
++}}
+diff --git a/WebKitBrowser/WebKitImplementation.cpp b/WebKitBrowser/WebKitImplementation.cpp
+index 072349bad..073dc9312 100644
+--- a/WebKitBrowser/WebKitImplementation.cpp
++++ b/WebKitBrowser/WebKitImplementation.cpp
+@@ -89,6 +89,8 @@ WK_EXPORT void WKPreferencesSetPageCacheEnabled(WKPreferencesRef preferences, bo
+ #include <testrunner.h>
+ #endif // ENABLE_TESTING
+ 
++#include "LegacyLaunchMetrics.h"
++
+ namespace WPEFramework {
+ namespace Plugin {
+ 
+@@ -1674,6 +1676,7 @@ static GSourceFuncs _handlerIntervention =
+                         string url = std::get<1>(data);
+                         object->_adminLock.Lock();
+                         object->_URL = url;
++                        object->_launchMetrics.Reset(url);
+                         object->_adminLock.Unlock();
+ 
+                         object->SetResponseHTTPStatusCode(-1);
+@@ -2415,6 +2418,8 @@ static GSourceFuncs _handlerIntervention =
+                 Core::SystemInfo::SetEnvironment(environmentVariable.Name.Value(), environmentVariable.Value.Value());
+             }
+ 
++            _launchMetrics.Initialize(this, [this](){return GetWebGetProcessIdentifier();});
++
+             // Oke, so we are good to go.. Release....
+             Core::Thread::Run();
+ 
+@@ -3556,6 +3561,8 @@ static GSourceFuncs _handlerIntervention =
+         uint32_t _unresponsiveReplyNum;
+         unsigned _frameCount;
+         gint64 _lastDumpTime;
++
++        Core::Sink<LaunchMetrics> _launchMetrics { };
+     };
+ 
+     SERVICE_REGISTRATION(WebKitImplementation, 1, 0);
+-- 
+2.25.1
+

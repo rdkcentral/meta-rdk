@@ -1,0 +1,69 @@
+meta-rdk
+==========
+
+This is the location for the generic RDK components.
+
+This layer is currently being developed, and is subject to drastic
+changes anytime.
+
+Setup
+==========
+
+This layer works with the Yocto Project release. The 'master' branch
+tracks the in-progress Yocto Project release, and each supported
+'stable' release is maintained in its own branch too.
+
+This layer depends on:
+
+--
+URI: git://git.openembedded.org/openembedded-core
+branch: daisy
+revision: HEAD
+layers: meta
+
+URI: git://git.openembedded.org/meta-openembedded
+branch: daisy
+revision: HEAD
+layers: meta-oe, meta-filesystems, meta-multimedia, meta-ruby
+
+URI: git://github.com/meta-qt5/meta-qt5
+branch: rdk/daisy
+revision: HEAD
+layers: meta-qt5
+
+URI: git://git.linaro.org/openembedded/meta-linaro
+branch: daisy
+revision: HEAD
+layers: meta-linaro, meta-linaro-toolchain
+--
+
+Patches
+==========
+
+Layer maintainers:
+  Nicolas Dechesne <nicolas.dechesne@linaro.org>
+  Trevor Woerner <trevor.woerner@linaro.org>
+  Ridish Rema Aravindan <ridish.ra@lnttechservices.com>
+
+Setup
+==========
+
+This layer includes configuration template files in meta-rdk/conf
+folder. The easiest way to work with this layer, is to use the
+associated repo manifest file, and the embedded setup script.
+
+$ repo init https://<url>/<repository>/rdkmanifest -b daisy -g rdk
+$ repo sync
+$ source meta-rdk/setup-environment
+
+The setup script will show the list of possible BSPs. It is
+recommended to build each BSP in its own <build> folder, hence the
+setup script will by default create a <build> folder called
+'build-<machine>'.
+
+You can install more BSP by simply adding the corresponding BSP layer
+underneath the top-level folder (along with meta-rdk folder). The
+setup script will search for possible machines using the following
+command, executed from the top level folder:
+
+$ ls -1 *{,/*}/conf/machine/*.conf

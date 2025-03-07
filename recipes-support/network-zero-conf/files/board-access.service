@@ -1,0 +1,17 @@
+[Unit]
+Description=Enable board SSH access
+#Wants=nvram.service
+After=iface-setup.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+# Start udhcpc for IPv4 address 
+# Moubt dropbear directory as read-write 
+# Start dropbear service
+# Add public DNS servers for dns resolution
+ExecStart=/bin/sh /lib/rdk/board_access.sh
+
+[Install]
+WantedBy=multi-user.target
