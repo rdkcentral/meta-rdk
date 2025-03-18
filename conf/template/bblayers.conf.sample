@@ -22,10 +22,11 @@ BBLAYERS ?= " \
 BBLAYERS =+ "${@'${MANIFEST_PATH_COMMON_OSS_REFERENCE}' if os.path.isfile('${MANIFEST_PATH_COMMON_OSS_REFERENCE}/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${MANIFEST_PATH_STACK_LAYERING_SUPPORT}' if os.path.isfile('${MANIFEST_PATH_STACK_LAYERING_SUPPORT}/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${MANIFEST_PATH_RDK_HALIF_HEADERS}' if os.path.isfile('${MANIFEST_PATH_RDK_HALIF_HEADERS}/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_RDK_TOOLS}' if os.path.isfile('${MANIFEST_PATH_RDK_TOOLS}/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@'${MANIFEST_PATH_OSS_EXT}' if os.path.isfile('${MANIFEST_PATH_OSS_EXT}/conf/layer.conf') else ''}"
 
 # Common layers: optional
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') if d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_RDK_TOOLS') if d.getVar('MANIFEST_PATH_RDK_TOOLS') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_TOOLS') + '/conf/layer.conf') else ''}"
 
 # Release layers: generic
 BBLAYERS =+ "${@'${MANIFEST_PATH_OSS_RELEASE}' if os.path.isfile('${MANIFEST_PATH_OSS_RELEASE}/conf/layer.conf') else ''}"
