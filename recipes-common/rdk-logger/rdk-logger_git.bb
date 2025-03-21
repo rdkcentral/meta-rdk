@@ -7,11 +7,13 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 PV ?= "1.0.0"
 PR ?= "r0"
 
-SRCREV = "41019bb6131226c3ac48ae76c42225d92e8529ee"
+#SRCREV = "41019bb6131226c3ac48ae76c42225d92e8529ee"
+SRCREV = "9e1615d0919c2002da00d6b77a3706beefbabdcd"
 SRCREV_FORMAT = "rdklogger"
 
 
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;${CMF_GITHUB_SRC_URI_SUFFIX}"
+#SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;${CMF_GITHUB_SRC_URI_SUFFIX}"
+SRC_URI = "git://github.com/DevikaJaladi/rdk_logger;protocol=https;branch=develop"
 
 S = "${WORKDIR}/git"
 
