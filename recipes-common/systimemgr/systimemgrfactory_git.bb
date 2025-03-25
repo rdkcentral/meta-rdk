@@ -18,18 +18,15 @@ PR ?= "r0"
 
 ASNEEDED = ""
 
-CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/rdk/iarmbus -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/rdk/iarmmgrs-hal -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/WPEFramework/powercontroller"
+CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/rdk/iarmbus -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/rdk/iarmmgrs-hal"
 
 
-LDFLAGS:append = " \
-	-lWPEFrameworkPowerController\
-      "
 S = "${WORKDIR}/git/systimerfactory"
 
 inherit autotools pkgconfig 
 
 RDEPENDS:${PN} += " jsonrpc curl jsoncpp "
-DEPENDS += " iarmmgrs wpeframework wpeframework-clientlibraries"
+DEPENDS += " iarmmgrs wpeframework "
 
 EXTRA_OECONF:append = " --enable-wpevgdrm --enable-dtt "
 
