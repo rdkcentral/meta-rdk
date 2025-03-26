@@ -16,7 +16,15 @@ inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logma
 DEPENDS = "cjson iarmbus iarmmgrs rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper"
 RDEPENDS:${PN}:append = " bash"
 RDEPENDS:${PN}:remove_morty = "bash"
- 
+
+# Add wpeframework-clientlibraries dependency for Ent-os powermanager
+DEPENDS +=  "${@bb.utils.contains('DISTRO_FEATURES', 'pwrmgr-plugin', 'wpeframework-clientlibraries', '', d)}"
+RDEPENDS:${PN}:append = "${@bb.utils.contains('DISTRO_FEATURES', 'pwrmgr-plugin', ' wpeframework-clientlibraries ', '', d)}"
+CFLAGS += " ${@bb.utils.contains('DISTRO_FEATURES', 'pwrmgr-plugin', " -I${PKG_CONFIG_SYSROOT_DIR}${includedir}/WPEFramework/powercontroller ", "", d)} "
+CFLAGS += " ${@bb.utils.contains('DISTRO_FEATURES', 'pwrmgr-plugin', " -DPWRMGR_PLUGIN ", "", d)} "
+LDFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'pwrmgr-plugin', " -lWPEFrameworkPowerController", "", d)}"
+
+
 INCLUDE_DIRS = " \
     -I${STAGING_INCDIR} \
     -I${STAGING_INCDIR}/trower-base64 \
