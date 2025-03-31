@@ -208,5 +208,34 @@
                                }
                             ]
                }
+             ],
+         "rdktv-us-armv7a" : [
+              {
+                 "group_id": 1,
+                     "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
+             ],
+         "rdktv-us-armv8a" : [
+              {
+                 "group_id": 1,
+                     "subdocs": [
+                               {
+                                  "name": "telemetry",
+                                  "bitposition": 1,
+                                  "support": true,
+                                  "version": "1.0",
+                                  "secondary_doc": true
+                               }
+                            ]
+               }
              ]
+
 }
