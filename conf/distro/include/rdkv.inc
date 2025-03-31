@@ -138,4 +138,4 @@ PREFERRED_VERSION_wpeframework-tools-native = "${@bb.utils.contains('DISTRO_FEAT
 include conf/distro/include/rdkv-cpc.inc
 
 # Distro feature for NetworkManager
-DISTRO_FEATURES:append = " ENABLE_NETWORKMANAGER"
+#DISTRO_FEATURES:append = " ENABLE_NETWORKMANAGER"
