@@ -7,6 +7,7 @@ BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 RDKROOT := "${@os.path.abspath(os.path.dirname(d.getVar('FILE', True)) + '/../..')}"
 include manifest_vars.conf
+include local.conf
 
 BBLAYERS ?= " \
   ${MANIFEST_PATH_POKY}/meta \
@@ -64,6 +65,8 @@ BBLAYERS =+ "${@'${MANIFEST_PATH_COMMON_CONFIG}' if os.path.isfile('${MANIFEST_P
 BBLAYERS =+ "${@'${MANIFEST_PATH_PROFILE_CONFIG}' if os.path.isfile('${MANIFEST_PATH_PROFILE_CONFIG}/conf/layer.conf') else ''}"
 
 # Config layers: restricted/proprietary/optional
-BBLAYERS =+ " \
-    ${@d.getVar('MANIFEST_PATH_REGION_CONFIG') if d.getVar('MANIFEST_PATH_REGION_CONFIG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_REGION_CONFIG') + '/conf/layer.conf') else ''} \
-    "
+BBLAYERS += "${@'${MANIFEST_PATH_REGION_CONFIG}' if os.path.isfile('${MANIFEST_PATH_REGION_CONFIG}/conf/layer.conf') and d.getVar('MACHINE') == 'xione-uk' else ''}"
+BBLAYERS += "${@'${MANIFEST_PATH_CONFIGS_REGION_FOXTEL}' if os.path.isfile('${MANIFEST_PATH_CONFIGS_REGION_FOXTEL}/conf/layer.conf') and d.getVar('MACHINE') == 'xione-foxtel' else ''}"
+BBLAYERS += "${@'${MANIFEST_PATH_CONFIGS_REGION_US}' if os.path.isfile('${MANIFEST_PATH_CONFIGS_REGION_US}/conf/layer.conf') and d.getVar('MACHINE') == 'xfinity-stream-box' else ''}"
+BBLAYERS += "${@'${MANIFEST_PATH_CONFIGS_REGION_US}' if os.path.isfile('${MANIFEST_PATH_CONFIGS_REGION_US}/conf/layer.conf') and d.getVar('MACHINE') == 'xumo-stream-box' else ''}"
+BBLAYERS += "${@'${MANIFEST_PATH_CONFIGS_REGION_DE}' if os.path.isfile('${MANIFEST_PATH_CONFIGS_REGION_DE}/conf/layer.conf') and d.getVar('MACHINE') == 'xione-de' or d.getVar('MACHINE') == 'xione-alpaca-de' else ''}"
