@@ -10,7 +10,7 @@ DEPENDS = "cjson trower-base64 msgpack-c cimplog wdmp-c curl wrp-c"
 DEPENDS:append = "${@bb.utils.contains("DISTRO_FEATURES", "webconfig_bin", " rbus cpeabs", " ", d)}"
 DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'aker', ' nanomsg libparodus ', '', d)}"
 
-SRCREV = "0b7bc1f05364b9d1ba69f9dc438fc8b7dec84cc7"
+SRCREV = "2c91a008bd7feeaea0c95c24eabd94cde11faa43"
 SRC_URI = "git://github.com/xmidt-org/webcfg.git;protocol=https;branch=master"
 
 RDEPENDS:${PN} += "util-linux-uuidgen"
@@ -55,7 +55,7 @@ CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'aker', '-I${STAGING_I
 
 CFLAGS:append = " -Wno-format-truncation -Wno-sizeof-pointer-memaccess"
 
-SRC_URI:append += " ${@bb.utils.contains('DISTRO_FEATURES', 'webconfig_bin', 'file://webconfig_metadata.json', '', d)}"
+SRC_URI:append += " ${@bb.utils.contains('DISTRO_FEATURES', 'webconfig_bin', 'file://webconfig_broadband_metadata.json', '', d)}"
 SRC_URI:append += " ${@bb.utils.contains('DISTRO_FEATURES', 'webconfig_bin', 'file://webconfig_video_metadata.json', '', d)}"
 SRC_URI:append += " ${@bb.utils.contains('DISTRO_FEATURES', 'webconfig_bin', 'file://metadata_parser.py', '', d)}"
 SRC_URI:append += " ${@bb.utils.contains('DISTRO_FEATURES', 'webconfig_bin', 'file://webconfig.service', '', d)}"
