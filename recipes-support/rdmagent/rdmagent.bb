@@ -12,6 +12,12 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=8700a1d105cac2a90d4f51290ac6e466"
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
+SRC_URI_append = " \
+  file://apps-prerdm.service \
+  file://apps_rdm.path \
+  file://apps-rdm.service \
+  file://apps_prerdm.sh \
+"
 SRCREV_FORMAT = "rdmagent"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
@@ -51,12 +57,8 @@ do_install:append () {
         install -d ${D}${includedir}/rdmagent/
         install -d ${D}${sysconfdir}
         install -d ${D}${sysconfdir}/rdmagent/
-        install -m644 ${S}/src/rdm_rsa_signature_verify.h ${D}${includedir}/rdmagent/
-        install -m 0755 ${S}/scripts/* ${D}${sysconfdir}/rdmagent/
-        install -m 0600 ${S}/rdm-manifest.json ${D}${sysconfdir}/rdmagent/
 
         install -m755 ${WORKDIR}/apps_prerdm.sh ${D}/${bindir}/
-        install -m755 ${WORKDIR}/rdm_apps_rfc_check.sh ${D}/${bindir}/
         install -D -m644 ${WORKDIR}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
         install -D -m644 ${WORKDIR}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m644 ${WORKDIR}/apps-prerdm.service ${D}${systemd_unitdir}/system/apps-prerdm.service
@@ -71,9 +73,4 @@ SYSTEMD_SERVICE:${PN} += "apps-prerdm.service"
 FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.service"
 FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.path"
 FILES:${PN} += "${systemd_unitdir}/system/apps-prerdm.service"
-
-FILES:${PN} += " \
-                /etc/rdmagent/* \
-                /usr/bin/opensslVerify \
-"
 
