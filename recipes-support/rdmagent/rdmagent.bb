@@ -40,7 +40,6 @@ PARALLEL_MAKE = ""
 
 DEPENDS += "commonutilities"
 DEPENDS += "opkg"
-DEPENDS = "curl openssl libsyswrapper"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 
@@ -48,10 +47,6 @@ LDFLAGS:append = " -lIARMBus -lsecure_wrapper"
 
 DEPENDS += " iarmmgrs iarmbus libsyswrapper"
 
-INCLUDE_DIRS = " \
-    -I${STAGING_INCDIR} \
-    -I${STAGING_INCDIR}/openssl \
-    "
 do_install:append () {
         install -d ${D}${bindir}/
         install -d ${D}${includedir}/rdmagent/
@@ -63,7 +58,6 @@ do_install:append () {
         install -D -m644 ${WORKDIR}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m644 ${WORKDIR}/apps-prerdm.service ${D}${systemd_unitdir}/system/apps-prerdm.service
 
-        rm -f ${D}${sysconfdir}/rdm/kmsVerify.sh
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
