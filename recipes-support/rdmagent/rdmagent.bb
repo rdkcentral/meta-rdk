@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=8700a1d105cac2a90d4f51290ac6e466"
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
-SRC_URI_append = " \
+SRC_URI:append = " \
   file://apps-prerdm.service \
   file://apps_rdm.path \
   file://apps-rdm.service \
