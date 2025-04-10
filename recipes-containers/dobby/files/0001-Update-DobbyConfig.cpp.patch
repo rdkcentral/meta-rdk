@@ -1,14 +1,14 @@
-From 69e3fd62b36898ef43fbe8c61e49e3a9fba68228 Mon Sep 17 00:00:00 2001
+From 341c54c576061673dcefce774ee5f42ba6d59c7a Mon Sep 17 00:00:00 2001
 From: ks734 <karthick_s@comcast.com>
-Date: Thu, 10 Apr 2025 00:23:50 +0530
+Date: Thu, 10 Apr 2025 11:02:10 +0530
 Subject: [PATCH] Update DobbyConfig.cpp
 
 ---
- bundle/lib/source/DobbyConfig.cpp | 33 +++++++++++++++++--------------
- 1 file changed, 18 insertions(+), 15 deletions(-)
+ bundle/lib/source/DobbyConfig.cpp | 55 ++++++++++++++++---------------
+ 1 file changed, 29 insertions(+), 26 deletions(-)
 
 diff --git a/bundle/lib/source/DobbyConfig.cpp b/bundle/lib/source/DobbyConfig.cpp
-index 444d6c8..be34988 100644
+index 444d6c8..1714719 100644
 --- a/bundle/lib/source/DobbyConfig.cpp
 +++ b/bundle/lib/source/DobbyConfig.cpp
 @@ -27,6 +27,7 @@
@@ -17,55 +17,69 @@ index 444d6c8..be34988 100644
  #include <fstream>
 +#include <fcntl.h>
  #include <FileUtilities.h>
- 
+
  #define OCI_VERSION_CURRENT         "1.0.2"         // currently used version of OCI in bundles
-@@ -781,29 +782,31 @@ bool DobbyConfig::updateBundleConfig(const ContainerId& id, std::shared_ptr<rt_d
- 
+@@ -780,32 +781,34 @@ bool DobbyConfig::updateBundleConfig(const ContainerId& id, std::shared_ptr<rt_d
+  */
+
  bool DobbyConfig::isApparmorProfileLoaded(const char *profile) const
- {
+-{
 -    FILE *fp = nullptr;
 -    char line[256];
-     bool status = false;
-+    int fd = open("/proc/self/attr/current", O_WRONLY);
-+    if (fd < 0)
-+    {
-+        AI_LOG_ERROR("/proc/self/attr/current open failed");
-+        return status;
-+    }
- 
+-    bool status = false;
+-
 -    fp = fopen("/sys/kernel/security/apparmor/profiles", "r");
-+    char profile_name[256];
-+    snprintf(profile_name, sizeof(profile_name), "permprofile %s", profile);
- 
+-
 -    if (fp == nullptr)
-+    if (write(fd, profile_name, strlen(profile_name)) < 0)
-     {
+-    {
 -        AI_LOG_ERROR("/sys/kernel/security/apparmor/profiles open failed");
 -        return status;
-+        if (errno == ENOENT)
-+            AI_LOG_INFO("Apparmor profile [%s] doesn't exist", profile);
-+        else
-+            AI_LOG_ERROR("/proc/self/attr/current write failed");
-     }
+-    }
 -
 -    while (fgets(line, sizeof(line), fp))
-+    else
-     {
+-    {
 -        if (strstr(line, profile))
 -        {
 -            status = true;
 -            AI_LOG_INFO("Apparmor profile [%s] is loaded", profile);
 -            break;
 -        }
-+        status = true;
-+        AI_LOG_INFO("Apparmor profile [%s] is loaded", profile);
-     }
- 
+-    }
+-
 -    fclose(fp);
-+    close(fd);
-     return status;
- }
- 
--- 
+-    return status;
+-}
++ {
++     bool status = false;
++     int fd = open("/proc/self/attr/current", O_WRONLY);
++
++     if (fd < 0)
++     {
++         AI_LOG_ERROR("/proc/self/attr/current open failed");
++         return status;
++     }
++     char profile_name[256];
++     snprintf(profile_name, sizeof(profile_name), "permprofile %s", profile);
++
++     if (write(fd, profile_name, strlen(profile_name)) < 0)
++     {
++         if (errno == ENOENT)
++             AI_LOG_INFO("Apparmor profile [%s] doesn't exist", profile);
++         else
++             AI_LOG_ERROR("/proc/self/attr/current write failed");
++     }
++     else
++     {
++         status = true;
++         AI_LOG_INFO("Apparmor profile [%s] is loaded", profile);
++     }
++
++     close(fd);
++     return status;
++ }
+
+ // -----------------------------------------------------------------------------
+ /**
+--
 2.31.1.windows.1
 
