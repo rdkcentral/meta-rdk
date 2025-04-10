@@ -167,6 +167,8 @@ def json_read(data, dest, device_name):
     global supported_bits
     group_id = None
     docs = None
+    device_found = False
+
     for (dev, subdoc) in list(data.items()):
         # Filtering based on device name from Json
         if dev in device_name:
@@ -186,7 +188,27 @@ def json_read(data, dest, device_name):
                         supported_docs(group_id, docs)
                         group_id = None
                         docs = None
+            device_found = True
             break
+
+    if not device_found:
+        # Default section if device name is not present
+        default_subdoc = data.get("default", [])
+        max_group_size = len(default_subdoc)
+        supported_bits = [0 for i in range(0, max_group_size)]
+        for count in range(0, len(default_subdoc)):
+            for (key, value) in list(default_subdoc[count].items()):
+                if key == "group_id":
+                    group_id = value
+
+                if key == "subdocs":
+                    docs = value
+
+                if group_id is not None and docs is not None:
+                    # Individual group is segregated
+                    supported_docs(group_id, docs)
+                    group_id = None
+                    docs = None
 
     '''print "Docs"
     for i in range(0,10):
