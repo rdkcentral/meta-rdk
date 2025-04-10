@@ -5,3 +5,4 @@ ConditionPathExists=/tmp/.xconfssrdownloadurl
 
 [Service]
 SyslogIdentifier=apps-rdm
+ExecStart=/usr/bin/rdm
