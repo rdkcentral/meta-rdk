@@ -1,7 +1,7 @@
 [Unit]
 Description= Service to ensure pre condition for rdm apps download
 After=nvram.service
-ConditionPathExists=/etc/rdm/rdm-manifest.json
+ConditionPathExists=/tmp/.xconfssrdownloadurl
 
 [Service]
 ExecStart=/bin/sh -c '/usr/bin/apps_prerdm.sh'
