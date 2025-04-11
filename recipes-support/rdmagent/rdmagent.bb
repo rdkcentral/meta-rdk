@@ -49,9 +49,6 @@ DEPENDS += " iarmmgrs iarmbus libsyswrapper"
 
 do_install:append () {
         install -d ${D}${bindir}/
-        install -d ${D}${includedir}/rdmagent/
-        install -d ${D}${sysconfdir}
-        install -d ${D}${sysconfdir}/rdmagent/
 
         install -m755 ${WORKDIR}/apps_prerdm.sh ${D}/${bindir}/
         install -D -m644 ${WORKDIR}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
