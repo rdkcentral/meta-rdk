@@ -15,11 +15,6 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "bluetooth-core cjson wpeframework-clientlibraries"
 
-CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/WPEFramework/powercontroller"
-LDFLAGS:append = " \
-	-lWPEFrameworkPowerController\
-      "
-
 RDEPENDS:${PN}  = " bluetooth-core"
 RDEPENDS:${PN} += " cjson"
 
