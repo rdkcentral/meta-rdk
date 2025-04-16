@@ -13,4 +13,4 @@ jobs:
     with:
       issueNumber: ${{ github.event.inputs.issueNumber }}
     secrets:
-      RDKE_GITHUB_TOKEN: ${{ secrets.RDKCM_RDKE }}
+      RDKCM_RDKE: ${{ secrets.RDKCM_RDKE }}
