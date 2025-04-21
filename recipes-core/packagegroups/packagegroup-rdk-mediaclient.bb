@@ -15,6 +15,7 @@ RDEPENDS:packagegroup-rdk-generic-mediaclient = "\
     tr69hostif \
     tenablehdcp \
     netsrvmgr \
+    valgrind \
     util-linux-sfdisk \
     webkitbrowser-plugin \
     "
