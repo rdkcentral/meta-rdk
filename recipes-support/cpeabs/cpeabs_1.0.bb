@@ -8,7 +8,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS = "cjson msgpack-c rbus wdmp-c cimplog"
 
-SRCREV = "1f16491bcd540c370cdda1399cbc3cffa8dfaf79"
+SRCREV = "c017d418919ac548e5c3f2d2e534261502210720"
 
 SRC_URI = "git://github.com/xmidt-org/cpeabs.git;protocol=https;branch=master"
 
