@@ -17,6 +17,7 @@ SRC_URI:append = " \
   file://apps_rdm.path \
   file://apps-rdm.service \
   file://apps_rdm.mount \
+  file://apps_prerdm.sh \
 "
 SRCREV_FORMAT = "rdmagent"
 
@@ -54,6 +55,7 @@ do_install:append () {
         install -D -m644 ${WORKDIR}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m644 ${WORKDIR}/apps-prerdm.service ${D}${systemd_unitdir}/system/apps-prerdm.service
         install -D -m644 ${WORKDIR}/apps_rdm.mount ${D}${systemd_unitdir}/system/apps_rdm.mount
+        install -D -m644 ${WORKDIR}/apps-prerdm.service ${D}${systemd_unitdir}/system/apps-prerdm.service
 
 }
 
