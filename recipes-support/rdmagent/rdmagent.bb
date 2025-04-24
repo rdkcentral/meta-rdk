@@ -51,11 +51,11 @@ DEPENDS += " iarmmgrs iarmbus libsyswrapper"
 do_install:append () {
         install -d ${D}${bindir}/
 
+        install -m755 ${WORKDIR}/apps_prerdm.sh ${D}/${bindir}/
         install -D -m644 ${WORKDIR}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
         install -D -m644 ${WORKDIR}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m644 ${WORKDIR}/apps-prerdm.service ${D}${systemd_unitdir}/system/apps-prerdm.service
         install -D -m644 ${WORKDIR}/apps_rdm.mount ${D}${systemd_unitdir}/system/apps_rdm.mount
-        install -D -m644 ${WORKDIR}/apps-prerdm.service ${D}${systemd_unitdir}/system/apps-prerdm.service
 
 }
 
