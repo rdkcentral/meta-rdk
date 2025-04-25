@@ -16,8 +16,6 @@ SRC_URI:append = " \
   file://apps-prerdm.service \
   file://apps_rdm.path \
   file://apps-rdm.service \
-  file://apps_rdm.mount \
-  file://apps_prerdm.sh \
 "
 SRCREV_FORMAT = "rdmagent"
 
@@ -51,21 +49,17 @@ DEPENDS += " iarmmgrs iarmbus libsyswrapper"
 do_install:append () {
         install -d ${D}${bindir}/
 
-        install -m755 ${WORKDIR}/apps_prerdm.sh ${D}/${bindir}/
         install -D -m644 ${WORKDIR}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
         install -D -m644 ${WORKDIR}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m644 ${WORKDIR}/apps-prerdm.service ${D}${systemd_unitdir}/system/apps-prerdm.service
-        install -D -m644 ${WORKDIR}/apps_rdm.mount ${D}${systemd_unitdir}/system/apps_rdm.mount
 
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
 SYSTEMD_SERVICE:${PN} += "apps_rdm.path"
 SYSTEMD_SERVICE:${PN} += "apps-prerdm.service"
-SYSTEMD_SERVICE:${PN} += "apps_rdm.mount"
 
 FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.service"
 FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.path"
 FILES:${PN} += "${systemd_unitdir}/system/apps-prerdm.service"
-FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.mount"
 

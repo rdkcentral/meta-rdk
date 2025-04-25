@@ -1,7 +1,6 @@
 [Unit]
 Description= Service to ensure pre condition for rdm apps download
 After=nvram.service
-Requires=apps_rdm.mount
 
 [Install]
 WantedBy=multi-user.target
