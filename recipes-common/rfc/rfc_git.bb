@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=bef3b9130aa5d626df3f7171f2dadfe2"
 
 PACKAGECONFIG ??= "rfctool"
 PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
+PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
@@ -17,7 +18,7 @@ DEPENDS="cjson curl commonutilities libsyswrapper iarmmgrs-hal-headers"
 EXTRA_OEMAKE += "-e MAKEFLAGS="
 EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
 
-inherit autotools pkgconfig coverity
+inherit autotools pkgconfig coverity comcast-breakpad
 
 CFLAGS += " -Wall -Werror -Wextra "
 CFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', '-DEN_MAINTENANCE_MANAGER -I${STAGING_INCDIR}/rdk/iarmmgrs-hal ', '', d)}"
@@ -34,7 +35,16 @@ do_install:append () {
 RDEPENDS:${PN} += "busybox"
 
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', ' gtest gmock', '', d)}"
+DEPENDS += "breakpad breakpad-wrapper"
+
+BREAKPAD_BIN_append = " rfcMgr"
+
+LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
+
 PACKAGES =+ "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${PN}-gtest', '', d)}"
+
+# generating minidumps
+PACKAGECONFIG_append = " breakpad"
 
 FILES:${PN}-gtest = "\
     ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${bindir}/rfc_gtest.bin', '', d)} \
