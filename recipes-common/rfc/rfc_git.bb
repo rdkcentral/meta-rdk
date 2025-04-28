@@ -18,7 +18,7 @@ DEPENDS="cjson curl commonutilities libsyswrapper iarmmgrs-hal-headers"
 EXTRA_OEMAKE += "-e MAKEFLAGS="
 EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
 
-inherit autotools pkgconfig coverity comcast-breakpad
+inherit autotools pkgconfig coverity breakpad
 
 CFLAGS += " -Wall -Werror -Wextra "
 CFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', '-DEN_MAINTENANCE_MANAGER -I${STAGING_INCDIR}/rdk/iarmmgrs-hal ', '', d)}"
