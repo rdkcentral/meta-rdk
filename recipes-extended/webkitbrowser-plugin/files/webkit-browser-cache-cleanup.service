@@ -1,7 +1,7 @@
 [Unit]
 Description=Cleans up browser cache
 
-After=local-fs.target storagemgrmain.service
+After=local-fs.target nvram.service
 Before=wpeframework.service
 
 [Service]
