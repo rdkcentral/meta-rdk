@@ -15,6 +15,7 @@ export cjson_LIBS = "-lcjson"
 
 DEPENDS="cjson curl commonutilities libsyswrapper iarmmgrs-hal-headers"
 EXTRA_OEMAKE += "-e MAKEFLAGS="
+EXTRA_OEMAKE += "-DINCLUDE_BREAKPAD=ON"
 EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
 
 inherit autotools pkgconfig coverity breakpad
