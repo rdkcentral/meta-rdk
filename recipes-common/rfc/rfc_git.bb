@@ -44,7 +44,7 @@ LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 PACKAGES =+ "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${PN}-gtest', '', d)}"
 
 # generating minidumps
-PACKAGECONFIG_append = " breakpad"
+PACKAGECONFIG:append = " breakpad"
 
 FILES:${PN}-gtest = "\
     ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${bindir}/rfc_gtest.bin', '', d)} \
