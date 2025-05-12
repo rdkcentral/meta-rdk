@@ -36,10 +36,11 @@ RDEPENDS:${PN} += "busybox"
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', ' gtest gmock', '', d)}"
 DEPENDS += "breakpad breakpad-wrapper"
 
-BREAKPAD_BIN:append = " rfc"
+BREAKPAD_BIN:append = " rfcMgr"
 PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 
 LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
+CFLAGS += "-DINCLUDE_BREAKPAD"
 
 PACKAGES =+ "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${PN}-gtest', '', d)}"
 
