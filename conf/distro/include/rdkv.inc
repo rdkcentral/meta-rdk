@@ -90,10 +90,6 @@ PREFERRED_VERSION_mosquitto:kirkstone = "2.0.14"
 PREFERRED_VERSION_nodejs:kirkstone = "16.14.2"
 PREFERRED_VERSION_nodejs-native:kirkstone = "16.14.2"
 
-VOLATILE_BINDS:append = "/tmp/named.conf.options /etc/bind/named.conf.options\n"
-VOLATILE_BINDS:append = "/tmp/bind /var/cache/bind\n"
-VOLATILE_BINDS:append = "/tmp/stunnel.conf /etc/stunnel.conf\n"
-
 PREFERRED_VERSION_qtwebsockets = "${@bb.utils.contains('DISTRO_FEATURES', 'comcast_qt5', '5.1.1%', '5.15.7', d)}"
 
 
@@ -132,7 +128,7 @@ BBMASK .= "${@bb.utils.contains('DISTRO_FEATURES', 'kirkstone', '|.meta-rdk-ext/
 DISTRO_FEATURES:append ?= " wpe_r4_4"
 PREFERRED_VERSION_wpeframework = "${@bb.utils.contains('DISTRO_FEATURES', 'wpe_r4_4', '4.4%' , bb.utils.contains('DISTRO_FEATURES', 'wpe_r4', '4.2%', '2.1%', d), d)}"
 PREFERRED_VERSION_wpeframework-clientlibraries = "${@bb.utils.contains('DISTRO_FEATURES', 'wpe_r4_4', '4.4%' , bb.utils.contains('DISTRO_FEATURES', 'wpe_r4', '4.2%', '2.1%', d), d)}"
-PREFERRED_VERSION_rdkservices-apis = "1.0.1"
+PREFERRED_VERSION_entservices-apis = "1.0.1"
 PREFERRED_VERSION_wpeframework-tools-native = "${@bb.utils.contains('DISTRO_FEATURES', 'wpe_r4_4', '4.4%' , bb.utils.contains('DISTRO_FEATURES', 'wpe_r4', '4.2%', '2.1%', d), d)}"
 
 include conf/distro/include/rdkv-cpc.inc
