@@ -7,7 +7,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 PV ?= "1.0.0"
 PR ?= "r0"
 
-SRCREV = "968bdfc364008e27a52921370f7bc98c0c43e161"
+SRCREV = "2d2b68e742e0afeaed8a021388ea36af4aa8a34e"
 SRCREV_FORMAT = "rdklogger"
 
 
