@@ -13,7 +13,6 @@ FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
 SRC_URI:append = " \
-  file://apps-prerdm.service \
   file://apps_rdm.path \
   file://apps-rdm.service \
 "
@@ -51,7 +50,6 @@ do_install:append () {
 
         install -D -m644 ${WORKDIR}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
         install -D -m644 ${WORKDIR}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
-
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
