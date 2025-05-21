@@ -46,7 +46,7 @@ do_install:append () {
         install -d ${D}${sysconfdir}
         install -d ${D}${sysconfdir}/rdm/
         install -D -m644 ${S}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
-        install -D -m644 ${S}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
+        install -D -m644 ${S}/apps-rdm.path ${D}${systemd_unitdir}/system/apps-rdm.path
         install -D -m755 ${S}/scripts/getRdmDwldPath.sh ${D}${sysconfdir}/rdm/getRdmDwldPath.sh
         install -D -m755 ${S}/scripts/downloadUtils.sh ${D}${sysconfdir}/rdm/downloadUtils.sh
         install -D -m755 ${S}/scripts/loggerUtils.sh ${D}${sysconfdir}/rdm/loggerUtils.sh
@@ -54,8 +54,8 @@ do_install:append () {
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
-SYSTEMD_SERVICE:${PN} += "apps_rdm.path"
+SYSTEMD_SERVICE:${PN} += "apps-rdm.path"
 
 FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.service"
-FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.path"
+FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.path"
 FILES:${PN} += "${sysconfdir}/rdm/* "
