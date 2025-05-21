@@ -26,6 +26,7 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_EXT') if d.getVar('MANIFEST_PATH_OSS
 
 # Common layers: optional
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') if d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_RDK_IMAGES') if d.getVar('MANIFEST_PATH_RDK_IMAGES') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_IMAGES') + '/conf/layer.conf') else ''}"
 
 # Release layers: generic
 BBLAYERS =+ "${@'${MANIFEST_PATH_OSS_RELEASE}' if os.path.isfile('${MANIFEST_PATH_OSS_RELEASE}/conf/layer.conf') else ''}"
@@ -34,7 +35,7 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_CSPC_SECURITY_RELEASE') if d.getVar('MAN
 
 # Release layers: restricted/proprietary/optional
 BBLAYERS =+ " \
-    ${@d.getVar('MANIFEST_PATH_APP_RELEASE') if d.getVar('MANIFEST_PATH_APP_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_APP_RELEASE') + '/conf/layer.conf') else ''} \
+    ${@d.getVar('MANIFEST_PATH_APPLICATION_RELEASE') if d.getVar('MANIFEST_PATH_APPLICATION_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_APPLICATION_RELEASE') + '/conf/layer.conf') else ''} \
     "
 
 # Middleware layers: generic
