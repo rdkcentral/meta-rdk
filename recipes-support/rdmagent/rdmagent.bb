@@ -39,7 +39,12 @@ CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 
 LDFLAGS:append = " -lIARMBus -lsecure_wrapper"
 
-DEPENDS += " iarmmgrs iarmbus libsyswrapper"
+DEPENDS += "libsyswrapper"
+
+EXTRA_OECONF_append = " --enable-iarmbusSupport=yes"
+
+DEPENDS_append = " iarmmgrs iarmbus"
+LDFLAGS_append = " -lIARMBus"
 
 do_install:append () {
         install -d ${D}${bindir}/
