@@ -37,14 +37,14 @@ DEPENDS += "opkg"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 
-LDFLAGS:append = " -lIARMBus -lsecure_wrapper"
+LDFLAGS:append = " -lsecure_wrapper"
 
 DEPENDS += "libsyswrapper"
 
-EXTRA_OECONF_append = " --enable-iarmbusSupport=yes"
+EXTRA_OECONF:append = " --enable-iarmbusSupport=yes"
 
-DEPENDS_append = " iarmmgrs iarmbus"
-LDFLAGS_append = " -lIARMBus"
+DEPENDS:append = " iarmmgrs iarmbus"
+LDFLAGS:append = " -lIARMBus"
 
 do_install:append () {
         install -d ${D}${bindir}/
