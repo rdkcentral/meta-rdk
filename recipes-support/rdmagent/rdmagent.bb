@@ -12,10 +12,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=8700a1d105cac2a90d4f51290ac6e466"
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
-SRC_URI:append = " \
-  file://apps_rdm.path \
-  file://apps-rdm.service \
-"
 SRCREV_FORMAT = "rdmagent"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
@@ -41,15 +37,25 @@ DEPENDS += "opkg"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 
-LDFLAGS:append = " -lIARMBus -lsecure_wrapper"
+LDFLAGS:append = " -lsecure_wrapper"
 
-DEPENDS += " iarmmgrs iarmbus libsyswrapper"
+DEPENDS += "libsyswrapper"
+
+EXTRA_OECONF:append = " --enable-iarmbusSupport=yes"
+
+DEPENDS:append = " iarmmgrs iarmbus"
+LDFLAGS:append = " -lIARMBus"
 
 do_install:append () {
         install -d ${D}${bindir}/
-
-        install -D -m644 ${WORKDIR}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
-        install -D -m644 ${WORKDIR}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
+        install -d ${D}${sysconfdir}
+        install -d ${D}${sysconfdir}/rdm/
+        install -D -m644 ${S}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
+        install -D -m644 ${S}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
+        install -D -m755 ${S}/scripts/getRdmDwldPath.sh ${D}${sysconfdir}/rdm/getRdmDwldPath.sh
+        install -D -m755 ${S}/scripts/downloadUtils.sh ${D}${sysconfdir}/rdm/downloadUtils.sh
+        install -D -m755 ${S}/scripts/loggerUtils.sh ${D}${sysconfdir}/rdm/loggerUtils.sh
+        install -D -m600 ${S}/rdm-manifest.json ${D}${sysconfdir}/rdm/rdm-manifest.json
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
@@ -57,4 +63,4 @@ SYSTEMD_SERVICE:${PN} += "apps_rdm.path"
 
 FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.service"
 FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.path"
-
+FILES:${PN} += "${sysconfdir}/rdm/* "
