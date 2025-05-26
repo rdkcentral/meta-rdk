@@ -27,7 +27,6 @@ inherit pkgconfig autotools systemd ${@bb.utils.contains("DISTRO_FEATURES", "kir
 CFLAGS += " -DDROP_ROOT_PRIV "
 
 LDFLAGS:append = " \
-        -lbreakpadwrapper \
         -lpthread \
         -lstdc++ \
         -lsecure_wrapper \
@@ -36,7 +35,7 @@ LDFLAGS:append = " \
         -lprivilege \
       "
 
-CXXFLAGS += "-DINCLUDE_BREAKPAD"
+#CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 do_install:append () {
     install -d ${D}/usr/include/
