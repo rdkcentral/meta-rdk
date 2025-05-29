@@ -8,6 +8,7 @@ SRC_URI:append = " file://Fix_compile_gcc11.patch  \
                    file://Add_config_header_kirkstone.patch \
                    file://dobby.generic.json \
                    file://dobby_start_after_apparmor.patch \
+                   file://coverity.patch \
                  "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
