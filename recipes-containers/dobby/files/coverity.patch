@@ -1,0 +1,721 @@
+From 174a5c9d601eb5dfc9f16bafcc35942af0f6b4f8 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Fri, 23 May 2025 11:51:23 +0530
+Subject: [PATCH 01/21] Update PortForwarding.cpp
+
+---
+ .../Networking/source/PortForwarding.cpp       | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/rdkPlugins/Networking/source/PortForwarding.cpp b/rdkPlugins/Networking/source/PortForwarding.cpp
+index 2778d24..02756e6 100644
+--- a/rdkPlugins/Networking/source/PortForwarding.cpp
++++ b/rdkPlugins/Networking/source/PortForwarding.cpp
+@@ -595,7 +595,7 @@ std::string createPreroutingRule(const PortForward &portForward,
+                                  const std::string &ipAddress,
+                                  const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     // We need to add -m <PROTOCOL> because it's automatically added by
+     // iptables. If omitted, we won't be able to match the rule for deletion.
+@@ -660,7 +660,7 @@ std::string createForwardingRule(const PortForward &portForward,
+                                  const std::string &ipAddress,
+                                  const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     // We need to add -m <PROTOCOL> because it's automatically added by
+     // iptables. If omitted, we won't be able to match the rule for deletion.
+@@ -807,7 +807,7 @@ std::string createDnatRule(const PortForward &portForward,
+                            const std::string &ipAddress,
+                            const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     std::string sourceAddr;
+     std::string bridgeAddr;
+@@ -879,7 +879,7 @@ std::string createAcceptRule(const PortForward &portForward,
+                              const std::string &vethName,
+                              const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     std::string sourceAddr;
+     std::string loAddr;
+@@ -940,7 +940,7 @@ std::string createMasqueradeDnatRule(const PortForward &portForward,
+                                     const std::string &ipAddress,
+                                     const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     std::string destination;
+ 
+@@ -993,7 +993,7 @@ std::string createNoIpv6LocalRule(const PortForward &portForward,
+                                     const std::string &ipAddress,
+                                     const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     std::string destination;
+ 
+@@ -1041,7 +1041,7 @@ std::string createMasqueradeSnatRule(const PortForward &portForward,
+                                     const std::string &ipAddress,
+                                     const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     std::string bridgeAddr;
+     std::string sourceAddr;
+@@ -1099,7 +1099,7 @@ std::string createLocalLinkSnatRule(const PortForward &portForward,
+                                     const std::string &ipAddress,
+                                     const int ipVersion)
+ {
+-    char buf[256];
++    char buf[256] = {0};
+ 
+     std::string bridgeAddr;
+     std::string sourceAddr;
+@@ -1135,4 +1135,4 @@ std::string createLocalLinkSnatRule(const PortForward &portForward,
+              destination.c_str());
+ 
+     return std::string(buf);
+-}
+\ No newline at end of file
++}
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 05f92c7ff034d740b05d4563d22e3f5a821d7989 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Mon, 26 May 2025 15:04:43 +0530
+Subject: [PATCH 02/21] Update Main.cpp
+
+---
+ daemon/process/source/Main.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/daemon/process/source/Main.cpp b/daemon/process/source/Main.cpp
+index ab3eafb..654d937 100644
+--- a/daemon/process/source/Main.cpp
++++ b/daemon/process/source/Main.cpp
+@@ -339,6 +339,7 @@ static void daemonise()
+             {
+                 fprintf(fp, "%d", pid);
+                 fflush(fp);
++                fclose(fp);
+             }
+         }
+ 
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 959960e2e94c6ad5eb374bcb6bf598eb1568fea7 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Mon, 26 May 2025 15:38:09 +0530
+Subject: [PATCH 03/21] Update Main.cpp
+
+---
+ daemon/process/source/Main.cpp | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/daemon/process/source/Main.cpp b/daemon/process/source/Main.cpp
+index 654d937..14c133e 100644
+--- a/daemon/process/source/Main.cpp
++++ b/daemon/process/source/Main.cpp
+@@ -302,9 +302,21 @@ static void closeConsole()
+     }
+     else
+     {
+-        dup2(fd, STDIN_FILENO);
+-        dup2(fd, STDOUT_FILENO);
+-        dup2(fd, STDERR_FILENO);
++        if (dup2(fd, STDIN_FILENO) < 0)
++        {
++            fprintf(stderr, "failed to redirect stdin (%d - %s)\n", errno, strerror(errno));
++            close(fd);
++        }
++        if (dup2(fd, STDOUT_FILENO) < 0)
++        {
++            fprintf(stderr, "failed to redirect stdout (%d - %s)\n", errno, strerror(errno));
++            close(fd);
++        }
++        if (dup2(fd, STDERR_FILENO) < 0)
++        {
++            fprintf(stderr, "failed to redirect stderr (%d - %s)\n", errno, strerror(errno));
++            close(fd);
++        }
+         if (fd > STDERR_FILENO)
+             close(fd);
+     }
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 117c54125c20191f1b0beac5499251f984525dd5 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Mon, 26 May 2025 17:09:46 +0530
+Subject: [PATCH 04/21] Update Minidump.cpp
+
+---
+ rdkPlugins/Minidump/source/Minidump.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/rdkPlugins/Minidump/source/Minidump.cpp b/rdkPlugins/Minidump/source/Minidump.cpp
+index 604c573..57050bb 100644
+--- a/rdkPlugins/Minidump/source/Minidump.cpp
++++ b/rdkPlugins/Minidump/source/Minidump.cpp
+@@ -143,7 +143,8 @@ std::string Minidump::getDestinationFile()
+ {
+     // If an app crashes multiple times, a previous dump might still exist in the destination
+     // path. Append the current date/time to the filename to prevent conflicts
+-    std::time_t currentTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
++    auto now = std::chrono::system_clock::now();
++    std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
+     std::stringstream timeString;
+     timeString << std::put_time(std::localtime(&currentTime), "%FT%T");
+     std::string destFile;
+-- 
+2.39.5 (Apple Git-154)
+
+
+From e849a42753991e21f6fdc82b12e41a7656203d46 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Mon, 26 May 2025 17:57:22 +0530
+Subject: [PATCH 05/21] Update DobbyUtils.cpp
+
+---
+ utils/source/DobbyUtils.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/utils/source/DobbyUtils.cpp b/utils/source/DobbyUtils.cpp
+index 92164ec..64a646b 100644
+--- a/utils/source/DobbyUtils.cpp
++++ b/utils/source/DobbyUtils.cpp
+@@ -669,7 +669,7 @@ bool DobbyUtils::callInNamespaceImpl(pid_t pid, int nsType,
+             return false;
+     }
+ 
+-    bool success;
++    bool success = true;
+ 
+     // get the namespace of the containered app
+     sprintf(nsPath, "/proc/%d/ns/%s", pid, nsName);
+@@ -1729,4 +1729,4 @@ gid_t DobbyUtils::getGID(pid_t pid) const
+ uid_t DobbyUtils::getUID(pid_t pid) const
+ {
+     return static_cast<uid_t>(getGIDorUID(pid, "Uid"));
+-}
+\ No newline at end of file
++}
+-- 
+2.39.5 (Apple Git-154)
+
+
+From fc04bd7a5d04cd52c776852c433516288fc84491 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 12:09:10 +0530
+Subject: [PATCH 06/21] Update DobbyUtils.cpp
+
+---
+ utils/source/DobbyUtils.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/utils/source/DobbyUtils.cpp b/utils/source/DobbyUtils.cpp
+index 64a646b..bbf87dd 100644
+--- a/utils/source/DobbyUtils.cpp
++++ b/utils/source/DobbyUtils.cpp
+@@ -588,7 +588,7 @@ bool DobbyUtils::callInNamespaceImpl(int namespaceFd,
+ {
+     AI_LOG_FN_ENTRY();
+ 
+-    bool success;
++    bool success = true;
+ 
+     // spawn the thread to run the callback in
+     std::thread _nsThread = std::thread(std::bind(&DobbyUtils::nsThread,
+-- 
+2.39.5 (Apple Git-154)
+
+
+From fd28fa04d6431623bcf1bd58ad7c00659f532639 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 12:59:37 +0530
+Subject: [PATCH 07/21] Update L2-tests.yml
+
+---
+ .github/workflows/L2-tests.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.github/workflows/L2-tests.yml b/.github/workflows/L2-tests.yml
+index fef6a8f..7717c4f 100755
+--- a/.github/workflows/L2-tests.yml
++++ b/.github/workflows/L2-tests.yml
+@@ -6,7 +6,7 @@ env:
+ 
+ jobs:
+   build:
+-    runs-on: ubuntu-20.04
++    runs-on: ubuntu-latest
+     strategy:
+       fail-fast: false
+       matrix:
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 088889460fd0a31062be7a055d422760a17c474a Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 15:56:51 +0530
+Subject: [PATCH 08/21] Update DobbyUtils.cpp
+
+---
+ utils/source/DobbyUtils.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/utils/source/DobbyUtils.cpp b/utils/source/DobbyUtils.cpp
+index bbf87dd..8fa1412 100644
+--- a/utils/source/DobbyUtils.cpp
++++ b/utils/source/DobbyUtils.cpp
+@@ -894,7 +894,7 @@ int DobbyUtils::runE2fsTool(int dirFd, std::list<std::string>* consoleOutput,
+ 
+     // create a pipe to store the stderr and stdout of the mke2fs utility, this
+     // is just to help with debugging issues
+-    int pipeFds[2];
++    int pipeFds[2] = { -1, -1 };
+     if (pipe2(pipeFds, O_CLOEXEC) != 0)
+     {
+         AI_LOG_SYS_ERROR_EXIT(errno, "failed to create stderr/stdout pipe");
+-- 
+2.39.5 (Apple Git-154)
+
+
+From cd112e1585f85b831defbe961572b86fb99d0577 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 17:29:58 +0530
+Subject: [PATCH 09/21] Update DobbyRdkPluginUtils.cpp
+
+---
+ pluginLauncher/lib/source/DobbyRdkPluginUtils.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pluginLauncher/lib/source/DobbyRdkPluginUtils.cpp b/pluginLauncher/lib/source/DobbyRdkPluginUtils.cpp
+index 92aa5dd..7f0fd50 100644
+--- a/pluginLauncher/lib/source/DobbyRdkPluginUtils.cpp
++++ b/pluginLauncher/lib/source/DobbyRdkPluginUtils.cpp
+@@ -345,7 +345,7 @@ bool DobbyRdkPluginUtils::callInNamespaceImpl(pid_t pid, int nsType,
+             return false;
+     }
+ 
+-    bool success;
++    bool success = true;
+ 
+     // get the namespace of the containered app
+     sprintf(nsPath, "/proc/%d/ns/%s", pid, nsName);
+-- 
+2.39.5 (Apple Git-154)
+
+
+From dcb3b9f2ccfa491cd0506f9a8a3ba1c556edf722 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 18:48:04 +0530
+Subject: [PATCH 10/21] Update DobbySpecConfig.cpp
+
+---
+ bundle/lib/source/DobbySpecConfig.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/bundle/lib/source/DobbySpecConfig.cpp b/bundle/lib/source/DobbySpecConfig.cpp
+index adeaae0..f24a1c9 100644
+--- a/bundle/lib/source/DobbySpecConfig.cpp
++++ b/bundle/lib/source/DobbySpecConfig.cpp
+@@ -254,7 +254,7 @@ DobbySpecConfig::DobbySpecConfig(const std::shared_ptr<IDobbyUtils> &utils,
+         if(!bundle->getPersistence())
+         {
+             // deserialise config.json
+-            parser_error err;
++            parser_error err = nullptr;
+             std::string configPath = bundle->path() + "/config.json";
+             mConf = std::shared_ptr<rt_dobby_schema>(
+                         rt_dobby_schema_parse_file(configPath.c_str(), nullptr, &err),
+@@ -263,6 +263,11 @@ DobbySpecConfig::DobbySpecConfig(const std::shared_ptr<IDobbyUtils> &utils,
+             if (mConf.get() == nullptr || err)
+             {
+                 AI_LOG_ERROR_EXIT("Failed to parse bundle config, err '%s'", err);
++                if (err)
++                {
++                    free(err);
++                    err = nullptr;
++                }
+                 mValid = false;
+             }
+             else
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 930f14a46ee69e1e845ed109f1373e1576dfa428 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 19:16:10 +0530
+Subject: [PATCH 11/21] Update Netlink.cpp
+
+---
+ rdkPlugins/Networking/source/Netlink.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/rdkPlugins/Networking/source/Netlink.cpp b/rdkPlugins/Networking/source/Netlink.cpp
+index ca81674..3c8dec0 100644
+--- a/rdkPlugins/Networking/source/Netlink.cpp
++++ b/rdkPlugins/Networking/source/Netlink.cpp
+@@ -1921,6 +1921,7 @@ bool Netlink::addRoute(const std::string &iface, const struct in6_addr destinati
+         if (!gwAddress)
+         {
+             AI_LOG_ERROR_EXIT("failed to create gateway address");
++            rtnl_route_nh_free(nextHop);
+             return false;
+         }
+ 
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 5b8c5a40685e806b1b2ae4bc359f6e5d198d084b Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 19:22:06 +0530
+Subject: [PATCH 12/21] Update DobbyManager.cpp
+
+---
+ daemon/lib/source/DobbyManager.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/daemon/lib/source/DobbyManager.cpp b/daemon/lib/source/DobbyManager.cpp
+index 3d28502..3def39a 100644
+--- a/daemon/lib/source/DobbyManager.cpp
++++ b/daemon/lib/source/DobbyManager.cpp
+@@ -306,11 +306,16 @@ bool DobbyManager::cleanupContainer(const DobbyRunC::ContainerListItem &containe
+         char configPath[PATH_MAX];
+         snprintf(configPath, sizeof(configPath), "%s/%s/config.json", mRunc->getWorkingDir().c_str(), container.id.c_str());
+ 
+-        parser_error err;
++        parser_error err = nullptr;
+         auto containerConfig = std::shared_ptr<rt_dobby_schema>(rt_dobby_schema_parse_file(configPath, nullptr, &err), free_rt_dobby_schema);
+         if (containerConfig.get() == nullptr || err)
+         {
+             AI_LOG_WARN("Couldn't load container confirm from %s, cannot run postHalt hook for %s", configPath, container.id.c_str());
++            if (err)
++            {
++                free(err);
++                err = nullptr;
++            }
+         }
+         else
+         {
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 50981f759bf52361067ff4b0c093db56ebee2b8d Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 20:27:36 +0530
+Subject: [PATCH 13/21] Update DobbyBundleConfig.cpp
+
+---
+ bundle/lib/source/DobbyBundleConfig.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/bundle/lib/source/DobbyBundleConfig.cpp b/bundle/lib/source/DobbyBundleConfig.cpp
+index 3f0c036..da12f43 100644
+--- a/bundle/lib/source/DobbyBundleConfig.cpp
++++ b/bundle/lib/source/DobbyBundleConfig.cpp
+@@ -121,7 +121,7 @@ bool DobbyBundleConfig::constructConfig(const ContainerId& id, const std::string
+         mValid = parseOCIConfig(bundlePath);
+ 
+         // de-serialise config.json
+-        parser_error err;
++        parser_error err = nullptr;
+         std::string configPath = bundlePath + "/config.json";
+         mConf = std::shared_ptr<rt_dobby_schema>(
+                     rt_dobby_schema_parse_file(configPath.c_str(), nullptr, &err),
+@@ -130,6 +130,11 @@ bool DobbyBundleConfig::constructConfig(const ContainerId& id, const std::string
+         if (mConf.get() == nullptr || err)
+         {
+             AI_LOG_ERROR_EXIT("Failed to parse bundle config, err '%s'", err);
++            if (err)
++            {
++                free(err);
++                err = nullptr;
++            }
+             mValid = false;
+         }
+         else
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 7e615912d865e648eab1a6905d16f7b49a4e6b40 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 20:32:58 +0530
+Subject: [PATCH 14/21] Update DynamicMountDetails.cpp
+
+---
+ rdkPlugins/Storage/source/DynamicMountDetails.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/rdkPlugins/Storage/source/DynamicMountDetails.cpp b/rdkPlugins/Storage/source/DynamicMountDetails.cpp
+index 733e37f..84a7bf7 100644
+--- a/rdkPlugins/Storage/source/DynamicMountDetails.cpp
++++ b/rdkPlugins/Storage/source/DynamicMountDetails.cpp
+@@ -91,7 +91,7 @@ bool DynamicMountDetails::onCreateRuntime() const
+                 // Creating the file first ensures an inode exists for the
+                 // bind mount to target.
+                 int fd = open(targetPath.c_str(), O_RDONLY | O_CREAT, 0644);
+-                if ((fd == 0) || (errno == EEXIST))
++                if (fd >= 0)
+                 {
+                     close(fd);
+                     success = true;
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 148cbd27af55897a58c70783298bb8efbf939948 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 21:20:20 +0530
+Subject: [PATCH 15/21] Update DobbySpecConfig.cpp
+
+---
+ bundle/lib/source/DobbySpecConfig.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bundle/lib/source/DobbySpecConfig.cpp b/bundle/lib/source/DobbySpecConfig.cpp
+index f24a1c9..326d428 100644
+--- a/bundle/lib/source/DobbySpecConfig.cpp
++++ b/bundle/lib/source/DobbySpecConfig.cpp
+@@ -2232,7 +2232,7 @@ bool DobbySpecConfig::processLegacyPlugins(const Json::Value& value,
+ 
+ 
+         // add the hook to the list
+-        mLegacyPlugins.emplace(name.asString(), std::move(data));
++        mLegacyPlugins.emplace(name.asString(), data);
+ 
+         // Convert the explicit plugins into RDK extended OCI bundle syntax
+         dictionary->ShowSection(ENABLE_LEGACY_PLUGINS);
+-- 
+2.39.5 (Apple Git-154)
+
+
+From a6b57d778966911f8a39dd2c4803cc843d73b7b9 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 21:48:59 +0530
+Subject: [PATCH 16/21] Update Main.cpp
+
+---
+ pluginLauncher/tool/source/Main.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/pluginLauncher/tool/source/Main.cpp b/pluginLauncher/tool/source/Main.cpp
+index e23b811..a83f4cc 100644
+--- a/pluginLauncher/tool/source/Main.cpp
++++ b/pluginLauncher/tool/source/Main.cpp
+@@ -197,7 +197,7 @@ std::shared_ptr<const rt_state_schema> getContainerState()
+         }
+     }
+ 
+-    parser_error err;
++    parser_error err = nullptr;
+     auto state = std::shared_ptr<const rt_state_schema>(
+                     rt_state_schema_parse_data(hookStdin.c_str(), nullptr, &err),
+                     free_rt_state_schema);
+@@ -208,6 +208,11 @@ std::shared_ptr<const rt_state_schema> getContainerState()
+         {
+             AI_LOG_ERROR("Most probably the read buffer is too small and causes the parse error below!");
+         }
++        if
++        {
++            free(err);
++            err = nullptr;
++        }
+         AI_LOG_ERROR_EXIT("Failed to parse container state, err '%s'", err);
+         return nullptr;
+     }
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 9eba7932415d3860249f280c3e897d49611eea52 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 21:54:25 +0530
+Subject: [PATCH 17/21] Update DobbyConfig.cpp
+
+---
+ bundle/lib/source/DobbyConfig.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/bundle/lib/source/DobbyConfig.cpp b/bundle/lib/source/DobbyConfig.cpp
+index 1714719..eb0acd5 100644
+--- a/bundle/lib/source/DobbyConfig.cpp
++++ b/bundle/lib/source/DobbyConfig.cpp
+@@ -460,7 +460,7 @@ const std::string DobbyConfig::configJson() const
+         return std::string();
+     }
+ 
+-    parser_error err;
++    parser_error err = nullptr;
+     std::shared_ptr<rt_dobby_schema> cfg = config();
+     if (cfg == nullptr)
+     {
+@@ -472,6 +472,11 @@ const std::string DobbyConfig::configJson() const
+     if (json_buf == nullptr || err)
+     {
+         AI_LOG_ERROR("Failed to generate json from container config with code '%s'", err);
++        if (err)
++        {
++            free(err);
++            err = nullptr;
++        }
+         return std::string();
+     }
+ 
+-- 
+2.39.5 (Apple Git-154)
+
+
+From b3b6795f246f13d8cab900f62404da66f06048f3 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 22:29:49 +0530
+Subject: [PATCH 18/21] Update DobbyHibernate.cpp
+
+---
+ daemon/lib/source/DobbyHibernate.cpp | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/daemon/lib/source/DobbyHibernate.cpp b/daemon/lib/source/DobbyHibernate.cpp
+index 4560587..be7de0a 100644
+--- a/daemon/lib/source/DobbyHibernate.cpp
++++ b/daemon/lib/source/DobbyHibernate.cpp
+@@ -106,7 +106,8 @@ static int Connect(const char* serverLocator, uint32_t timeoutMs)
+         }
+ 
+         addrUn.sun_family = PF_UNIX;
+-        strncpy(addrUn.sun_path, serverLocator, sizeof(addrUn.sun_path));
++        strncpy(addrUn.sun_path, serverLocator, sizeof(addrUn.sun_path) - 1);
++        addrUn.sun_path[sizeof(addrUn.sun_path) - 1] = '\0';
+         addr = (struct sockaddr*)&addrUn;
+         addrSize = sizeof(struct sockaddr_un);
+     } else {
+@@ -118,10 +119,12 @@ static int Connect(const char* serverLocator, uint32_t timeoutMs)
+             return -1;
+         }
+ 
+-        strncpy(host, serverLocator, 64);
++        strncpy(host, serverLocator, sizeof(host) - 1);
++	host[sizeof(host) - 1] = '\0';
+         port = strstr(host, ":");
+         if (port == NULL) {
+             AI_LOG_ERROR("Invalid Server Ip Address: %s", host);
++            close(cd);
+             AI_LOG_FN_EXIT();
+             return false;
+         }
+@@ -306,4 +309,4 @@ DobbyHibernate::Error DobbyHibernate::WakeupProcess(const pid_t pid, const uint3
+     return DobbyHibernate::Error::ErrorGeneral;
+ }
+ 
+-#endif
+\ No newline at end of file
++#endif
+-- 
+2.39.5 (Apple Git-154)
+
+
+From e82fa83b837a7bdec0644809aaaa4343563908bb Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 22:50:46 +0530
+Subject: [PATCH 19/21] Update Main.cpp
+
+---
+ pluginLauncher/tool/source/Main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pluginLauncher/tool/source/Main.cpp b/pluginLauncher/tool/source/Main.cpp
+index a83f4cc..0517e4c 100644
+--- a/pluginLauncher/tool/source/Main.cpp
++++ b/pluginLauncher/tool/source/Main.cpp
+@@ -208,7 +208,7 @@ std::shared_ptr<const rt_state_schema> getContainerState()
+         {
+             AI_LOG_ERROR("Most probably the read buffer is too small and causes the parse error below!");
+         }
+-        if
++        if (err)
+         {
+             free(err);
+             err = nullptr;
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 7c5b08a58fa33c256dd26a8e6b897413bad7ef00 Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 23:13:02 +0530
+Subject: [PATCH 20/21] Update TapInterface.cpp
+
+---
+ rdkPlugins/Networking/source/TapInterface.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/rdkPlugins/Networking/source/TapInterface.cpp b/rdkPlugins/Networking/source/TapInterface.cpp
+index 2595c4c..8e29ceb 100644
+--- a/rdkPlugins/Networking/source/TapInterface.cpp
++++ b/rdkPlugins/Networking/source/TapInterface.cpp
+@@ -145,6 +145,7 @@ bool TapInterface::destroyTapInterface(const std::shared_ptr<Netlink> &netlink)
+     // be deleted
+     if (ioctl(fd, TUNSETPERSIST, 0) != 0)
+     {
++        close(fd);
+         AI_LOG_SYS_ERROR_EXIT(errno, "Failed to reset TUNSETPERSIST");
+         return false;
+     }
+@@ -235,4 +236,4 @@ std::array<uint8_t, 6> TapInterface::macAddress(const std::shared_ptr<Netlink> &
+ bool TapInterface::setMACAddress(const std::shared_ptr<Netlink> &netlink, const std::array<uint8_t, 6> &address)
+ {
+     return netlink->setIfaceMAC(TAP_NAME, address);
+-}
+\ No newline at end of file
++}
+-- 
+2.39.5 (Apple Git-154)
+
+
+From 14a04ffce98878d208f258b110ceb12be9b0d36a Mon Sep 17 00:00:00 2001
+From: Karthick Swaminathan <85346280+ks734@users.noreply.github.com>
+Date: Thu, 29 May 2025 23:17:10 +0530
+Subject: [PATCH 21/21] Update TapInterface.cpp
+
+---
+ rdkPlugins/Networking/source/TapInterface.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/rdkPlugins/Networking/source/TapInterface.cpp b/rdkPlugins/Networking/source/TapInterface.cpp
+index 8e29ceb..8aeca41 100644
+--- a/rdkPlugins/Networking/source/TapInterface.cpp
++++ b/rdkPlugins/Networking/source/TapInterface.cpp
+@@ -95,6 +95,7 @@ bool TapInterface::createTapInterface(const std::shared_ptr<Netlink> &netlink)
+     // (i.e. when the plugin finishes)
+     if (ioctl(fd, TUNSETPERSIST, 1) != 0)
+     {
++        close(fd);
+         AI_LOG_SYS_ERROR_EXIT(errno, "Failed to set TUNSETPERSIST");
+         return false;
+     }
+-- 
+2.39.5 (Apple Git-154)
+
