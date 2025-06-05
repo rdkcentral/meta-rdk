@@ -1,0 +1,35 @@
+From 6aaa62667932ce2a9b0e0ad21d8f1dd0769bb355 Mon Sep 17 00:00:00 2001
+From: amarim184 <ananth_marimuthu2@comcast.com>
+Date: Tue, 13 May 2025 20:27:27 +0000
+Subject: [PATCH] DELIA-68069 : Enhance to handle the unsupported gamepad
+
+Reason for change: send unsupported firmware message from btmgr to UI
+Test Procedure: Test BLE pair/connect functionalities
+
+Risks: NA
+Priority: P1
+
+Change-Id: I146a9e59ffd101071443766577c1292703c9bb44
+Signed-off-by: Ananth Marimuthu <ananth_marimuthu2@comcast.com>
+---
+ recipes-connectivity/bluetooth/bluetooth-core_git.bb | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/recipes-connectivity/bluetooth/bluetooth-core_git.bb b/recipes-connectivity/bluetooth/bluetooth-core_git.bb
+index 2f3c53d5..2c556d4a 100644
+--- a/recipes-connectivity/bluetooth/bluetooth-core_git.bb
++++ b/recipes-connectivity/bluetooth/bluetooth-core_git.bb
+@@ -20,6 +20,10 @@ S = "${WORKDIR}/git"
+ CFLAGS_append_morty = " -DMORTY_BUILD"
+ CFLAGS_append_daisy = " -DMORTY_BUILD"
+ 
++# BT unsupported gamepad feature enabled
++ENABLE_UNSUPPORT_GAMEPAD = "--enable-unsupportedgamepad=${@bb.utils.contains('DISTRO_FEATURES', 'disable_unsupported_gamepad','no','yes',d)}"
++EXTRA_OECONF += " ${ENABLE_UNSUPPORT_GAMEPAD} "
++
+ ENABLE_BTR_IFCE = "--enable-btr-ifce=${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth', \
+                                             bb.utils.contains('DISTRO_FEATURES', 'gdbus_bluez5', 'gdbus_bluez5', \
+                                                 bb.utils.contains('DISTRO_FEATURES', 'bluez5', 'bluez5', 'bluez4', d), d), 'none', d)}"
+-- 
+2.25.1
+
