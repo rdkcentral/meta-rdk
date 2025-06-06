@@ -42,7 +42,8 @@ LDFLAGS:append = " -lsecure_wrapper"
 DEPENDS += "libsyswrapper"
 
 EXTRA_OECONF:append = " --enable-iarmbusSupport=yes"
-
+EXTRA_OECONF:append = " --enable-t2api=yes"
+ 
 DEPENDS:append = " iarmmgrs iarmbus"
 LDFLAGS:append = " -lIARMBus"
 
