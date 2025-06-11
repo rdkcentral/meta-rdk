@@ -138,3 +138,7 @@ include conf/distro/include/rdkv-cpc.inc
 
 # Distro feature for NetworkManager
 DISTRO_FEATURES:append = " ENABLE_NETWORKMANAGER"
+
+
+#Distro feature for WPEFramework SecurityUtility Disable
+DISTRO_FEATURES:append = " wpe_security_util_disable"
