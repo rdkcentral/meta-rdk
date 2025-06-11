@@ -46,11 +46,11 @@ do_install:append () {
     install -m 644 ${S}/include/telemetry2_0.h ${D}/usr/include/
     install -m 0755 ${S}/source/commonlib/t2Shared_api.sh ${D}/lib/rdk
     rm -fr ${D}/usr/lib/libtelemetry_msgsender.la 
+    rm -rf ${D}${bindir}/t2rbusMethodSimulator
 }
 
 FILES:${PN} = "\
     ${bindir}/telemetry2_0 \
-    ${bindir}/t2rbusMethodSimulator \
     ${bindir}/telemetry2_0_client \
     ${systemd_unitdir}/system \
 "
