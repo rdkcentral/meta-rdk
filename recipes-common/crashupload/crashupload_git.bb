@@ -66,7 +66,7 @@ LOGROTATE_ROTATION_crashupload = "2"
 LOGROTATE_SIZE_MEM_crashupload = "512000"
 LOGROTATE_ROTATION_MEM_crashupload = "2"
 
-do_install() {
+do_install:append() {
         install -d ${D}${base_libdir}/rdk
         install -d ${D}${sysconfdir} ${D}${sysconfdir}/rfcdefaults
         install -m 0755 ${S}/uploadDumps.sh ${D}${base_libdir}/rdk
