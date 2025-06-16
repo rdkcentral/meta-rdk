@@ -10,7 +10,7 @@ PR ?= "r0"
 
 
 
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;${CMF_GITHUB_SRC_URI_SUFFIX}"
+
 
 S = "${WORKDIR}/git"
 
