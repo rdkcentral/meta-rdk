@@ -7,11 +7,11 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 PV ?= "1.0.0"
 PR ?= "r0"
 
-SRCREV = "968bdfc364008e27a52921370f7bc98c0c43e161"
+SRCREV = "46f3fe8dace1a66e35a4b11bbb94d4c8bea2b34f"
 SRCREV_FORMAT = "rdklogger"
 
 
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;${CMF_GITHUB_SRC_URI_SUFFIX}"
+SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;${CMF_GITHUB_SRC_URI_SUFFIX};branch=topic/RDKEMW-3178"
 
 S = "${WORKDIR}/git"
 
