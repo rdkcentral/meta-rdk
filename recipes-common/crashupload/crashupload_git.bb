@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-CRASHUPLOAD_SRC_URI ?= "${RDK_GENERIC_ROOT_GIT}/crashupload/generic;module=.;protocol=${RDK_GIT_PROTOCOL};branch=feature-sample-rust"
+CRASHUPLOAD_SRC_URI ?= "${RDK_GENERIC_ROOT_GIT}/crashupload/generic;name=crashupload;module=.;protocol=${RDK_GIT_PROTOCOL};branch=feature-sample-rust"
 SRC_URI = "${CMF_GITHUB_ROOT}/crashupload;${CMF_GITHUB_SRC_URI_SUFFIX};module=."
 
 PV = "1.0"
@@ -14,7 +14,8 @@ S = "${WORKDIR}/git"
 
 inherit cargo coverity systemd syslog-ng-config-gen logrotate_config
 
-SRCREV = "9727ebc5fa47dc1043444d3653e8e3ef5e190df7"
+SRCREV = "a44ecbd217b862de5842e0468823539b512af913"
+SRCREV_FORMAT = "crashupload"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = "crash-upload"
 
