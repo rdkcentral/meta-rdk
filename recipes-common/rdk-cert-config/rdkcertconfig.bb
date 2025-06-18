@@ -16,6 +16,15 @@ B = "${WORKDIR}/git"
 
 CFLAGS:append = " -DCONFIG_ERROR_ENABLED "
 inherit autotools pkgconfig coverity
+do_install() {
+	  install -d ${D}${sysconfdir}/ssl/certs
+    if [ "${@bb.utils.contains('DISTRO_FEATURES', 'ENABLE_HW_CERT_USAGE', 'true', 'false', d)}" = "true" ]; then
+           install -Dm 0644 ${S}/CertSelector/conf/hrot.properties ${D}${sysconfdir}/ssl/certsel/hrot.properties           
+    fi
+}
+do_install:append:client() {
+    install -Dm 0644 ${S}/CertSelector/conf/certsel.cfg ${D}${sysconfdir}/ssl/certsel/certsel.cfg
+}
 
 TARGET_CC_ARCH += "${LDFLAGS}"
 
