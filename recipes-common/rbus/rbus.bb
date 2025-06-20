@@ -6,10 +6,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
 SRC_URI:append = " file://gtest_libraries_check.patch"
 
-SRCREV = "ed30640c74511681e8d2cc3566b46dfb28de8323"
+SRCREV = "ce10ff2246632f232aa91d6723cfae123972ebe1"
 SRCREV_FORMAT = "base"
 
-PV ?= "2.3.0"
+PV ?= "2.5.0"
 PR ?= "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
