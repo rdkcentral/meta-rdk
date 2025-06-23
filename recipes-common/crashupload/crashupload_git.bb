@@ -14,7 +14,7 @@ S = "${WORKDIR}/git"
 
 inherit cargo coverity systemd syslog-ng-config-gen logrotate_config
 
-SRCREV = "2065a9d150da9e7dd5d0b1ad378e4c9ce6a13164"
+SRCREV = "9e308c589a6ba48a2fd039e6013d859e77d736e2"
 SRCREV_FORMAT = "crashupload"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = "crash-upload"
@@ -55,8 +55,8 @@ SRC_URI += " \
 "
 
 SYSLOG-NG_FILTER = "crashupload"
-SYSLOG-NG_SERVICE_crashupload += "coredump-upload.service"
-SYSLOG-NG_SERVICE_crashupload += "minidump-on-bootup-upload.service"
+SYSLOG-NG_SERVICE_crashupload = "coredump-upload.service"
+SYSLOG-NG_SERVICE_crashupload = "minidump-on-bootup-upload.service"
 SYSLOG-NG_DESTINATION_crashupload = "core_log.txt"
 SYSLOG-NG_LOGRATE_crashupload = "high"
 
