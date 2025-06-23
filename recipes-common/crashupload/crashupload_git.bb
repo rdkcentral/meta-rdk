@@ -55,8 +55,8 @@ SRC_URI += " \
 "
 
 SYSLOG-NG_FILTER = "crashupload"
-SYSLOG-NG_SERVICE_crashupload = "coredump-upload.service"
-SYSLOG-NG_SERVICE_crashupload = "minidump-on-bootup-upload.service"
+SYSLOG-NG_SERVICE_crashupload += "coredump-upload.service"
+SYSLOG-NG_SERVICE_crashupload += "minidump-on-bootup-upload.service"
 SYSLOG-NG_DESTINATION_crashupload = "core_log.txt"
 SYSLOG-NG_LOGRATE_crashupload = "high"
 
