@@ -142,6 +142,9 @@ DISTRO_FEATURES:remove = "ext2"
 DISTRO_FEATURES:remove = "zeroconf"
 DISTRO_FEATURES:remove = "nfs"
 DISTRO_FEATURES:append = " safec"
+# Distro feature for enabling RBUS_TEST_APPS
+DISTRO_FEATURES:append = "RBUS_ENABLE_TESTAPPS"
+
 #DISTRO_FEATURES:append = " webui_php"
 DISTRO_FEATURES:append = " webui_jst"
 #DISTRO_FEATURES:append = " gtestapp"
