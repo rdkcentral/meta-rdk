@@ -141,3 +141,6 @@ DISTRO_FEATURES:append = " ENABLE_NETWORKMANAGER"
 
 #Distro feature for WPEFramework SecurityUtility Disable
 DISTRO_FEATURES:append = " wpe_security_util_disable"
+
+# Distro feature for installing RBUS_TEST_APPS
+DISTRO_FEATURES:append = "RBUS_ENABLE_TESTAPPS"

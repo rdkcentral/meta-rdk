@@ -146,4 +146,7 @@ DISTRO_FEATURES:append = " safec"
 DISTRO_FEATURES:append = " webui_jst"
 #DISTRO_FEATURES:append = " gtestapp"
 DISTRO_FEATURES:append = " redrecovery"
+# Distro feature for installing RBUS_TEST_APPS
+DISTRO_FEATURES:append = "RBUS_ENABLE_TESTAPPS"
+
 OPTIMIZE_DEFAULT = "-Os"
