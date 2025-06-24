@@ -146,5 +146,4 @@ DISTRO_FEATURES:append = " safec"
 DISTRO_FEATURES:append = " webui_jst"
 #DISTRO_FEATURES:append = " gtestapp"
 DISTRO_FEATURES:append = " redrecovery"
-
 OPTIMIZE_DEFAULT = "-Os"
