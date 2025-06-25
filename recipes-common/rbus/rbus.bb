@@ -6,10 +6,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
 SRC_URI:append = " file://gtest_libraries_check.patch"
 
-SRCREV = "ed30640c74511681e8d2cc3566b46dfb28de8323"
+SRCREV = "ce10ff2246632f232aa91d6723cfae123972ebe1"
 SRCREV_FORMAT = "base"
 
-PV ?= "2.3.0"
+PV ?= "2.5.0"
 PR ?= "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
@@ -34,6 +34,9 @@ EXTRA_OECMAKE += " -DMSG_ROUNDTRIP_TIME=ON -DENABLE_RDKLOGGER=ON"
 EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '-DENABLE_UNIT_TESTING=ON', '', d)}"
 EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '-DBUILD_RBUS_BENCHMARK_TEST=ON -DBUILD_RBUS_UNIT_TEST=ON -DBUILD_RBUS_SAMPLE_APPS=ON', '', d)}"
 DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', ' gtest benchmark ', ' ', d)}"
+
+#Avoid install RBus test binariesAdd commentMore actions
+EXTRA_OECMAKE += " ${@bb.utils.contains_any('DISTRO_FEATURES', 'prod-variant prodlog-variant', '-DBUILD_RBUS_SAMPLE_APPS=OFF -DBUILD_RBUS_TEST_APPS=OFF', '', d)}"
 
 #Dunfell Specific CFlags
 CFLAGS:append = " -Wno-format-truncation "
