@@ -10,7 +10,7 @@ SRCREV = "ce10ff2246632f232aa91d6723cfae123972ebe1"
 SRCREV_FORMAT = "base"
 
 PV ?= "2.5.0"
-PR ?= "r0"
+PR ?= "r1"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -32,8 +32,8 @@ EXTRA_OECMAKE += " -DMSG_ROUNDTRIP_TIME=ON -DENABLE_RDKLOGGER=ON"
 
 #Gtest Specific Enablements
 EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '-DENABLE_UNIT_TESTING=ON', '', d)}"
-DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', ' gtest benchmark ', ' ', d)}"
-
+DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', ' gtest ', ' ', d)}"
+DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'RBUS_ENABLE_TESTAPPS', ' benchmark ', ' ', d)}"
 EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'RBUS_ENABLE_TESTAPPS', '-DBUILD_RBUS_SAMPLE_APPS=ON -DBUILD_RBUS_TEST_APPS=ON -DBUILD_RBUS_BENCHMARK_TEST=ON', '-DBUILD_RBUS_SAMPLE_APPS=OFF -DBUILD_RBUS_TEST_APPS=OFF -DBUILD_RBUS_BENCHMARK_TEST=OFF', d)}"
 
 #Dunfell Specific CFlags
