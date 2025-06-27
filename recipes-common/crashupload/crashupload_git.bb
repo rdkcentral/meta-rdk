@@ -14,7 +14,7 @@ S = "${WORKDIR}/git"
 
 inherit cargo coverity systemd syslog-ng-config-gen logrotate_config
 
-SRCREV = "1a6841c32d22dc7e2ab3c3262cc46a57f852cff9"
+SRCREV = "29f34317772f6133a53bf9db7260e0c66c30d442"
 SRCREV_FORMAT = "crashupload"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = "crash-upload"
