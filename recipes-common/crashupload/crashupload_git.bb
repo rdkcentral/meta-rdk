@@ -67,6 +67,9 @@ LOGROTATE_ROTATION_crashupload = "2"
 LOGROTATE_SIZE_MEM_crashupload = "512000"
 LOGROTATE_ROTATION_MEM_crashupload = "2"
 
+EXTRA_OECARGO_BUILD += "--release"
+RUSTFLAGS += "-C debuginfo=0"
+
 do_install:append() {
         install -d ${D}${base_libdir}/rdk
         install -d ${D}${sysconfdir} ${D}${sysconfdir}/rfcdefaults
