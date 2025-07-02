@@ -20,3 +20,12 @@ inherit autotools pkgconfig coverity
 TARGET_CC_ARCH += "${LDFLAGS}"
 
 EXTRA_OECONF += "--enable-rdklogger"
+
+do_install() {	  
+    if [ "${@bb.utils.contains('DISTRO_FEATURES', 'ENABLE_HW_CERT_USAGE', 'true', 'false', d)}" = "true" ]; then
+           install -Dm 0644 ${S}/CertSelector/conf/hrot.properties ${D}${sysconfdir}/ssl/certsel/hrot.properties           
+    fi
+}
+do_install:append:client() {
+    install -Dm 0644 ${S}/CertSelector/conf/certsel.cfg ${D}${sysconfdir}/ssl/certsel/certsel.cfg
+}
