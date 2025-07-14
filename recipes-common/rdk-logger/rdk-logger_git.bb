@@ -5,7 +5,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 PV ?= "1.0.0"
-PR ?= "r1"
+PR ?= "r2"
 
 SRCREV = "f3f31b18fefb8a438ae9c763e69898adfe46aa64"
 SRCREV_FORMAT = "rdklogger"
