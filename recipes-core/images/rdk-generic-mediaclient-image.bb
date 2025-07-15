@@ -7,8 +7,10 @@ require  rdk-generic-media-common.inc
 inherit rdk-image-sdk
 
 IMAGE_INSTALL += "packagegroup-rdk-oss-mediaclient"
+IMAGE_INSTALL += "barton-matter"
 #Add a uuid generator for generating random receiver id
 IMAGE_INSTALL += "util-linux-uuidgen"
+
 
 python __anonymous () {
     if "client" not in d.getVar('MACHINEOVERRIDES', True):
