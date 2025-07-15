@@ -43,13 +43,12 @@ BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') if d.getVar
 BBLAYERS =+ "${@'${MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC}' if os.path.isfile('${MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC}/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${MANIFEST_PATH_META_RDK}' if os.path.isfile('${MANIFEST_PATH_META_RDK}/conf/layer.conf') else ''}"
-#BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_IOT') if d.getVar('MANIFEST_PATH_RDK_IOT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_IOT') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_IOT') if d.getVar('MANIFEST_PATH_RDK_IOT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_IOT') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_RESTRICTED') if d.getVar('MANIFEST_PATH_RDK_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_RESTRICTED') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${MANIFEST_PATH_RDK_VIDEO}' if os.path.isfile('${MANIFEST_PATH_RDK_VIDEO}/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${MANIFEST_PATH_META_PYTHON2}' if os.path.isfile('${MANIFEST_PATH_META_PYTHON2}/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_PRODUCT_LAYER') if d.getVar('MANIFEST_PATH_PRODUCT_LAYER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_PRODUCT_LAYER') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_SKY') if d.getVar('MANIFEST_PATH_RDK_SKY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_SKY') + '/conf/layer.conf') else ''}"
-BBLAYERS += "${LAYERDIR}/meta-rdk-iot"
 # Middleware layers: restricted/proprietary
 BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_RDK_COMCAST') if d.getVar('MANIFEST_PATH_RDK_COMCAST') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_COMCAST') + '/conf/layer.conf') else ''} \
