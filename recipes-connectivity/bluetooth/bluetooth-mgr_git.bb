@@ -84,6 +84,10 @@ CFLAGS:append =" ${@bb.utils.contains('RDEPENDS:${PN}', 'virtual/${MLPREFIX}medi
 ENABLE_RDK_LOGGER = "--enable-rdk-logger=${@bb.utils.contains('RDEPENDS:${PN}', '${MLPREFIX}rdk-logger', 'yes', 'no', d)}"
 EXTRA_OECONF += " ${ENABLE_RDK_LOGGER}"
 
+# Autoconnect feature enabled
+ENABLE_AUTO_CONNECT = "--enable-autoconnectfeature=${@bb.utils.contains('DISTRO_FEATURES', 'btr_enable_auto_connect','yes','no',d)}"
+EXTRA_OECONF += " ${ENABLE_AUTO_CONNECT} "
+
 EXTRA_OECONF:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--enable-systemd-notify', '', d)}"
 EXTRA_OECONF:append:client = " --enable-sys-diag"
 
