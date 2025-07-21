@@ -48,6 +48,7 @@ BBLAYERS =+ "${@'${MANIFEST_PATH_RDK_VIDEO}' if os.path.isfile('${MANIFEST_PATH_
 BBLAYERS =+ "${@'${MANIFEST_PATH_META_PYTHON2}' if os.path.isfile('${MANIFEST_PATH_META_PYTHON2}/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_PRODUCT_LAYER') if d.getVar('MANIFEST_PATH_PRODUCT_LAYER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_PRODUCT_LAYER') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_SKY') if d.getVar('MANIFEST_PATH_RDK_SKY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_SKY') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_IOT') if d.getVar('MANIFEST_PATH_RDK_IOT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_IOT') + '/conf/layer.conf') else ''}"
 
 # Middleware layers: restricted/proprietary
 BBLAYERS =+ " \
