@@ -1,6 +1,6 @@
 SUMMARY = "A simple message queue application"
 SECTION = "console/testapp"
-LICENSE = "Closed"
+LICENSE = "CLOSED"
 
 SRC_URI = "file://utility.c"
 SRC_URI += "file://msgq_receive.c"
