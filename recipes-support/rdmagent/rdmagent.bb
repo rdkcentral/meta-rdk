@@ -50,6 +50,7 @@ do_install:append () {
         install -d ${D}${bindir}/
         install -d ${D}${sysconfdir}
         install -d ${D}${sysconfdir}/rdm/
+        install -d ${D}${includedir}/rdm/
         install -D -m644 ${S}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
         install -D -m644 ${S}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m755 ${S}/scripts/getRdmDwldPath.sh ${D}${sysconfdir}/rdm/getRdmDwldPath.sh
