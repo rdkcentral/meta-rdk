@@ -56,6 +56,11 @@ do_install:append () {
         install -D -m755 ${S}/scripts/downloadUtils.sh ${D}${sysconfdir}/rdm/downloadUtils.sh
         install -D -m755 ${S}/scripts/loggerUtils.sh ${D}${sysconfdir}/rdm/loggerUtils.sh
         install -D -m600 ${S}/rdm-manifest.json ${D}${sysconfdir}/rdm/rdm-manifest.json
+        install -m644 ${S}/src/rdm_types.h  ${D}${includedir}/rdm/
+        install -m644 ${S}/src/rdm.h  ${D}${includedir}/rdm/
+        install -m644 ${S}/src/rdm_utils.h  ${D}${includedir}/rdm/
+        install -m644 ${S}/src/rdm_jsonquery.h  ${D}${includedir}/rdm/
+        install -m644 ${S}/src/rdm_download.h  ${D}${includedir}/rdm/
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
