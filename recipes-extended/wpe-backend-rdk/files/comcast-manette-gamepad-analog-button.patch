@@ -1,0 +1,96 @@
+Date: Fri, Aug 30 20:30:21 2024 +0000
+From: Manoj Bhatta <manoj_bhatta@comcast.com>
+Subject: [PATCH] Add support for Analog buton values
+Source: COMCAST 
+Signed-off-by: Ganesh Sahu <ganeshprasad_sahu@comcast.com>
+
+diff --git a/src/manettegamepad/manette_gamepad.cpp b/src/manettegamepad/manette_gamepad.cpp
+index 71ee82a..c4f1a04 100644
+--- a/src/manettegamepad/manette_gamepad.cpp
++++ b/src/manettegamepad/manette_gamepad.cpp
+@@ -166,17 +166,29 @@ struct GamepadProvider
+   static void onButtonPressEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
+   {
+     uint16_t button;
++    double value = 1.0;
+     if (!manette_event_get_button(event, &button))
+         return;
+-    provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), true);
++    if (button == BTN_TL2 || button == BTN_TR2) {
++       manette_event_get_button_value(event, &value);
++       provider->analogButtonChanged(device, toStandardGamepadButton(button), value);
++    }
++    else
++      provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), true);
+   }
+ 
+   static void onButtonReleaseEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
+   {
+     uint16_t button;
++    double value = 0.0;
+     if (!manette_event_get_button(event, &button))
+         return;
+-    provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), false);
++    if (button == BTN_TL2 || button == BTN_TR2) {
++       manette_event_get_button_value(event, &value);
++       provider->analogButtonChanged(device, toStandardGamepadButton(button), value);
++    }
++    else
++      provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), false);
+   }
+ 
+   void listentoManetteDevice(ManetteDevice * device)
+@@ -186,6 +198,16 @@ struct GamepadProvider
+      g_signal_connect(device, "absolute-axis-event", G_CALLBACK(onAbsoluteAxisEvent), this);
+      g_signal_connect(device, "hat-axis-event", G_CALLBACK(onHatAxisEvent), this);
+   }
++  
++ void analogButtonChanged(ManetteDevice* device, enum wpe_gamepad_button  button, double value)
++  {
++    if (button == WPE_GAMEPAD_BUTTON_COUNT)
++      return;
++    auto it = manetteDevices.find(device);
++    if (it != manetteDevices.end()) {
++       updateGamepadAnalogButton(it->second,button,value);
++    }
++  }
+ 
+   void buttonPressedOrReleased(ManetteDevice* device, enum wpe_gamepad_button  button, bool pressed)
+   {
+@@ -317,6 +339,7 @@ struct GamepadProvider
+     gamepadsInfo.erase(it);
+     wpe_gamepad_provider_dispatch_gamepad_disconnected(provider, gamepadId);
+   }
++ void updateGamepadAnalogButton(uint32_t gamepadId, enum wpe_gamepad_button button, double value);
+  void updateGamepadButton(uint32_t gamepadId, enum wpe_gamepad_button button, bool pressed);
+  void updateGamepadAxis(uint32_t gamepadId, enum wpe_gamepad_axis axis, double value);
+ };
+@@ -354,6 +377,12 @@ struct GamepadProxy
+     return result ? result: "Unknown";
+   }
+ 
++  void dispatchAnalogButtonChanged(enum wpe_gamepad_button button, double value)
++  {
++    if (gamepad)
++      wpe_gamepad_dispatch_analog_button_changed(gamepad, button, value);
++  }
++
+   void dispatchButtonChanged(enum wpe_gamepad_button button, bool pressed)
+   {
+     if (gamepad)
+@@ -378,6 +407,15 @@ GamepadProvider::~GamepadProvider()
+     kv.second->cleanUp();
+ }
+ 
++void GamepadProvider::updateGamepadAnalogButton( uint32_t gamepadId, enum wpe_gamepad_button button, double value )
++{
++  auto iter = gamepadProxies.find(gamepadId);
++  if (iter != gamepadProxies.end()) {
++     auto *proxy = iter->second;
++     proxy->dispatchAnalogButtonChanged(button,value);
++  }
++}
++
+ void GamepadProvider::updateGamepadButton( uint32_t gamepadId, enum wpe_gamepad_button button, bool pressed )
+ {
+   auto iter = gamepadProxies.find(gamepadId);
