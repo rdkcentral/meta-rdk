@@ -4,13 +4,12 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
 SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
-SRC_URI:append = " file://gtest_libraries_check.patch"
 
-SRCREV = "ce10ff2246632f232aa91d6723cfae123972ebe1"
+SRCREV = "b193ae44c976fe8dd31d48a91f45ac7791a292f0"
 SRCREV_FORMAT = "base"
 
-PV ?= "2.5.0"
-PR ?= "r1"
+PV ?= "2.6.0"
+PR ?= "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -31,10 +30,9 @@ EXTRA_OECMAKE += " -DCMAKE_BUILD_TYPE=Release "
 EXTRA_OECMAKE += " -DMSG_ROUNDTRIP_TIME=ON -DENABLE_RDKLOGGER=ON"
 
 #Gtest Specific Enablements
-EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '-DENABLE_UNIT_TESTING=ON', '', d)}"
-DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', ' gtest ', ' ', d)}"
-DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'RBUS_ENABLE_TESTAPPS', ' benchmark ', ' ', d)}"
-EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'RBUS_ENABLE_TESTAPPS', '-DBUILD_RBUS_SAMPLE_APPS=ON -DBUILD_RBUS_TEST_APPS=ON -DBUILD_RBUS_BENCHMARK_TEST=ON', '-DBUILD_RBUS_SAMPLE_APPS=OFF -DBUILD_RBUS_TEST_APPS=OFF -DBUILD_RBUS_BENCHMARK_TEST=OFF', d)}"
+EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '-DENABLE_UNIT_TESTING=ON -DBUILD_RBUS_BENCHMARK_TEST=ON', '', d)}"
+EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'RBUS_ENABLE_TESTAPPS', '-DBUILD_RBUS_SAMPLE_APPS=ON -DBUILD_RBUS_TEST_APPS=ON ', '-DBUILD_RBUS_SAMPLE_APPS=OFF -DBUILD_RBUS_TEST_APPS=OFF', d)}"
+DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', ' gtest benchmark ', ' ', d)}"
 
 #Dunfell Specific CFlags
 CFLAGS:append = " -Wno-format-truncation "

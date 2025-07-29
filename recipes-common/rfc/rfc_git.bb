@@ -27,7 +27,6 @@ do_install:append () {
 	install -d ${D}${base_libdir}/rdk
         install -d ${D}${sysconfdir}
 
-        install -m 0755 ${S}/rfcInit.sh ${D}${base_libdir}/rdk
         install -m 0644 ${S}/rfc.properties ${D}${sysconfdir}/rfc.properties
 }
 
