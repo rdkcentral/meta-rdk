@@ -9,6 +9,7 @@ SRCREV_FORMAT = "generic"
 # Release version - 1.3.1
 S = "${WORKDIR}/git"
 
+
 CFLAGS += " -Wall -Werror"
 
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
