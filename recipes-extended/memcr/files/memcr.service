@@ -15,7 +15,7 @@ ExecStartPre=/bin/sh -c '/bin/mkdir -p ${DUMPSDIR_PERSIST}; /bin/chmod -R 777 ${
 ExecStartPre=/usr/bin/find ${DUMPSDIR_PERSIST} -mindepth 1 -exec rm {} \;
 ExecStartPre=/bin/sh -c '/bin/mkdir -p ${DUMPSDIR_TEMP}; /bin/chmod -R 777 ${DUMPSDIR_TEMP}'
 ExecStartPre=/usr/bin/find ${DUMPSDIR_TEMP} -mindepth 1 -exec rm {} \;
-ExecStart=/usr/bin/memcr -d "${DUMPSDIR_PERSIST};${DUMPSDIR_TEMP}" -N -l ${LOCATOR} -f -z -e -t ${TIMEOUT}
+ExecStart=/usr/bin/memcr -d "${DUMPSDIR_PERSIST};${DUMPSDIR_TEMP}" -N -l ${LOCATOR} -c -f -z -e -t ${TIMEOUT}
 Restart=on-failure
 
 [Install]
