@@ -1,21 +1,21 @@
 SUMMARY = "memcr memory hibernate/restore tool"
 LICENSE = "GPL-2.0-only"
-LIC_FILES_CHKSUM = "file://COPYING;md5=0ba16794955006770904e8293abcbee5"
+LIC_FILES_CHKSUM = "file://COPYING;md5=606d8cf603cf7007e6c1fffda5da9ffa"
 
 HOMEPAGE = "https://github.com/LibertyGlobal/memcr"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI = "git://git@github.com/LibertyGlobal/memcr.git;branch=main;protocol=ssh"
-SRC_URI += " file://0001-RDK-54059-retry-ptrace-seize-on-EPERM.patch"
 SRC_URI += " file://memcr.service"
-SRC_URI += " file://0001-RDK-47153-Support-zstd-compression-and-option-to-set-dump-dir-.patch"
+SRC_URI += " file://0001-RDK-47153-Option-to-set-dump-dir-and-compression-per.patch"
+SRC_URI += " file://0001-RDK-54059-retry-ptrace-seize-on-EPERM.patch"
 
 INSANE_SKIP:${PN} += "ldflags"
 
 PV = "1.0+git${SRCPV}"
-# Code base from 30.08.2024
-SRCREV = "b58f2b8e26cab6b67eceaa36fd6ce5a6d04dcd28"
+# Code base from 22.07.2025
+SRCREV = "f46af4008d19cb527d5cede22bf0a3d0c7a8ed02"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
