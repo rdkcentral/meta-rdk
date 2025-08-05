@@ -62,6 +62,7 @@ do_install:append () {
         install -m644 ${S}/include/rdm_utils.h  ${D}${includedir}/rdm/
         install -m644 ${S}/include/rdm_jsonquery.h  ${D}${includedir}/rdm/
         install -m644 ${S}/include/rdm_download.h  ${D}${includedir}/rdm/
+        install -m644 ${S}/include/rdm_downloadutils.h ${D}${includedir}/rdm/
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
