@@ -5,7 +5,7 @@ DESCRIPTION = "Timer , publishing and subscription interfaces."
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-DEPENDS = "systimemgrinetrface systimemgrfactory rdk-logger libsyswrapper wpeframework-clientlibraries"
+DEPENDS = "systimemgrinetrface systimemgrfactory rdk-logger libsyswrapper wpeframework-clientlibraries  telemetry"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgr"
 
@@ -30,6 +30,7 @@ SYSLOG-NG_LOGRATE_systimemgr = "low"
 
 RDEPENDS:${PN} += "systimemgrfactory"
 
+EXTRA_OECONF = "--enable-t2api=yes"
 do_install:append() {
    install -d ${D}${systemd_unitdir}/system
    install -d ${D}${systemd_unitdir}/system/systimemgr.service.d
