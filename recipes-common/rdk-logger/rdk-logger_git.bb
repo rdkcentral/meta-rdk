@@ -14,7 +14,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 S = "${WORKDIR}/git"
 
 DEPENDS = "log4c glib-2.0"
-
+DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
 PACKAGECONFIG[systemd-syslog-helper] = "--enable-systemd-syslog-helper,,"
 
 #Milestone Support
@@ -24,6 +24,11 @@ CFLAGS:append = " -DLOGMILESTONE"
 CXXFLAGS:append = " -DLOGMILESTONE"
 
 inherit autotools pkgconfig coverity pkgconfig
+
+CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
+
+CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
+LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 
 do_install:append () {
     install -d ${D}${base_libdir}/rdk/
