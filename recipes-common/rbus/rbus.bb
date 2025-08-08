@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
 SRC_URI = "git://github.com/rosemarybennyy/rbus.git;branch=topic/MediumPriority_Src_Fixes"
 
-SRCREV = "e5c2d01b5c87f93c99ef669cc4b152560aee1eb7"
+SRCREV = "76bf869e3663d7d04f16b532843b91c3b3ae2b23"
 SRCREV_FORMAT = "base"
 
 PV ?= "2.6.0"
