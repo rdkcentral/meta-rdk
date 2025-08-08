@@ -15,7 +15,6 @@ S = "${WORKDIR}/git"
 
 DEPENDS = "log4c glib-2.0"
 DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
-PACKAGECONFIG[systemd-syslog-helper] = "--enable-systemd-syslog-helper,,"
 
 #Milestone Support
 EXTRA_OECONF += " --enable-milestone"
