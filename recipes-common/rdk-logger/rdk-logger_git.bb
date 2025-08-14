@@ -10,7 +10,7 @@ PR = "r0"
 SRCREV = "1def45660f7f8ffbd1e612be12a274ef0e729033"
 SRCREV_FORMAT = "rdklogger"
 
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
+SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=feature/test"
 
 S = "${WORKDIR}/git"
 
