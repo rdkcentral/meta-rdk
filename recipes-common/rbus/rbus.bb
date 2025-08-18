@@ -3,9 +3,9 @@ SUMMARY = "rbus library component"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
-SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
+SRC_URI = "git://github.com/rosemarybennyy/rbus.git;branch=topic/MediumPriority_Src_Fixes"
 
-SRCREV = "4cc34e9c8190369d05bf9b6ecbf5449f047654ee"
+SRCREV = "4884ecbbf031d9863e03af039aa7cce1bdb22cd2"
 SRCREV_FORMAT = "base"
 
 PV ?= "2.7.0"
