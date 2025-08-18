@@ -7,9 +7,9 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 PV = "2.0.0"
 PR = "r0"
 
-SRCREV = "0087a47dbc6c28905f7fd4424a43ed1fc8874389"
+SRCREV = "caf4bf24ae1a7fc379fcfff9acbdb477fd79738c"
 
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
+SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=topic/RDKB-60970"
 
 S = "${WORKDIR}/git"
 
