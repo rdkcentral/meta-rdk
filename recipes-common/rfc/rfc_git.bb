@@ -14,6 +14,12 @@ export cjson_CFLAGS = "-I$(PKG_CONFIG_SYSROOT_DIR)${includedir}/cjson"
 export cjson_LIBS = "-lcjson"
 
 DEPENDS="cjson curl commonutilities libsyswrapper iarmmgrs-hal-headers"
+
+DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
+CFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
+CFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
+LDFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
+
 EXTRA_OEMAKE += "-e MAKEFLAGS="
 EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
 
@@ -22,6 +28,7 @@ inherit autotools pkgconfig coverity
 CFLAGS += " -Wall -Werror -Wextra "
 CFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', '-DEN_MAINTENANCE_MANAGER -I${STAGING_INCDIR}/rdk/iarmmgrs-hal ', '', d)}"
 CXXFLAGS += " -Wall -Werror"
+LDFLAGS += " -lrdkconfig"
 
 do_install:append () {
 	install -d ${D}${base_libdir}/rdk
