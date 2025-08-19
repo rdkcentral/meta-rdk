@@ -15,10 +15,10 @@ export cjson_LIBS = "-lcjson"
 
 DEPENDS="cjson curl commonutilities libsyswrapper iarmmgrs-hal-headers"
 
-DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
-CFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
-CFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
-LDFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
+DEPENDS += " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
+CFLAGS += " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
+CFLAGS += " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
+LDFLAGS += " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 
 EXTRA_OEMAKE += "-e MAKEFLAGS="
 EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
