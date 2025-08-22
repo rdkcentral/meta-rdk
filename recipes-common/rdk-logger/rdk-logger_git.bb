@@ -7,7 +7,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 PV = "2.0.0"
 PR = "r0"
 
-SRCREV = "0087a47dbc6c28905f7fd4424a43ed1fc8874389"
+SRCREV = "83e5965a8e6ae69649024ba446541085db2e2c5d"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 
