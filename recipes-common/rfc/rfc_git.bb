@@ -14,13 +14,13 @@ export cjson_CFLAGS = "-I$(PKG_CONFIG_SYSROOT_DIR)${includedir}/cjson"
 export cjson_LIBS = "-lcjson"
 
 DEPENDS="cjson curl commonutilities libsyswrapper iarmmgrs-hal-headers"
-DEPENDS_append_broadband += " rbus"
+DEPENDS:append:broadband += " rbus"
 export rbus_CFLAGS = "-I$(PKG_CONFIG_SYSROOT_DIR)${includedir}/rbus"
 export rbus_LIBS = "-lrbus"
 
 EXTRA_OEMAKE += "-e MAKEFLAGS="
 EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
-EXTRA_OECONF_append_broadband = " --enable-rdkb=yes --enable-tr181set=yes"
+EXTRA_OECONF:append:broadband = " --enable-rdkb=yes --enable-tr181set=yes"
 
 inherit autotools pkgconfig coverity
 
