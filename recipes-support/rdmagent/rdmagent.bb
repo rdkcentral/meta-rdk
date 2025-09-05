@@ -32,7 +32,7 @@ LOGROTATE_ROTATION_MEM_rdm_status="3"
 
 PARALLEL_MAKE = ""
 
-DEPENDS += "commonutilities"
+DEPENDS += "commonutilities telemetry"
 DEPENDS += "opkg"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
@@ -41,7 +41,7 @@ LDFLAGS:append = " -lsecure_wrapper"
 
 DEPENDS += "libsyswrapper"
 
-EXTRA_OECONF:append = " --enable-iarmbusSupport=yes"
+EXTRA_OECONF:append = " --enable-iarmbusSupport=yes --enable-t2api=yes"
 
 DEPENDS:append = " iarmmgrs iarmbus"
 LDFLAGS:append = " -lIARMBus"
