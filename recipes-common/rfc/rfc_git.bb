@@ -22,6 +22,7 @@ EXTRA_OEMAKE += "-e MAKEFLAGS="
 EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
 EXTRA_OECONF:append:broadband = " --enable-rdkb=yes --enable-tr181set=yes"
 EXTRA_OECONF += " --enable-rdkcertselector=yes"
+EXTRA_OEMAKE += "LIBS='-lsafec'"
 
 inherit autotools pkgconfig coverity
 
