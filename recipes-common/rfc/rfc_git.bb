@@ -23,6 +23,12 @@ EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
 EXTRA_OECONF:append:broadband = " --enable-rdkb=yes --enable-tr181set=yes"
 EXTRA_OECONF += " --enable-mountutils=yes --enable-rdkcertselector=yes"
 
+DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
+CFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
+CFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
+LDFLAGS_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
+LDFLAGS_append_morty = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' -Wl,--no-as-needed -lsafec-3.5.1 -Wl,--as-needed', '', d)}"
+
 inherit autotools pkgconfig coverity
 
 CFLAGS += " -Wall -Werror -Wextra "
