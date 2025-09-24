@@ -14,7 +14,9 @@ SRC_URI = "${CMF_GITHUB_ROOT}/rdk-cert-config;${CMF_GITHUB_SRC_URI_SUFFIX}"
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/git"
 
-CFLAGS:append = " -DCONFIG_ERROR_ENABLED "
+CFLAGS:append = " -DCONFIG_ERROR_ENABLED -Wall -Werror"
+CXXFLAGS:append = " -Wall -Werror"
+
 inherit autotools pkgconfig coverity
 
 TARGET_CC_ARCH += "${LDFLAGS}"

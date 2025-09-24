@@ -5,10 +5,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
 SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
 
-SRCREV = "b193ae44c976fe8dd31d48a91f45ac7791a292f0"
+SRCREV = "4cc34e9c8190369d05bf9b6ecbf5449f047654ee"
 SRCREV_FORMAT = "base"
 
-PV ?= "2.6.0"
+PV ?= "2.7.0"
 PR ?= "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
