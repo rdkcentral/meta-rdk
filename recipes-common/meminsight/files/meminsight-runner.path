@@ -18,14 +18,11 @@
 ##########################################################################
 
 [Unit]
-Description=MemInsight Memory Stats Runner
+Description=MemInsight Enable Path Monitor
+OnFailure=path-fail-notifier@%n.service
 
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-EnvironmentFile=-/tmp/meminsight.env
-ExecStart=/usr/bin/xmeminsight $ARGS
-ExecStop=-/bin/rm /tmp/meminsight.env
+[Path]
+Unit=meminsight-runner.service
 
 [Install]
 WantedBy=multi-user.target
