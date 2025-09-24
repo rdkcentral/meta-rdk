@@ -20,8 +20,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit autotools systemd
 
-SYSTEMD_SERVICE:${PN} = "meminsight-runner.service"
-
 do_install() {
     install -d ${D}${bindir}
     install -m 0755 ${B}/xmeminsight ${D}${bindir}/xmeminsight
@@ -34,10 +32,10 @@ do_install() {
     install -m 0644 ${WORKDIR}/conf/client-path.conf ${D}${systemd_unitdir}/system/meminsight-runner.path.d/
 }
 
-SYSTEMD_SERVICE_${PN} = "meminsight-runner.path"
+SYSTEMD_SERVICE:${PN} = "meminsight-runner.path"
 
-FILES_${PN} += "${bindir}/xmeminsight"
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.service"
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
+FILES:${PN} += "${bindir}/xmeminsight"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
