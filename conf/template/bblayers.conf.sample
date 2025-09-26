@@ -28,7 +28,7 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_EXT') if d.getVar('MANIFEST_PATH_OSS
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') if d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') + '/conf/layer.conf') else ''}"
 
 # Release layers: generic
-BBLAYERS =+ "${@'${MANIFEST_PATH_OSS_RELEASE}' if os.path.isfile('${MANIFEST_PATH_OSS_RELEASE}/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_RELEASE') if d.getVar('MANIFEST_PATH_OSS_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OSS_RELEASE') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_VENDOR_RELEASE') if d.getVar('MANIFEST_PATH_VENDOR_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_VENDOR_RELEASE') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_CSPC_SECURITY_RELEASE') if d.getVar('MANIFEST_PATH_CSPC_SECURITY_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_CSPC_SECURITY_RELEASE') + '/conf/layer.conf') else ''}"
 
@@ -59,6 +59,8 @@ BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_RDK_CPC_HALIF_HEADERS') if d.getVar('MANIFEST_PATH_RDK_CPC_HALIF_HEADERS') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_CPC_HALIF_HEADERS') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_RDK_TOOLS') if d.getVar('MANIFEST_PATH_RDK_TOOLS') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_TOOLS') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_BRINGUP') if d.getVar('MANIFEST_PATH_MIDDLEWARE_BRINGUP') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_BRINGUP') + '/conf/layer.conf') else ''} \
+    ${@d.getVar('MANIFEST_PATH_RDK_IMAGES') if d.getVar('MANIFEST_PATH_RDK_IMAGES') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_IMAGES') + '/conf/layer.conf') else ''} \
+    ${@d.getVar('MANIFEST_PATH_CSPC_IMAGES') if d.getVar('MANIFEST_PATH_CSPC_IMAGES') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_CSPC_IMAGES') + '/conf/layer.conf') else ''} \
     "
 
 # Config layers: generic

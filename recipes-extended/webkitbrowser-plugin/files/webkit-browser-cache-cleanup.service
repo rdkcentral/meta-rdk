@@ -2,11 +2,13 @@
 Description=Cleans up browser cache
 
 After=local-fs.target storagemgrmain.service
-Before=wpeframework.service
 
 [Service]
 Type=oneshot
 ExecStart=-/bin/sh -c '/lib/rdk/clearWebkitBrowserCache.sh'
+# Ensure this service runs only once ever after boot, independently
+# of other services being restarted that depend on this one
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
