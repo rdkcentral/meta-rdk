@@ -3,7 +3,7 @@ SECTION = "console/utils"
 DESCRIPTION = "meminsight: system/process memory statistics collection tool with systemd runner service."
 
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=70514b59ff7b36bbbc30d093c6814d8e"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=1c020dfe1abb4e684874a44de1244c28"
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
 
 SRC_URI:append = " file://meminsight-runner.service \
