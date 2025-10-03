@@ -8,7 +8,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 SRCREV = "v2.3.0"
 S = "${WORKDIR}/git"
 PV = "2.3.0"
-PR = "r0"
+PR = "r1"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 
