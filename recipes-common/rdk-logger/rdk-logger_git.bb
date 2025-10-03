@@ -5,11 +5,11 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 PV = "2.0.0"
-PR = "r0"
+PR = "r1"
 
-SRCREV = "a0e24181c3e7243c99e9a53b35aae69f24da5cdb"
+SRCREV = "0087a47dbc6c28905f7fd4424a43ed1fc8874389"
 
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=develop"
+SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 
 S = "${WORKDIR}/git"
 
