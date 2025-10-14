@@ -19,6 +19,7 @@ EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=Release"
 inherit cmake systemd
 
 do_install() {
+    install -d ${D}${bindir}
     install -d ${D}${systemd_unitdir}/system
     install -m 0755 ${B}/ProcessMonitor ${D}${bindir}/ProcessMonitor
     install -m 0644 ${S}/process-monitor.service ${D}${systemd_unitdir}/system
