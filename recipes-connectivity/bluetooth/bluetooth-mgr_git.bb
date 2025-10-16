@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 PV ?= "1.0.0"
 PR ?= "r0"
 
-SRCREV_FORMAT = "bluetooth-mgr "
+SRCREV_FORMAT = "bluetooth-mgr"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
@@ -83,6 +83,10 @@ CFLAGS:append =" ${@bb.utils.contains('RDEPENDS:${PN}', 'virtual/${MLPREFIX}medi
 
 ENABLE_RDK_LOGGER = "--enable-rdk-logger=${@bb.utils.contains('RDEPENDS:${PN}', '${MLPREFIX}rdk-logger', 'yes', 'no', d)}"
 EXTRA_OECONF += " ${ENABLE_RDK_LOGGER}"
+
+# Autoconnect feature enabled
+ENABLE_AUTO_CONNECT = "--enable-autoconnectfeature=${@bb.utils.contains('DISTRO_FEATURES', 'btr_enable_auto_connect','yes','no',d)}"
+EXTRA_OECONF += " ${ENABLE_AUTO_CONNECT} "
 
 EXTRA_OECONF:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--enable-systemd-notify', '', d)}"
 EXTRA_OECONF:append:client = " --enable-sys-diag"
