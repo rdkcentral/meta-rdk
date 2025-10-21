@@ -8,7 +8,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 S = "${WORKDIR}/git"
 SRCREV = "v2.3.0"
 PV = "2.3.0"
-PR = "r1"
+PR = "r2"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 
@@ -30,7 +30,7 @@ LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-confi
 
 do_install:append () {
     install -d ${D}${base_libdir}/rdk/
-    install -m 0755 ${D}${bindir}/rdkLogMileStone ${D}${base_libdir}/rdk/logMilestone.sh
+    install -m 0755 ${S}/scripts/logMilestone.sh ${D}${base_libdir}/rdk
 }
 
 FILES:${PN} += "${base_libdir}/rdk/logMilestone.sh \
