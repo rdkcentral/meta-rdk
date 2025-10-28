@@ -82,6 +82,7 @@ BBMASK .= "|.meta-rdk-ext/recipes-extended|.meta-rdk-ext/recipes-multimedia|.met
 BBMASK .= "|.meta-rdk-comcast/recipes-common/nvm-sqlite/nvm-sqlite.bb|.meta-rdk-comcast/recipes-common/rdkversion/rdkversion_1.0.bb"
 BBMASK .= "|.meta-rdk-soc-intel-gw/meta-intelce-arm/recipes-gateway/miniupnpd/miniupnpd.bb"
 BBMASK .= "|.meta-rdk/recipes-core/packagegroups/packagegroup-rdk-qt5.bb"
+BBMASK .= "|.meta-rdk-comcast/recipes-core/packagegroups/packagegroup-rdk-qt5.bb"
 VOIP_MASK ?= "|.meta-rdk-broadband/recipes-ccsp/ccsp/ccsp-telcovoip-agent.bb"
 BBMASK .= "${VOIP_MASK}"
 WAN_MASK ?= "|.meta-rdk-broadband/recipes-ccsp/ccsp/ccsp-wanagent.bb"
@@ -147,3 +148,8 @@ DISTRO_FEATURES:append = " webui_jst"
 #DISTRO_FEATURES:append = " gtestapp"
 DISTRO_FEATURES:append = " redrecovery"
 OPTIMIZE_DEFAULT = "-Os"
+
+
+
+include conf/include/oss-config.inc
+PREFERRED_VERSION_gettext-native = "0.21"
