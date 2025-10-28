@@ -14,7 +14,7 @@ CFLAGS += " -Wall -Werror -Wextra -Wno-sign-compare -Wno-address "
 SRC_URI = "${CMF_GIT_ROOT}/rdk/components/generic/dca;protocol=${CMF_GIT_PROTOCOL};branch=${CMF_GIT_BRANCH}"
 
 PV = "${RDK_RELEASE}+git${SRCPV}"
-SRCREV ?= "${AUTOREV}"
+SRCREV ?= "94bab6ee8e3c7f4fc30acfc45ba266e303f16d3a"
 S = "${WORKDIR}/git"
 
 inherit pkgconfig autotools systemd coverity
