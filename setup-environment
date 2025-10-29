@@ -132,6 +132,7 @@ fi
 case "$(sed -n 's/^__version__ = "\(.*\)"/\1/p' ${_PWD_PREV}/$OE_CORE_LAYER/bitbake/bin/bitbake)"
 in
     2.2.*) _DISTRO_CODENAME="kirkstone" ;;
+    2.0.*) _DISTRO_CODENAME="kirkstone" ;;
     1.46.*) _DISTRO_CODENAME="dunfell" ;;
     1.37.*|1.38.*) _DISTRO_CODENAME="sumo" ;;
     1.35.*|1.36.*) _DISTRO_CODENAME="rocko" ;;

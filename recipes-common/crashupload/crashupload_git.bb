@@ -56,4 +56,4 @@ RDEPENDS:${PN} += "busybox"
 PACKAGE_BEFORE_PN += "${PN}-conf"
 
 FILES:${PN} += "${base_libdir}/rdk/uploadDumps.sh"
-#FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
+FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"

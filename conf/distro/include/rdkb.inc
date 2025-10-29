@@ -2,6 +2,7 @@
 SPLASH = ""
 
 DISTRO_FEATURES:append:dunfell = " virtualization"
+PREFERRED_VERSION_systemd = "1:250%"
 
 PREFERRED_VERSION_lighttpd = "1.4.53"
 PREFERRED_VERSION_libupnp = "1.6.22"
@@ -153,3 +154,4 @@ OPTIMIZE_DEFAULT = "-Os"
 
 include conf/include/oss-config.inc
 PREFERRED_VERSION_gettext-native = "0.21"
+PREFERRED_PROVIDER_ca-certificates-trust-store = "ca-certificates-trust-store"
