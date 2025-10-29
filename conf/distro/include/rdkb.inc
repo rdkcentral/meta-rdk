@@ -182,3 +182,5 @@ BBMASK .= "|meta-rdk/recipes-support/webcfg/webcfg_1.0.bb"
 
 PREFERRED_VERSION_jsoncpp = "1:1.9.5"
 
+DISTRO_FEATURES:append := "${@bb.utils.contains('DISTRO_FEATURES', 'WanManagerUnificationEnable', ' rdkb_configurable_wan_interface ', '', d)}"
+DISTRO_FEATURES:append := "${@bb.utils.contains('DISTRO_FEATURES', 'WanManagerUnificationEnable', bb.utils.contains('DISTRO_FEATURES', 'nat46',' unified_mapt ', bb.utils.contains('DISTRO_FEATURES', 'feature_mapt',' unified_mapt ', '', d), d), '', d)}"
