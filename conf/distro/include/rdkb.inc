@@ -183,8 +183,8 @@ BBMASK .= "|meta-rdk-comcast-broadband/recipes-common/rfc/rfc_git.bbappend"
 
 PREFERRED_VERSION_jsoncpp = "1:1.9.5"
 
-DISTRO_FEATURES:append := "${@bb.utils.contains('DISTRO_FEATURES', 'WanManagerUnificationEnable', ' rdkb_configurable_wan_interface ', '', d)}"
-DISTRO_FEATURES:append := "${@bb.utils.contains('DISTRO_FEATURES', 'WanManagerUnificationEnable', bb.utils.contains('DISTRO_FEATURES', 'nat46',' unified_mapt ', bb.utils.contains('DISTRO_FEATURES', 'feature_mapt',' unified_mapt ', '', d), d), '', d)}"
+DISTRO_FEATURES:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'WanManagerUnificationEnable', ' rdkb_configurable_wan_interface ', '', d)}"
+DISTRO_FEATURES:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'WanManagerUnificationEnable', bb.utils.contains('DISTRO_FEATURES', 'nat46',' unified_mapt ', bb.utils.contains('DISTRO_FEATURES', 'feature_mapt',' unified_mapt ', '', d), d), '', d)}"
 BBMASK .= "|meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_17.2.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_18.1.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_18.3.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_19.3.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread-bin_17.2.bb|.meta-rdk-oem-tch-broadcom-wifi/meta-tchbcm/recipes-bsp/broadcom-wifi/broadcom-wifi_19.3.bb"
 MIDDLEWARE_ARCH = "cortexa15hf-neon"
 OSS_LAYER_ARCH = "cortexa15hf-neon"
