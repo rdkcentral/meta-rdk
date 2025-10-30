@@ -13,7 +13,8 @@ B = "${WORKDIR}/build"
 DEPENDS = "inja nlohmann-json"
 
 inherit cmake syslog-ng-config-gen systemd
-EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=Release -DENABLE_CPU_IDLE_METRICS=ON"
+EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=Release"
+EXTRA_OECMAKE += "${@bb.utils.contains('DISTRO_FEATURES', 'disable_idle_metrics', '-DENABLE_CPU_IDLE_METRICS=OFF', '-DENABLE_CPU_IDLE_METRICS=ON', d)}"
 
 SYSLOG-NG_FILTER = "memcapture"
 SYSLOG-NG_SERVICE_memcapture = "memcapture.service"
