@@ -179,6 +179,7 @@ BBMASK .= "|meta-rdk-comcast-broadband/recipes-core/dropbear/dropbear_2020.81.bb
 BBMASK .= "|meta-rdk-comcast/recipes-protocols/net-snmp/*"
 BBMASK .= "|meta-rdk/recipes-support/cimplog/cimplog_1.0.bb"
 BBMASK .= "|meta-rdk/recipes-support/webcfg/webcfg_1.0.bb"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-common/rfc/rfc_git.bbappend"
 
 PREFERRED_VERSION_jsoncpp = "1:1.9.5"
 
