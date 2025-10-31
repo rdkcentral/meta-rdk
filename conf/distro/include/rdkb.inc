@@ -2,6 +2,7 @@
 SPLASH = ""
 
 DISTRO_FEATURES:append:dunfell = " virtualization"
+PREFERRED_VERSION_systemd = "1:250%"
 
 PREFERRED_VERSION_lighttpd = "1.4.53"
 PREFERRED_VERSION_libupnp = "1.6.22"
@@ -82,6 +83,7 @@ BBMASK .= "|.meta-rdk-ext/recipes-extended|.meta-rdk-ext/recipes-multimedia|.met
 BBMASK .= "|.meta-rdk-comcast/recipes-common/nvm-sqlite/nvm-sqlite.bb|.meta-rdk-comcast/recipes-common/rdkversion/rdkversion_1.0.bb"
 BBMASK .= "|.meta-rdk-soc-intel-gw/meta-intelce-arm/recipes-gateway/miniupnpd/miniupnpd.bb"
 BBMASK .= "|.meta-rdk/recipes-core/packagegroups/packagegroup-rdk-qt5.bb"
+BBMASK .= "|.meta-rdk-comcast/recipes-core/packagegroups/packagegroup-rdk-qt5.bb"
 VOIP_MASK ?= "|.meta-rdk-broadband/recipes-ccsp/ccsp/ccsp-telcovoip-agent.bb"
 BBMASK .= "${VOIP_MASK}"
 WAN_MASK ?= "|.meta-rdk-broadband/recipes-ccsp/ccsp/ccsp-wanagent.bb"
@@ -147,3 +149,70 @@ DISTRO_FEATURES:append = " webui_jst"
 #DISTRO_FEATURES:append = " gtestapp"
 DISTRO_FEATURES:append = " redrecovery"
 OPTIMIZE_DEFAULT = "-Os"
+
+
+
+include conf/include/oss-config.inc
+PREFERRED_VERSION_gettext-native = "0.21"
+PREFERRED_PROVIDER_ca-certificates-trust-store = "ca-certificates-trust-store"
+
+BBMASK .= "|meta-rdk-comcast/recipes-core/systemd/systemd_250.5.bbappend"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-core/systemd/systemd_%.bbappend"
+BBMASK .= "|meta-rdk/recipes-common/safec/safec_%.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-connectivity/ndisc6/ndisc6_%.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-support/ca-certificates/ca-certificates_%.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-connectivity/dibbler/dibbler_git.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-common/lighttpd/lighttpd_%.bbappend"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-common/bash/bash_%.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-devtools/breakpad/breakpad_git.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-tweaks/breakpad/breakpad_git.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-core/glib-2.0/glib-2.0_2.7%.bbappend"
+BBMASK .= "|meta-rdk-broadband/recipes-support/libsoup/libsoup-2.4_2.74.2.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-support/stunnel/stunnel_%.bbappend"
+BBMASK .= "|meta-rdk/recipes-extended/rpcbind/rpcbind_1.2.%.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-connectivity/bind/bind_%.bbappend"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-rdkb/iptables/iptables_1.8.%.bbappend"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-rdkb/iptables/iptables_%.bbappend"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-support/syslog-ng/syslog-ng_3.36.1.bbappend"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-connectivity/dibbler/dibbler_%.bbappend"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-core/dropbear/dropbear_2020.81.bbappend"
+BBMASK .= "|meta-rdk-comcast/recipes-protocols/net-snmp/*"
+BBMASK .= "|meta-rdk/recipes-support/webcfg/webcfg_1.0.bb"
+BBMASK .= "|meta-rdk-comcast-broadband/recipes-common/rfc/rfc_git.bbappend"
+#BBMASK .= "|meta-rdk-broadband/recipes-support/cimplog/cimplog_1.0.bbappend"
+
+PREFERRED_VERSION_jsoncpp = "1:1.9.5"
+PREFERRED_VERSION_dnsmasq = "2.83"
+
+DISTRO_FEATURES:append = " rdkb_configurable_wan_interface "
+DISTRO_FEATURES:append = " unified_mapt "
+
+BBMASK .= "|meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_17.2.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_18.1.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_18.3.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_19.3.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread-bin_17.2.bb|.meta-rdk-oem-tch-broadcom-wifi/meta-tchbcm/recipes-bsp/broadcom-wifi/broadcom-wifi_19.3.bb"
+MIDDLEWARE_ARCH = "cortexa15hf-neon"
+#This should be reviewed and added it back.
+#OSS_LAYER_ARCH = "cortexa15hf-neon"
+IMAGE_CLASSES:remove = " post-rootfs-hooks "
+
+
+#srcrev for opensourced components
+
+
+SRCREV:pn-libsyswrapper = "5143ba5b92f5dc77b436837d51f2f612d5846b7b"
+SRCREV_rdk-libunpriv = "a0dbea7d368a630158abf56ef8bd7f3855910ec5"
+SRCREV:pn-telemetry = "0d73470cc038f1e47ffee483a7d05e51bf88751e"
+SRCREV:pn-crashupload = "8e7e22d2cb988ea58b9ba9d85b8b0812c6dc77d2"
+SRCREV:pn-commonutilities = "071361f284ba9049bf7d8cb9a75b583b9b1e353b"
+SRCREV:pn-rfc = "b6da366e704a006394b33759f144c0a4256fd335"
+SRCREV:pn-rdkcertconfig = "e0e35743f7e96ad0595ac25b11d829b766f7062b"
+SRCREV_caupdate = "9859720a8748331038e5476321cf039e7d17c5f1"
+#topic branch - rdk-ca-store
+SRCREV_rdk-ca-store = "378b7d149a0a0c71be7eb41c0ac0fc79a3ca1cf9"
+SRCREV:pn-sslcerts = "2d3ef2f7c1b54c7552cac2ab1e41f1ce3871c3d6"
+#topic branch - ssacpc
+SRCREV_ssacpc = "f238816d57f9956d1ddcd6754b170eafec0ec47e"
+#topic branch -cedmcpc
+SRCREV_cedmcpc = "a82a07c5c2639a81d4bcd2e2d665ce06c999019c"
+SRCREV_ecfsgeneric= "822d726d14e575ec9c73198ce939733abd0d365b"
+SRCREV:pn-remotedebugger = "300d29e105f6a7244bff81fa0357dac914dd8913"
+SRCREV_sshkeys = "3a1c7d6a07586117bd992fe72ae3365fdd7ef2f3"
+SRCREV_mount-utils = "c1aeb29c8e1f236babdd6a1a4538c5b451c7b8c1"
