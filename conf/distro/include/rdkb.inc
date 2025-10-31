@@ -188,7 +188,8 @@ DISTRO_FEATURES:append = " unified_mapt "
 
 BBMASK .= "|meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_17.2.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_18.1.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_18.3.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread_19.3.bb|.meta-rdk-oem-tch-brcm-xb6/meta-tchxb6/recipes-bsp/broadcom-thread/broadcom-thread-bin_17.2.bb|.meta-rdk-oem-tch-broadcom-wifi/meta-tchbcm/recipes-bsp/broadcom-wifi/broadcom-wifi_19.3.bb"
 MIDDLEWARE_ARCH = "cortexa15hf-neon"
-OSS_LAYER_ARCH = "cortexa15hf-neon"
+#This should be reviewed and added it back.
+#OSS_LAYER_ARCH = "cortexa15hf-neon"
 IMAGE_CLASSES:remove = " post-rootfs-hooks "
 
 
