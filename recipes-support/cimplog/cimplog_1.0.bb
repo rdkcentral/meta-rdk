@@ -13,7 +13,7 @@ PR ?= "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-CFLAGS_append:broadband += " ${@bb.utils.contains('DISTRO_FEATURES', 'bci', '', '-DFEATURE_SUPPORT_ONBOARD_LOGGING',d)}"
+CFLAGS:append:broadband += " ${@bb.utils.contains('DISTRO_FEATURES', 'bci', '', '-DFEATURE_SUPPORT_ONBOARD_LOGGING',d)}"
 
 S = "${WORKDIR}/git"
 inherit pkgconfig cmake
