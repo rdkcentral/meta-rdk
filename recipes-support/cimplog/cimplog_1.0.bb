@@ -20,4 +20,3 @@ EXTRA_OECMAKE += "-DRDK_LOGGER=ON -DBUILD_TESTING=OFF -DBUILD_YOCTO=true"
 
 ASNEEDED_hybrid = ""
 ASNEEDED_client = ""
-EXTRA_OECMAKE:append:broadband = " ${@bb.utils.contains('DISTRO_FEATURES', 'bci', '', ' -DFEATURE_SUPPORT_ONBOARD_LOGGING=false',d)}"
