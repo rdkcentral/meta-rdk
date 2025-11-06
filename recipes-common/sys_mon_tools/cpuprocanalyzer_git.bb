@@ -2,7 +2,7 @@ DESCRIPTION = "CPU Proc Analyzer"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "${AUTOREV}"
+SRCREV = "8fb410c461543ffa1d97245e9c493762d9392ad4"
 SRC_URI = "${CMF_GIT_ROOT}/rdk/components/generic/cpuprocanalyzer;protocol=${CMF_GIT_PROTOCOL};branch=${CMF_GIT_BRANCH};name=cpuprocanalyzer" 
 S = "${WORKDIR}/git"
 
