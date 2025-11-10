@@ -17,6 +17,10 @@ DEPENDS = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', ' systemd ', '', d
 DEPENDS:append = " autoconf-native automake-native "
 RDEPENDS:${PN} = "crun (>= 0.14.1) ${@bb.utils.contains('DISTRO_FEATURES', 'dac', '', ' dobby-thunderplugin', d)} "
 
+DEPENDS += "gcc-sanitizers"
+RDEPENDS:${PN} += "libasan"
+
+
 CFLAGS:append = " --sysroot=${RECIPE_SYSROOT}"
 
 python do_patch_new () {
@@ -39,6 +43,10 @@ LOGROTATE_ROTATION_MEM_dobby="3"
 
 # Always build debug version for now
 EXTRA_OECMAKE =  " -DCMAKE_BUILD_TYPE=Debug -DBUILD_REFERENCE=${SRCREV}"
+
+EXTRA_OECMAKE += "-DCMAKE_CXX_FLAGS='-fsanitize=address -fno-omit-frame-pointer'"
+EXTRA_OECMAKE += "-DCMAKE_EXE_LINKER_FLAGS='-fsanitize=address'"
+
 
 SRC_URI += "file://secure_wrapper.patch"
 
