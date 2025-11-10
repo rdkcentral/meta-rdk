@@ -1,0 +1,16 @@
+[Unit]
+Description=Connection service (udhcpc)
+After=network@%i.service
+Requires=network@%i.service
+Wants=network-online.target
+Before=network-online.target
+ConditionPathExists=/etc
+ConditionPathExists=/tmp
+
+[Service]
+ExecStartPre=-/bin/touch /etc/resolv.conf
+ExecStart=/sbin/udhcpc -i%i
+RemainAfterExit=yes
+
+[Install]
+WantedBy=network.target
