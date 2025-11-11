@@ -44,8 +44,17 @@ LOGROTATE_ROTATION_MEM_dobby="3"
 # Always build debug version for now
 EXTRA_OECMAKE =  " -DCMAKE_BUILD_TYPE=Debug -DBUILD_REFERENCE=${SRCREV}"
 
-EXTRA_OECMAKE += "-DCMAKE_CXX_FLAGS='-fsanitize=address -fno-omit-frame-pointer'"
-EXTRA_OECMAKE += "-DCMAKE_EXE_LINKER_FLAGS='-fsanitize=address'"
+EXTRA_OECMAKE += "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize-recover=address -I${STAGING_EXECPREFIXDIR}/lib/gcc/${TARGET_SYS}/9.3.0/include'"
+
+DEPENDS += "gcc-sanitizers leakcheck-msgq"
+RDEPENDS_${PN} += "libasan leakcheck-msgq"
+
+LDFLAGS += " -fsanitize=address -fsanitize-recover=address -Wl,--no-as-needed -lmsgq -Wl,--as-needed -lpthread -lrt -lasan"
+
+INHIBIT_PACKAGE_STRIP = "1"
+
+INHIBIT_SYSROOT_STRIP = "1"
+
 
 
 SRC_URI += "file://secure_wrapper.patch"
@@ -94,6 +103,13 @@ do_install:append(){
 
     #Copy the dobby generic config file to /etc/
     install -m 0644 ${S}/../dobby.generic.json ${D}${sysconfdir}/dobby.generic.json
+
+    
+    # Systemd doesn't parse these entries properly for exporting them to environment. Therefore overrided user options via function __asan_default_options() (Note, asan has this fn defined as weak)
+    	sed -i  "s/^ExecStart=.*/ExecStart=\/bin\/sh -c \'ASAN_OPTIONS=malloc_context_size=8:halt_on_error=false:fast_unwind_on_malloc=0:new_delete_type_mismatch=0 \/usr\/sbin\/DobbyDaemon\'/" ${D}/lib/systemd/system/dobby.service
+    # for testing
+    	sed -i 's/Restart=on-failure/Restart=no/' ${D}/lib/systemd/system/dobby.service
+
 }
 
 FILES:${PN} += "${sysconfdir}/dobby.generic.json"
