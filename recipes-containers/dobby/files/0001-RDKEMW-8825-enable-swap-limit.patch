@@ -1,0 +1,45 @@
+From 9f066586771a436a11521bcafb99211852afcc2a Mon Sep 17 00:00:00 2001
+From: Gurdal Oruklu <gurdal_oruklu@comcast.com>
+Date: Mon, 29 Sep 2025 22:14:13 +0000
+Subject: [PATCH] RDKEMW-8825: App not killed when container reaches memory
+ limit
+
+Added "swap" limit in the OCI config templates to enable OOM killing when
+memory limit is reached when swap memory is enabled.
+
+Signed-off-by: Gurdal Oruklu <gurdal_oruklu@comcast.com>
+---
+ bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template | 4 +++-
+ .../lib/source/templates/OciConfigJsonVM1.0.2-dobby.template  | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
+index 381017098..6cbdabd43 100644
+--- a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
++++ b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
+@@ -327,7 +327,9 @@ static const char* ociJsonTemplate = R"JSON(
+                 {{/DEV_WHITELIST_SECTION}}
+             ],
+             "memory": {
+-                "limit": {{MEM_LIMIT}}
++                "limit": {{MEM_LIMIT}},
++                "swap": {{MEM_LIMIT}},
++                "swappiness": 60
+             },
+             "cpu": {
+                 {{#CPU_SHARES_ENABLED}}
+diff --git a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
+index ed1bc177f..21fe91d38 100644
+--- a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
++++ b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
+@@ -338,7 +338,9 @@ static const char* ociJsonTemplate = R"JSON(
+                 {{/DEV_WHITELIST_SECTION}}
+             ],
+             "memory": {
+-                "limit": {{MEM_LIMIT}}
++                "limit": {{MEM_LIMIT}},
++                "swap": {{MEM_LIMIT}},
++                "swappiness": 60
+             },
+             "cpu": {
+                 {{#CPU_SHARES_ENABLED}}

@@ -6,8 +6,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 S = "${WORKDIR}/git"
-SRCREV = "v2.3.0"
-PV = "2.3.0"
+SRCREV = "ed3a3f71b8db836449bde6b7c9dc60438fedf30e"
+PV = "2.4.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -19,7 +19,6 @@ DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " 
 EXTRA_OECONF += " --enable-milestone"
 PROVIDES = "getClockUptime"
 CFLAGS:append = " -DLOGMILESTONE"
-CXXFLAGS:append = " -DLOGMILESTONE"
 
 inherit autotools pkgconfig coverity pkgconfig
 
