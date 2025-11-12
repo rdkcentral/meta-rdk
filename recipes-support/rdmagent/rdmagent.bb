@@ -32,7 +32,7 @@ LOGROTATE_ROTATION_MEM_rdm_status="3"
 
 PARALLEL_MAKE = ""
 
-DEPENDS += "commonutilities telemetry"
+DEPENDS += "commonutilities telemetry rdkcertconfig mountutils"
 DEPENDS += "opkg"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
@@ -41,10 +41,15 @@ LDFLAGS:append = " -lsecure_wrapper"
 
 DEPENDS += "libsyswrapper"
 
-EXTRA_OECONF:append = " --enable-iarmbusSupport=yes --enable-t2api=yes"
+EXTRA_OECONF:append = " --enable-iarmbusSupport=yes --enable-t2api=yes --enable-mountutils=yes --enable-rdkcertselector=yes"
+
+DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
+CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
+CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
+LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 
 DEPENDS:append = " iarmmgrs iarmbus"
-LDFLAGS:append = " -lIARMBus"
+LDFLAGS:append = " -lIARMBus -lsafec"
 
 do_install:append () {
         install -d ${D}${bindir}/
