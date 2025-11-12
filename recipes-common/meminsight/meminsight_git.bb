@@ -12,8 +12,8 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://conf/client-path.conf \
                    "
 
-SRCREV = "f83f1804827cca0550d525d971f4337998d6ac1d"
-PV = "1.0"
+SRCREV = "380f58329517b579040e97ec338814a215f44764"
+PV = "1.1"
 S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
