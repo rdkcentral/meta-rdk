@@ -13,3 +13,5 @@ do_install() {
     install -m 0644 ${S}/50-sysctl.conf ${D}${sysconfdir}/sysctl.d
     install -m 0644 ${S}/98-sysctl-mw.conf ${D}${sysconfdir}/sysctl.d
 }
+
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

@@ -48,3 +48,9 @@ do_install () {
 FILES:${PN} += "${@bb.utils.contains('DISTRO_FEATURES','systemd','${systemd_unitdir}/system/memcr.service','',d)}"
 FILES:${PN} += "${bindir}/memcr ${bindir}/parasite.bin ${bindir}/memcr-client"
 FILES:${PN} += "${libdir}/memcr/libencrypt.so"
+
+SRCREV = "f46af4008d19cb527d5cede22bf0a3d0c7a8ed02"
+
+PV = "1.0.2"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

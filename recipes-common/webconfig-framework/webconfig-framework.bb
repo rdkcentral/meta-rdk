@@ -64,3 +64,7 @@ do_install:class-native () {
 FILES:${PN} += "${libdir}/*.so"
 
 BBCLASSEXTEND = "native"
+
+PV = "1.0.0"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

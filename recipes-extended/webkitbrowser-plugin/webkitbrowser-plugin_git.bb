@@ -134,3 +134,7 @@ FILES:${PN}-dbg += "${datadir}/WPEFramework/WebKitBrowser/.debug"
 
 INSANE_SKIP:${PN} += "libdir staticdev dev-so"
 INSANE_SKIP:${PN}-dbg += "libdir"
+
+PV = "1.1.30"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

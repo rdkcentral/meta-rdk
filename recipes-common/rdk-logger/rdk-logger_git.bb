@@ -37,3 +37,7 @@ FILES:${PN} += "${base_libdir}/rdk/logMilestone.sh \
                 /rdklogctrl \
                 ${base_libdir} \
                 ${base_libdir}/rdk"
+
+PV = "2.4.0"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

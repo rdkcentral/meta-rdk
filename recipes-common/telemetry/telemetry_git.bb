@@ -76,3 +76,9 @@ DOWNLOAD_ON_DEMAND="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', '
 # Breakpad processname and logfile mapping
 BREAKPAD_LOGMAPPER_PROCLIST = "telemetry2_0"
 BREAKPAD_LOGMAPPER_LOGLIST = "telemetry2_0.txt.0"
+
+SRCREV = "0d73470cc038f1e47ffee483a7d05e51bf88751e"
+
+PV = "1.6.4"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

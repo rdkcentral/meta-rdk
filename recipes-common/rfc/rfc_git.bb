@@ -59,3 +59,9 @@ inherit comcast-package-deploy
 CUSTOM_PKG_EXTNS="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'gtest', '', d)}"
 SKIP_MAIN_PKG="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', 'no', d)}"
 DOWNLOAD_ON_DEMAND="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', 'no', d)}"
+
+SRCREV = "b6da366e704a006394b33759f144c0a4256fd335"
+
+PV = "1.1.7"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

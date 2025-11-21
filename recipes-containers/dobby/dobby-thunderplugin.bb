@@ -29,3 +29,7 @@ FILES:${PN} += "${libdir}/plugins/dobby/*.so*"
 
 PV ?= "1.0.0"
 PR ?= "r0"
+
+PV = "3.14.1"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

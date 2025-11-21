@@ -44,3 +44,9 @@ ENABLE_SAFEC = "--enable-safec=${@bb.utils.contains('DISTRO_FEATURES', 'safec','
 EXTRA_OECONF += " ${ENABLE_SAFEC}"
 
 inherit autotools pkgconfig coverity
+
+SRCREV = "02e40603f48c748cc7a7cc776c4743534cab573e"
+
+PV = "1.0.4.0"
+PR = "r2"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

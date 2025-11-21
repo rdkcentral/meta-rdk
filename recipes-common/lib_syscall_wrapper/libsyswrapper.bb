@@ -14,3 +14,9 @@ DEBIAN_NOAUTONAME:${PN} = "1"
 
 inherit autotools pkgconfig coverity
 
+
+SRCREV = "5143ba5b92f5dc77b436837d51f2f612d5846b7b"
+
+PV = "1.3.3"
+PR = "r1"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

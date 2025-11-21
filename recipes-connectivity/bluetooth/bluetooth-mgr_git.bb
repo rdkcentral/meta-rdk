@@ -112,3 +112,9 @@ FILES:${PN} += "${systemd_unitdir}/system/btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr.conf"
 
 
+
+SRCREV = "b284d24692988285e449252829eacc78214634b5"
+
+PV = "1.0.3"
+PR = "r2"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

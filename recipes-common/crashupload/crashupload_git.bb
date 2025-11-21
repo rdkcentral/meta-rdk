@@ -57,3 +57,9 @@ PACKAGE_BEFORE_PN += "${PN}-conf"
 
 FILES:${PN} += "${base_libdir}/rdk/uploadDumps.sh"
 #FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
+
+SRCREV = "8e7e22d2cb988ea58b9ba9d85b8b0812c6dc77d2"
+
+PV = "1.0.7"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

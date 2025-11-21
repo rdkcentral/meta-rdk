@@ -99,3 +99,9 @@ FILES:${PN} += "${libdir}/libethanlog.so*"
 FILES:${PN} += "${libdir}/libocispec.so*"
 PV ?= "1.0.0"
 PR ?= "r0"
+
+SRCREV = "59381966b7251d46a28ef7897a290662ca6009cb"
+
+PV = "3.15.0"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

@@ -19,3 +19,9 @@ PV = "1.0"
 
 inherit autotools pkgconfig 
 ALLOW_EMPTY:${PN} = "1"
+
+SRCREV_systemtimemgrifc = "f327d55479d559bfb94803d2e6d60501ab32f9f2"
+
+PV = "1.3.0"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

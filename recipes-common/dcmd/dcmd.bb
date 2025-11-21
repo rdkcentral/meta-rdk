@@ -49,3 +49,9 @@ do_install:append () {
 
 SYSTEMD_SERVICE:${PN} += "dcmd.service"
 
+
+SRCREV = "03974134e21b316d4053de6574df14b3a423c8d6"
+
+PV = "1.2.0"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

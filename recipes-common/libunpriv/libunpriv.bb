@@ -14,3 +14,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 inherit autotools pkgconfig
 
 CFLAGS += " -Wall -Werror -Wextra -Wno-unused-parameter "
+
+SRCREV_rdk-libunpriv = "547d202d421ed83bd60b677b5d057cad3b7ae8ad"
+
+PV = "1.0.2"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

@@ -64,3 +64,9 @@ SYSTEMD_SERVICE:${PN} += "apps_rdm.path"
 FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.service"
 FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.path"
 FILES:${PN} += "${sysconfdir}/rdm/* "
+
+SRCREV = "7e09a367a5b0547fcecb215b1a4b837de86a26cc"
+
+PV = "2.1.2"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
