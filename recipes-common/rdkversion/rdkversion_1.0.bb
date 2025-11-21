@@ -7,7 +7,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 PV ?= "1.0.0"
 PR ?= "r0"
 
-SRCREV ?= "d461bbd2fc8299f6e5056f488ff944e90142e9b6"
+SRCREV = "d461bbd2fc8299f6e5056f488ff944e90142e9b6"
+
 SRCREV_FORMAT     = "rdkversion"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdkversion;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdkversion"

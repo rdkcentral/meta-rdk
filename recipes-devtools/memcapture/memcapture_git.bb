@@ -28,3 +28,6 @@ do_install () {
 
 FILES:${PN} += "${bindir}/MemCapture \
                "
+
+SRCREV_src = "0cf90e07af97b70fb1f253ebd0f71edd5a9b8225"
+

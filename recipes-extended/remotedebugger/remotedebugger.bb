@@ -61,3 +61,6 @@ FILES:${PN} += " \
                 ${systemd_unitdir}/system/remote-debugger.service \
                 ${base_libdir}/rdk/uploadRRDLogs.sh \
 "
+
+SRCREV_generic = "300d29e105f6a7244bff81fa0357dac914dd8913"
+

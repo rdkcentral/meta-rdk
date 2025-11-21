@@ -111,4 +111,7 @@ SYSTEMD_SERVICE:${PN}  = "btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr.conf"
 
+SRCREV = "b284d24692988285e449252829eacc78214634b5"
+
+
 

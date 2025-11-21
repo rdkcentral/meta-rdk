@@ -45,3 +45,6 @@ FILES:${PN}:append = " ${systemd_unitdir}/system/systimemgr.service "
 FILES:${PN}:append = " ${systemd_unitdir}/system/systimemgr.service.d/secure.conf "
 SYSTEMD_SERVICE:${PN} = "systimemgr.service"
 
+SRCREV_systemtimemgr = "f327d55479d559bfb94803d2e6d60501ab32f9f2"
+
+

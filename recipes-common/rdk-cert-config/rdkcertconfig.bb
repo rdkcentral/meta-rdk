@@ -22,3 +22,6 @@ inherit autotools pkgconfig coverity
 TARGET_CC_ARCH += "${LDFLAGS}"
 
 EXTRA_OECONF += "--enable-rdklogger"
+
+SRCREV = "e0e35743f7e96ad0595ac25b11d829b766f7062b"
+

@@ -5,7 +5,6 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=c466d4ab8a68655eb1edf0bf8c
 
 include dobby.inc
 
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS = "dobby wpeframework-clientlibraries"
 
@@ -27,5 +26,7 @@ FILES_SOLIBSDEV = ""
 
 FILES:${PN} += "${libdir}/plugins/dobby/*.so*"
 
-PV ?= "1.0.0"
-PR ?= "r0"
+
+PV = "3.14.1"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

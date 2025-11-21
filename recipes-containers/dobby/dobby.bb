@@ -11,7 +11,6 @@ SRC_URI:append = " file://Fix_compile_gcc11.patch  \
                    file://0001-RDKEMW-8825-enable-swap-limit.patch \
                  "
 
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', ' systemd ', '', d)} libnl dbus jsoncpp boost yajl breakpad breakpad-wrapper libsyswrapper libcap"
 DEPENDS:append = " autoconf-native automake-native "
@@ -97,5 +96,9 @@ FILES:${PN} += "${libexecdir}/DobbyInit"
 FILES:${PN} += "${libdir}/plugins/dobby/*.so*"
 FILES:${PN} += "${libdir}/libethanlog.so*"
 FILES:${PN} += "${libdir}/libocispec.so*"
-PV ?= "1.0.0"
-PR ?= "r0"
+
+SRCREV = "59381966b7251d46a28ef7897a290662ca6009cb"
+
+PV = "3.15.0"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

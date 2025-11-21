@@ -5,7 +5,6 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS += "curl cjson glib-2.0 breakpad-wrapper rbus libsyswrapper libunpriv"
 DEPENDS += "rdk-logger"
@@ -13,8 +12,6 @@ DEPENDS += "rdk-logger"
 RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
 
 
-PV ?= "1.0.1"
-PR ?= "r0"
 
 S = "${WORKDIR}/git"
 
@@ -76,3 +73,9 @@ DOWNLOAD_ON_DEMAND="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', '
 # Breakpad processname and logfile mapping
 BREAKPAD_LOGMAPPER_PROCLIST = "telemetry2_0"
 BREAKPAD_LOGMAPPER_LOGLIST = "telemetry2_0.txt.0"
+
+SRCREV = "0d73470cc038f1e47ffee483a7d05e51bf88751e"
+
+PV = "1.6.4"
+PR = "r0"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

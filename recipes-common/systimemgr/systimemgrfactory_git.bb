@@ -32,3 +32,6 @@ RDEPENDS:${PN} += " jsonrpc curl jsoncpp "
 DEPENDS += " iarmmgrs wpeframework wpeframework-clientlibraries"
 
 EXTRA_OECONF:append = " --enable-wpevgdrm --enable-dtt --enable-t2api=yes"
+
+SRCREV_systemtimemgrfactory = "f327d55479d559bfb94803d2e6d60501ab32f9f2"
+

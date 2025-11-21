@@ -5,11 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=cfbe95dd83ee8f2ea75475ecc20723e5"
 
 DEPENDS = " util-linux rtcore "
 
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-PV ?= "2.0.0"
-PR ?= "r0"
 
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 
 S = "${WORKDIR}/git"
@@ -103,3 +99,6 @@ DEBIAN_NOAUTONAME:${PN} = "1"
 
 BBCLASSEXTEND = "native"
 
+PV = "2.0.0"
+PR = "r3"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

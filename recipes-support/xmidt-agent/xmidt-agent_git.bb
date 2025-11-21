@@ -30,3 +30,6 @@ FILES_${PN} += "${bindir}/xmidt-agent ${sysconfdir}/xmidt-agent/01-config.yml"
 FILES:${PN} += "${systemd_unitdir}/system/xmidt-agent.service"
 SYSTEMD_SERVICE_${PN} += "xmidt-agent.service"
 INSANE_SKIP:${PN} += "already-stripped"
+
+SRCREV = "a42eef93f5f129da6a25f1ce5386b2ee"
+
