@@ -181,6 +181,7 @@ BBMASK .= "|meta-rdk-comcast-broadband/recipes-common/rfc/rfc_git.bbappend"
 
 PREFERRED_VERSION_jsoncpp = "1:1.9.5"
 PREFERRED_VERSION_dnsmasq = "2.83"
+PREFERRED_VERSION_msgpack-c = "2.1.1"
 
 DISTRO_FEATURES:append = " rdkb_configurable_wan_interface "
 DISTRO_FEATURES:append = " unified_mapt "
