@@ -12,10 +12,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2441d6cdabdc0f370be5cd8a746eb647"
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-PV ?= "1.0.0"
-PR ?= "r0"
+PV = "1.2.0"
+PR = "r0"
 
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
@@ -48,4 +47,5 @@ do_install:append () {
 }
 
 SYSTEMD_SERVICE:${PN} += "dcmd.service"
-
+SRCREV = "03974134e21b316d4053de6574df14b3a423c8d6"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

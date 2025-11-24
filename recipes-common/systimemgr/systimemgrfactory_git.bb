@@ -10,11 +10,10 @@ DEPENDS = "systimemgrinetrface iarmbus jsonrpc virtual/mfrlib rdk-logger telemet
 
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgrfactory"
 
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRCREV_FORMAT = "systemtimemgrfactory"
 
-PV ?= "1.0.0"
-PR ?= "r0"
+PV = "1.3.0"
+PR = "r0"
 
 ASNEEDED = ""
 
@@ -32,3 +31,5 @@ RDEPENDS:${PN} += " jsonrpc curl jsoncpp "
 DEPENDS += " iarmmgrs wpeframework wpeframework-clientlibraries"
 
 EXTRA_OECONF:append = " --enable-wpevgdrm --enable-dtt --enable-t2api=yes"
+SRCREV_systemtimemgrfactory = "f327d55479d559bfb94803d2e6d60501ab32f9f2"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"

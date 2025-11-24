@@ -89,4 +89,5 @@ FILES:${PN} += " ${@bb.utils.contains("DISTRO_FEATURES", "webconfig_bin", "${exe
 
 ASNEEDED_hybrid = ""
 ASNEEDED_client = ""
-
+PV = "1.1.0"
+PR = "r0"
