@@ -1,0 +1,66 @@
+Date: Jan 13, 2025 10:50 PM
+From: LasyaPrakarsha_DonthiVenkata@comcast.com
+Subject: RDKB-58300: aker process runs with limited privilege
+Source: Comcast
+Upstream-Status: Pending
+Signed-off-by: LasyaPrakarsha_DonthiVenkata@comcast.com
+
+---
+
+Index: git/src/main.c
+===================================================================
+--- git.orig/src/main.c
++++ git/src/main.c
+@@ -43,6 +43,8 @@
+    #include <telemetry_busmessage_sender.h>
+ #endif
+ 
++#include "cap.h"
++static cap_user appcaps;
+ 
+ /*----------------------------------------------------------------------------*/
+ /*                                   Macros                                   */
+@@ -71,6 +73,7 @@ size_t max_macs = INT_MAX;
+ static void sig_handler(int sig);
+ static void import_existing_schedule( const char *data_file, const char *md5_file );
+ static int main_loop(libpd_cfg_t *cfg, char *data_file, char *md5_file, const char *device_id );
++static bool drop_root();
+ 
+ /*----------------------------------------------------------------------------*/
+ /*                             External Functions                             */
+@@ -181,6 +184,10 @@ int main( int argc, char **argv)
+         }
+     }
+ 
++    if(!drop_root()) {
++        debug_error("drop_root method failed!\n");
++    }
++
+     if (max_macs <= 0) {
+         max_macs = INT_MAX;
+     }
+@@ -249,6 +256,24 @@ int main( int argc, char **argv)
+     return rv;
+ }
+ 
++static bool drop_root()
++{
++    bool retval = false;
++    debug_info("NonRoot feature is enabled, dropping root privileges for aker process\n");
++    appcaps.caps = NULL;
++    appcaps.user_name = NULL;
++
++    if(init_capability() != NULL) {
++        if(drop_root_caps(&appcaps) != -1) {
++            if(update_process_caps(&appcaps) != -1) {
++                read_capability(&appcaps);
++                retval = true;
++            }
++        }
++    }
++    return retval;
++}
++
+ /*----------------------------------------------------------------------------*/
+ /*                             Internal functions                             */
+ /*----------------------------------------------------------------------------*/
