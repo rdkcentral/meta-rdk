@@ -34,8 +34,13 @@ if [ "$(whoami)" = "root" ]; then
     return 1
 fi
 
+OE_CORE_LAYER="openembedded-core"
+if [ -d "poky" ];then
+    OE_CORE_LAYER="poky"
+fi
+
 # check that we are where we think we are!
-if [ ! -f "openembedded-core/oe-init-build-env" ]; then
+if [ ! -f "$OE_CORE_LAYER/oe-init-build-env" ]; then
     echo -e "\nUNABLE TO FIND OPENEMBEDDED !"
     return 1
 fi
@@ -53,7 +58,7 @@ EOF
 export PATH="`echo ${PATH} | sed 's/\(:.\|:\)*:/:/g;s/^.\?://;s/:.\?$//'`"
 
 # Clean PATH of any previous oe-core bitbake or scripts directories
-export PATH="$(echo $PATH | sed 's!/[^:]\+/openembedded-core/\(bitbake/bin\|scripts\):!!g')"
+export PATH="$(echo $PATH | sed 's!/[^:]\+/$OE_CORE_LAYER/\(bitbake/bin\|scripts\):!!g')"
 
 # only 1 parameter max, <build> folder, or default to build-$machine
 _BUILDDIR=
@@ -110,7 +115,7 @@ _PWD_PREV=$(pwd)
 
 # Warning: Sourcing the oe-init-build-env script changes the current directory.
 
-TEMPLATECONF=${_PWD_PREV}/meta-rdk/conf source openembedded-core/oe-init-build-env ${_BUILDDIR}
+TEMPLATECONF=${_PWD_PREV}/meta-rdk/conf source $OE_CORE_LAYER/oe-init-build-env ${_BUILDDIR}
 
 if [ "$_CONFIGS_FOUND" ]; then
     echo -e "\nConfig files already exist in folder ${_BUILDDIR}/conf/, they were not modified."
@@ -124,9 +129,10 @@ fi
 # bitbake released with OE 2.0) with OE 1.6. We need to account for that here,
 # ie bitbake version 1.28 needs to map to "daisy", not "jethro".
 
-case "$(sed -n 's/^__version__ = "\(.*\)"/\1/p' ${_PWD_PREV}/openembedded-core/bitbake/bin/bitbake)"
+case "$(sed -n 's/^__version__ = "\(.*\)"/\1/p' ${_PWD_PREV}/$OE_CORE_LAYER/bitbake/bin/bitbake)"
 in
     2.2.*) _DISTRO_CODENAME="kirkstone" ;;
+    2.0.*) _DISTRO_CODENAME="kirkstone" ;;
     1.46.*) _DISTRO_CODENAME="dunfell" ;;
     1.37.*|1.38.*) _DISTRO_CODENAME="sumo" ;;
     1.35.*|1.36.*) _DISTRO_CODENAME="rocko" ;;
