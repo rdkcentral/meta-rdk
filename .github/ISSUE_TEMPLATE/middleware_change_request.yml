@@ -12,7 +12,7 @@ body:
     id: description
     attributes:
       label: Description
-      description: Provide a clear and concise description of the feature or Bug Ticket
+      description: Provide a clear and concise description of the feature or bug ticket
       placeholder: Describe the feature you'd like to see
     validations:
       required: true
