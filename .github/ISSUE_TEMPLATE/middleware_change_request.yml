@@ -31,105 +31,93 @@ body:
       value: |
         ---
         ## Definition of Done (DoD)
-        Please select the status and provide details for each item below.
-
-  # --- DoD Item 1 ---
-  - type: dropdown
-    id: dod-status-1
+        
+  # --- Pair 1 ---
+  - type: checkboxes
+    id: dod-1
     attributes:
       label: 1. Middleware component tags with changelog
       options:
-        - "Yes"
-        - "No"
-        - "N/A"
-    validations:
-      required: true
+        - label: Done / Yes
   - type: input
-    id: dod-details-1
+    id: dod-1-details
     attributes:
-      label: Details for Item 1
-      placeholder: "Link e.g. https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md"
+      label: Details
+      placeholder: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
+    validations:
+      required: false
 
-  # --- DoD Item 2 ---
-  - type: dropdown
-    id: dod-status-2
+  # --- Pair 2 ---
+  - type: checkboxes
+    id: dod-2
     attributes:
       label: 2. Impact on Devices (STBs, TVs)
       options:
-        - "Yes"
-        - "No"
-        - "N/A"
-    validations:
-      required: true
+        - label: Done / Yes
   - type: input
-    id: dod-details-2
+    id: dod-2-details
     attributes:
-      label: Details for Item 2
-      placeholder: "Notes on Realtek, Broadcom, Amlogic, MediaTek..."
+      label: Details
+      placeholder: Notes on Realtek, Broadcom, Amlogic, MediaTek...
+    validations:
+      required: false
 
-  # --- DoD Item 3 ---
-  - type: dropdown
-    id: dod-status-3
+  # --- Pair 3 ---
+  - type: checkboxes
+    id: dod-3
     attributes:
       label: 3. Dependent components
       options:
-        - "Yes"
-        - "No"
-        - "N/A"
-    validations:
-      required: true
+        - label: Done / Yes
   - type: input
-    id: dod-details-3
+    id: dod-3-details
     attributes:
-      label: Details for Item 3
-      description: "If a feature involves more than one component changes, link the dependent component release task ticket clarifying the dependency"
+      label: Details
+      placeholder: Link dependent component release task if applicable
+    validations:
+      required: false
 
-  # --- DoD Item 4 ---
-  - type: dropdown
-    id: dod-status-4
+  # --- Pair 4 ---
+  - type: checkboxes
+    id: dod-4
     attributes:
       label: 4. Layer tags
       options:
-        - "Yes"
-        - "No"
-        - "N/A"
-    validations:
-      required: true
+        - label: Done / Yes
   - type: input
-    id: dod-details-4
+    id: dod-4-details
     attributes:
-      label: Details for Item 4
-      description: "Tags released for OSS/OE repos, Layer release, product repo, build-support, RDKE config into middleware manifest"
-      placeholder: "e.g: https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md"
+      label: Details
+      placeholder: e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md
+    validations:
+      required: false
 
-  # --- DoD Item 5 ---
-  - type: dropdown
-    id: dod-status-5
+  # --- Pair 5 ---
+  - type: checkboxes
+    id: dod-5
     attributes:
       label: 5. Do Widgets Need Publishing
       options:
-        - "Yes"
-        - "No"
-        - "N/A"
-    validations:
-      required: true
+        - label: Done / Yes
   - type: input
-    id: dod-details-5
+    id: dod-5-details
     attributes:
-      label: Details for Item 5
+      label: Details
+      placeholder: Provide context if widgets are involved
+    validations:
+      required: false
 
-  # --- DoD Item 6 ---
-  - type: dropdown
-    id: dod-status-6
+  # --- Pair 6 ---
+  - type: checkboxes
+    id: dod-6
     attributes:
       label: 6. Copilot review Done
       options:
-        - "Yes"
-        - "No"
-        - "N/A"
-    validations:
-      required: true
+        - label: Done / Yes
   - type: input
-    id: dod-details-6
+    id: dod-6-details
     attributes:
-      label: Details for Item 6
+      label: Details
+      placeholder: Any comments on the review
+    validations:
+      required: false
