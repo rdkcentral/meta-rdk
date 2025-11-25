@@ -30,6 +30,15 @@ S = "${WORKDIR}/git"
 inherit pkgconfig cmake systemd logrotate_config
 inherit syslog-ng-config-gen
 
+SYSLOG-NG_FILTER = "rdkappmanagers"
+SYSLOG-NG_SERVICE_rdkappmanagers = "dobby.service"
+SYSLOG-NG_DESTINATION_rdkappmanagers = "rdkappmanagers.log"
+SYSLOG-NG_LOGRATE_rdkappmanagers = "high"
+LOGROTATE_NAME="rdkappmanagers"
+LOGROTATE_LOGNAME_rdkappmanagers = "rdkappmanagers.log"
+LOGROTATE_SIZE_MEM_rdkappmanagers = "10485760"
+LOGROTATE_ROTATION_MEM_rdkappmanagers = "4"
+
 LOGROTATE_NAME="dobby"
 LOGROTATE_LOGNAME_dobby="dobby.log"
 LOGROTATE_SIZE_dobby="1572864"
