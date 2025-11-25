@@ -13,9 +13,8 @@ RDEPENDS:${PN}:remove_morty = "bash"
 SRC_URI = "${CMF_GITHUB_ROOT}/WebconfigFramework;${CMF_GITHUB_SRC_URI_SUFFIX}"
 
 SRCREV_FORMAT = "WebconfigFramework"
-SRCREV = "9c7a05a78aefd1d5da1afe3cf050499888b93fb7"
-PV ?= "1.0.0"
-PR ?= "r0"
+PV = "1.0.0"
+PR = "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 

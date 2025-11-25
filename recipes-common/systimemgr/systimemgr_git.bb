@@ -8,13 +8,15 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 DEPENDS = "systimemgrinetrface systimemgrfactory rdk-logger libsyswrapper wpeframework-clientlibraries  telemetry"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgr"
+SRCREV_systemtimemgr = "f327d55479d559bfb94803d2e6d60501ab32f9f2"
 
 SRC_URI:append = " file://systimemgr.conf "
 SRC_URI:append = " file://secure.conf "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRCREV_FORMAT = "systemtimemgr"
-PV = "1.0"
+PV = "1.3.0"
+PR = "r0"
 
 CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/WPEFramework/powercontroller"
 LDFLAGS:append = " \
