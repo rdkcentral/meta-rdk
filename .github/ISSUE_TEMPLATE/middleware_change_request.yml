@@ -52,7 +52,7 @@ body:
         | Status | DoD Item | Details |
         |--------|----------|---------|
         | ⬜ Not Started | Middleware component tags with changelog | https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md <br> |
-        | ⬜ Not Started | Impact on Devices - STBs (Realtek, Broadcom), TVs (Amlogic,MediaTek) |  |
+        | ⬜ Not Started | Impact on Devices - STBs (Realtek, Broadcom), TVs (Amlogic, MediaTek) |  |
         | ⬜ Not Started | Dependent components	 | If a feature involves more than one component changes, link the dependent component release task ticket clarifying the dependency |
         | ⬜ Not Started | Layer tags | Tags released for OSS/OE repos, Layer release, product repo, build-support, RDKE config into middleware manifest <br> eg: https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md <br> |
         | ⬜ Not Started | Do Widgets Need Publishing  | |
