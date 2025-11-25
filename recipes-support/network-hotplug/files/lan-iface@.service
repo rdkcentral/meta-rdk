@@ -1,0 +1,12 @@
+[Unit]
+Description=LAN Interface
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=/etc/device.properties
+ExecStart=/sbin/udhcpc -i ${LAN_INTERFACE} -p /tmp/udhcpc.${LAN_INTERFACE}
+ExecStop=/sbin/ifconfig ${LAN_INTERFACE} down
+
+[Install]
+Alias=multi-user.target.wants/lan-iface@%i.service

@@ -71,6 +71,7 @@ RDEPENDS:packagegroup-rdk-oss-broadband = "\
     "
 DEPENDS += " libsyswrapper"
 
+RDEPENDS:packagegroup-rdk-oss-broadband += " ${@bb.utils.contains('DISTRO_FEATURES', 'btr_hciadv', 'bleadvhci', '', d)}"
 RDEPENDS:packagegroup-rdk-oss-broadband += " ${@bb.utils.contains('DISTRO_FEATURES', 'snmppa', 'net-snmp-client net-snmp-server net-snmp-mibs net-snmp-server-snmpd', '', d)}"
 RDEPENDS:packagegroup-rdk-oss-broadband += " ${@bb.utils.contains('DISTRO_FEATURES', 'rdk-oss-ssa', 'rdk-oss-ssa ecryptfs-utils', '', d)}"
 RDEPENDS:packagegroup-rdk-oss-broadband += " ${@bb.utils.contains('DISTRO_FEATURES', 'gateway_manager', ' rsync ', '', d)}"

@@ -1,0 +1,30 @@
+Date: Nov 1, 2017 3:38 AM
+
+From: 3a060c36ddd7a1fc0150063f9469e412e6ace94f Nov 2, 2017 12:49 AM
+
+Subject: [PATCH] RDKB-14632: Deploy aker on Yocto.
+
+	Support for aker, parental control component on Yocto.
+
+Source: COMCAST
+
+
+Upstream-Status: Pending
+
+Signed-off-by: Ramki Ananthakrishnan <ramki_ananthakrishnan@cable.comcast.com>
+---
+
+diff --git a/src/main.c b/src/main.c
+index cf6e9ea..0808271 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -248,3 +248,9 @@ static int main_loop(libpd_cfg_t *cfg, char *firewall_cmd, char *data_file, char
+     debug_print("End of parodus_upstream\n");
+     return 0;
+ }
++
++
++const char *rdk_logger_module_fetch(void)
++{
++   return "LOG.RDK.AKER";
++}

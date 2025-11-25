@@ -43,7 +43,7 @@ do_install:append:broadband() {
         $use_sysv || install -m 0644 ${S}/minidump-on-bootup-upload.service ${D}${systemd_unitdir}/system/
         $use_sysv || install -m 0644 ${S}/minidump-on-bootup-upload.timer ${D}${systemd_unitdir}/system/
         install -d ${D}${sysconfdir}
-        #install -m 0755 ${S}/uploadDumpsUtils.sh ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/uploadDumpsUtils.sh ${D}${base_libdir}/rdk
 }
 
 SYSTEMD_SERVICE:${PN}:append:broadband = " coredump-upload.service \
@@ -56,4 +56,4 @@ RDEPENDS:${PN} += "busybox"
 PACKAGE_BEFORE_PN += "${PN}-conf"
 
 FILES:${PN} += "${base_libdir}/rdk/uploadDumps.sh"
-#FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
+FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
