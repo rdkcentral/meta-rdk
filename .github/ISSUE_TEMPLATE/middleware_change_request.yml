@@ -36,9 +36,8 @@ body:
   - type: checkboxes
     id: dod-1
     attributes:
-      label: 1. Middleware component tags with changelog
       options:
-        - label: Done / Yes
+        - label: Middleware component tags with changelog
   - type: input
     id: dod-1-details
     attributes:
@@ -51,9 +50,8 @@ body:
   - type: checkboxes
     id: dod-2
     attributes:
-      label: 2. Impact on Devices (STBs, TVs)
       options:
-        - label: Done / Yes
+        - label: Impact on Devices (STBs, TVs)
   - type: input
     id: dod-2-details
     attributes:
@@ -66,9 +64,8 @@ body:
   - type: checkboxes
     id: dod-3
     attributes:
-      label: 3. Dependent components
       options:
-        - label: Done / Yes
+        - label: Dependent components
   - type: input
     id: dod-3-details
     attributes:
@@ -81,9 +78,8 @@ body:
   - type: checkboxes
     id: dod-4
     attributes:
-      label: 4. Layer tags
       options:
-        - label: Done / Yes
+        - label: Layer tags
   - type: input
     id: dod-4-details
     attributes:
@@ -96,9 +92,8 @@ body:
   - type: checkboxes
     id: dod-5
     attributes:
-      label: 5. Do Widgets Need Publishing
       options:
-        - label: Done / Yes
+        - label: Do Widgets Need Publishing
   - type: input
     id: dod-5-details
     attributes:
@@ -111,9 +106,8 @@ body:
   - type: checkboxes
     id: dod-6
     attributes:
-      label: 6. Copilot review Done
       options:
-        - label: Done / Yes
+        - label: Copilot review Done
   - type: input
     id: dod-6-details
     attributes:
