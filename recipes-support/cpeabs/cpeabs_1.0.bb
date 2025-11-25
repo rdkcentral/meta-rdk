@@ -45,3 +45,5 @@ FILES:${PN} += "${libdir}/*.so"
 
 ASNEEDED_hybrid = ""
 ASNEEDED_client = ""
+PV = "2.0.0"
+PR = "r0"

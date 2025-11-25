@@ -14,7 +14,7 @@ SRC_URI:append = " file://secure.conf "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRCREV_FORMAT = "systemtimemgr"
-PV = "1.0"
+PV = "1.3.0"
 
 CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/WPEFramework/powercontroller"
 LDFLAGS:append = " \
@@ -45,3 +45,6 @@ FILES:${PN}:append = " ${systemd_unitdir}/system/systimemgr.service "
 FILES:${PN}:append = " ${systemd_unitdir}/system/systimemgr.service.d/secure.conf "
 SYSTEMD_SERVICE:${PN} = "systimemgr.service"
 
+
+SRCREV_systemtimemgr = "f327d55479d559bfb94803d2e6d60501ab32f9f2"
+PR = "r0"
