@@ -48,7 +48,7 @@ CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-confi
 LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 
 DEPENDS:append = " iarmmgrs iarmbus"
-LDFLAGS:append = " -lIARMBus -lsafec"
+LDFLAGS:append = " -lIARMBus"
 
 do_install:append () {
         install -d ${D}${bindir}/
