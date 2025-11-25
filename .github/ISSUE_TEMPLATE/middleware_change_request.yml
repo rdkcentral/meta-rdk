@@ -1,7 +1,7 @@
 name: RDK-E Middleware Change Request
 description: Change Request for RDK-E Middleware
-title: "[FEATURE] "
-labels: ["enhancement"]
+title: "<JIRA TICKET>:<Ticket Title> "
+labels: ["MW Change Request"]
 body:
   - type: markdown
     attributes:
@@ -13,16 +13,7 @@ body:
     attributes:
       label: Description
       description: Provide a clear and concise description of the feature or bug ticket
-      placeholder: Describe the feature you'd like to see
-    validations:
-      required: true
-  
-  - type: textarea
-    id: solution
-    attributes:
-      label: Proposed Solution
-      description: Describe your proposed solution and how it addresses the problem
-      placeholder: How would you solve this?
+      placeholder: Describe the changes you are bringing
     validations:
       required: true
   
@@ -41,7 +32,7 @@ body:
         ---
         ## Definition of Done (DoD)
         
-        Update the status and details for each item as you work on this feature.
+        Update the status and details for each item as you work on this Change Request.
   
   - type: textarea
     id: dod-checklist
@@ -51,12 +42,11 @@ body:
       value: |
         | Status | DoD Item | Details |
         |--------|----------|---------|
-        | ⬜ Not Started | Middleware component tags with changelog | https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md <br> |
-        | ⬜ Not Started | Impact on Devices - STBs (Realtek, Broadcom), TVs (Amlogic, MediaTek) |  |
-        | ⬜ Not Started | Dependent components	 | If a feature involves more than one component changes, link the dependent component release task ticket clarifying the dependency |
-        | ⬜ Not Started | Layer tags | Tags released for OSS/OE repos, Layer release, product repo, build-support, RDKE config into middleware manifest <br> eg: https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md <br> |
-        | ⬜ Not Started | Do Widgets Need Publishing  | |
-        | ⬜ Not Started | Copilot review Done | |
-        **Status options:** ⬜ Not Started | ✅ Done | ➖ Not Applicable
+        | Yes / No / NA | Middleware component tags with changelog | https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md <br> |
+        | Yes / No / NA | Impact on Devices - STBs (Realtek, Broadcom), TVs (Amlogic, MediaTek) |  |
+        | Yes / No / NA | Dependent components	 | If a feature involves more than one component changes, link the dependent component release task ticket clarifying the dependency |
+        | Yes / No / NA | Layer tags | Tags released for OSS/OE repos, Layer release, product repo, build-support, RDKE config into middleware manifest <br> eg: https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md <br> |
+        | Yes / No / NA | Do Widgets Need Publishing  | |
+        | Yes / No / NA | Copilot review Done | |
     validations:
       required: true
