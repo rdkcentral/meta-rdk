@@ -1,0 +1,52 @@
+name: RDK-E Middleware Change Request
+description: Change Request for RDK-E Middleware
+title: "<JIRA TICKET>:<Ticket Title> "
+labels: ["MW Change Request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Change Request for RDK-E Middleware
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and concise description of the feature or bug ticket
+      placeholder: Describe the changes you are bringing
+    validations:
+      required: true
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or examples about the feature request
+      placeholder: Any other relevant information
+    validations:
+      required: false
+  
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Definition of Done (DoD)
+        
+        Update the status and details for each item as you work on this Change Request.
+  
+  - type: textarea
+    id: dod-checklist
+    attributes:
+      label: Definition of Done Checklist
+      description: Track progress on completion criteria. Update status and add details as you progress.
+      value: |
+        | Status | DoD Item | Details |
+        |--------|----------|---------|
+        | Yes / No / NA | Middleware component tags with changelog | https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md <br> |
+        | Yes / No / NA | Impact on Devices - STBs (Realtek, Broadcom), TVs (Amlogic, MediaTek) |  |
+        | Yes / No / NA | Dependent components	 | If a feature involves more than one component changes, link the dependent component release task ticket clarifying the dependency |
+        | Yes / No / NA | Layer tags | Tags released for OSS/OE repos, Layer release, product repo, build-support, RDKE config into middleware manifest <br> eg: https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md <br> |
+        | Yes / No / NA | Do Widgets Need Publishing  | |
+        | Yes / No / NA | Copilot review Done | |
+    validations:
+      required: true
