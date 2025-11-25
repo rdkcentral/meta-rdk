@@ -1,0 +1,2 @@
+# Disable USB to Ethernet interface
+KERNEL!="lo", ACTION=="add", SUBSYSTEM=="net", SUBSYSTEMS=="usb", ENV{ID_BUS}=="usb", ATTRS{authorized}=="1", PROGRAM="/lib/rdk/disableUSBEthernet.sh", RESULT=="TRUE", ENV{SYSTEMD_WANTS}="", ENV{SYSTEMD_ALIAS}="", RUN+="/bin/sh -c 'echo 0 >/sys/bus/usb/devices/$id/authorized'"
