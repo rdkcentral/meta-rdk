@@ -21,6 +21,8 @@ S = "${WORKDIR}/git"
 #compiler warnings were fixed as part of RDK-55297
 #CFLAGS += " -Wall -Werror -Wextra -Wno-unused-parameter -Wno-pointer-sign -Wno-sign-compare -Wno-enum-compare -Wno-type-limits -Wno-enum-conversion -Wno-format-truncation"
 CFLAGS += " -Wall -Werror -Wextra"
+#FIXME, this is temporary workaround for broadband. It has to be verified and remove these suppression flags
+CFLAGS:append:broadband += " -DRDK_LOGGER -Wno-sign-compare -Wno-unused-parameter -Wno-pointer-sign"
 
 inherit pkgconfig autotools systemd ${@bb.utils.contains("DISTRO_FEATURES", "kirkstone", "python3native", "pythonnative", d)} breakpad-logmapper
 
