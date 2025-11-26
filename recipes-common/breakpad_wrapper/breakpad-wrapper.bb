@@ -30,4 +30,4 @@ do_install:append () {
 
 FILES:${PN} += "${libdir}/*.so"
 
-CXXFLAGS += "-DMINIDUMP_RDKV"
+CXXFLAGS:append:client = " -DMINIDUMP_RDKV"
