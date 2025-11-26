@@ -62,7 +62,7 @@ body:
           - Details: (Any comments on the review)
           
         - [ ] **Unit Testing for Component Changes**
-          - Details: Share L1/L2 Test runs if applicable. For eg. https://github.com/rdkcentral/entservices-infra/actions/runs/19664345654/job/56317542489?pr=686
+          - Details: Share L1/L2 Test runs if applicable. For example: https://github.com/rdkcentral/entservices-infra/actions/runs/19664345654/job/56317542489?pr=686
 
         - [ ] **Component Test**
           - Details: Share Testing done as part of component/s release
