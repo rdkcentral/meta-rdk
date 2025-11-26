@@ -32,6 +32,15 @@ body:
         ---
         ## Definition of Done (DoD)
         
+        Please complete the following Middleware Layer Integration checklist items to ensure all requirements for changes to be merged.
+        
+        **IMPORTANT:** Do NOT provide any proprietary information including:
+        - Links to internal Automatics/CI builds
+        - Links to internal Confluence pages
+        - Any other Comcast/Sky proprietary or confidential information
+        
+        Only provide publicly accessible information and links.
+        
   - type: checkboxes
     id: dod-1
     attributes:
