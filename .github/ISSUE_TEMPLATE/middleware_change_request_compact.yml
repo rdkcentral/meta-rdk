@@ -45,7 +45,7 @@ body:
     id: dod-checklist
     attributes:
       label: DoD Checklist
-      description: Mark items with [x] and provide details in the line below.
+      description: Mark items with [x] and replace the placeholder text on Details lines with actual information.
       value: |
         - [ ] **Middleware component tags with changelog**
           - Details: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
