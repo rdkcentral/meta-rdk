@@ -26,101 +26,57 @@ body:
     validations:
       required: false
   
-  - type: markdown
+  - type: textarea
+    id: dod-checklist
     attributes:
+      label: Definition of Done (DoD)
+      description: Mark items with [x] and replace the placeholder text on Details lines with actual information.
       value: |
-        ---
-        ## Definition of Done (DoD)
-        
         Please complete the following Middleware Layer Integration checklist items to ensure all requirements for changes to be merged.
-        
+
         **IMPORTANT:** Do NOT provide any proprietary information including:
         - Links to internal Automatics/CI builds
         - Links to internal Confluence pages
         - Any other Comcast/Sky proprietary or confidential information
+
+        Only provide publicly accessible information and links. All proprietary information should be added to JIRA Ticket.
         
-        Only provide publicly accessible information and links.
-        
-  - type: checkboxes
-    id: dod-1
-    attributes:
-      label: "​"
-      options:
-        - label: Middleware component tags with changelog
-  - type: input
-    id: dod-1-details
-    attributes:
-      label: "​"
-      placeholder: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
-    validations:
-      required: false
+        ---
 
-  - type: checkboxes
-    id: dod-2
-    attributes:
-      label: "​"
-      options:
-        - label: Impact on Devices (STBs, TVs)
-  - type: input
-    id: dod-2-details
-    attributes:
-      label: "​"
-      placeholder: Notes on Realtek, Broadcom, Amlogic, MediaTek...
-    validations:
-      required: false
+        - [ ] **Middleware component tags with changelog**
+          - Details: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
 
-  - type: checkboxes
-    id: dod-3
-    attributes:
-      label: "​"
-      options:
-        - label: Dependent components
-  - type: input
-    id: dod-3-details
-    attributes:
-      label: "​"
-      placeholder: Link dependent component release task if applicable
-    validations:
-      required: false
+        - [ ] **Impact on Devices (STBs, TVs)**
+          - Details: (Notes on Realtek, Broadcom, Amlogic, MediaTek...)
 
-  - type: checkboxes
-    id: dod-4
-    attributes:
-      label: "​"
-      options:
-        - label: Layer tags
-  - type: input
-    id: dod-4-details
-    attributes:
-      label: "​"
-      placeholder: e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md
-    validations:
-      required: false
+        - [ ] **Dependent components**
+          - Details: (Link dependent component release task if applicable)
 
-  - type: checkboxes
-    id: dod-5
-    attributes:
-      label: "​"
-      options:
-        - label: Do Widgets Need Publishing
-  - type: input
-    id: dod-5-details
-    attributes:
-      label: "​"
-      placeholder: Provide context if widgets are involved
-    validations:
-      required: false
+        - [ ] **Layer tags**
+          - Details: (e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md)
 
-  - type: checkboxes
-    id: dod-6
-    attributes:
-      label: "​"
-      options:
-        - label: Copilot review Done
-  - type: input
-    id: dod-6-details
-    attributes:
-      label: "​"
-      placeholder: Any comments on the review
+        - [ ] **Do Widgets Need Publishing**
+          - Details: (Provide context if widgets are involved)
+
+        - [ ] **Copilot review Done**
+          - Details: (Any comments on the review)
+          
+        - [ ] **Unit Testing for Component Changes**
+          - Details: Share L1/L2 Test runs if applicable. For eg. https://github.com/rdkcentral/entservices-infra/actions/runs/19664345654/job/56317542489?pr=686
+
+        - [ ] **Component Test**
+          - Details: Share Testing done as part of component/s release
+
+        - [ ] **E2E Testing**
+          - Details: Provide details on end to end testing done
+
+        - [ ] **Performance Testing**
+          - Details: Provide details on any performance testing done
+
+        - [ ] **Static code analysis/Coverity**
+          - Details: Share any Coverity runs for components affected
+          
+        - [ ] **Manual Functional Test**
+          - Details: Share details of manual Functional Testing done
     validations:
-      required: false
+      required: true
