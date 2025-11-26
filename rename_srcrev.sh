@@ -93,8 +93,6 @@ if [ -f ${PWD}/../versions.conf ]; then
 	sed -z -i 's+SRCREV:pn-rdk/components/cpc/xreplugins/generic+SRCREV:pn-netflix-plugin+' ${PWD}/../versions.conf
 	sed -z -i 's+SRCREV:pn-rdk/components/cpc/xreplugins/generic+SRCREV:pn-wayland-plugin-default+' ${PWD}/../versions.conf
 	sed -z -i 's+SRCREV:pn-rdk/components/cpc/xreplugins/generic+SRCREV:pn-xre2-plugin-default+' ${PWD}/../versions.conf
-        sed -z -i 's+SRCREV:pn-rdk/components/cpc/xre/generic+SRCREV:pn-xre-receiver-default+' ${PWD}/../versions.conf
-        sed -z -i 's+SRCREV:pn-rdk/components/cpc/xre/generic+SRCREV:pn-xre-receiver-default-headers+' ${PWD}/../versions.conf
 	sed -z -i 's+SRCREV:pn-rdk/components/cpc/ave/generic+SRCREV:pn-ave-crypto+' ${PWD}/../versions.conf
 	sed -z -i 's+SRCREV:pn-rdk/components/cpc/ave/generic+SRCREV:pn-ave-filesystem+' ${PWD}/../versions.conf
 	sed -z -i 's+SRCREV:pn-rdk/components/cpc/ave/generic+SRCREV:pn-ave-trace+' ${PWD}/../versions.conf
@@ -171,7 +169,6 @@ if [ -f ${PWD}/../versions.conf ]; then
         sed -i 's+SRCREV:pn-rdk/components/generic/control-testapp/generic+SRCREV:pn-ctrlm-testapp+g' ${PWD}/../versions.conf
         sed -i 's+SRCREV:pn-rdk/components/thirdparty/vnc/generic+SRCREV:pn-vnc+g' ${PWD}/../versions.conf
         sed -i 's+SRCREV:pn-rdk/components/generic/hdmicec/soc/raspberrypi/rpi3+SRCREV:pn-hdmicec-hal+g' ${PWD}/../versions.conf
-        sed -i 's+SRCREV:pn-rdk/components/cpc/xre/devices/raspberry/rpi3+SRCREV_xreplat:pn-xre-receiver-default +g' ${PWD}/../versions.conf
         sed -i 's+SRCREV:pn-rdk/components/generic/sec-apis/generic+SRCREV:pn-secapi-noop+g' ${PWD}/../versions.conf
         sed -i 's+SRCREV:pn-rdk/components/generic/dcm/generic+SRCREV:pn-dcmjsonparser+g' ${PWD}/../versions.conf
         sed -i 's+SRCREV:pn-rdk/components/generic/gstreamer-netflix-platform/generic+SRCREV:pn-rdk-gstreamer-utils+g' ${PWD}/../versions.conf
@@ -372,8 +369,6 @@ if [ -f ${PWD}/../auto.conf ]; then
      sed -i 's/SRCREV_pn-wayland-plugin-default/SRCREV_xreplgs_pn-wayland-plugin-default/g' ${PWD}/../auto.conf
      sed -i 's/SRCREV_pn-cef-eglfs/SRCREV_rdkcef_chromium_pn-cef-eglfs/g' ${PWD}/../auto.conf
      sed -i 's/SRCREV_pn-qtwebrtc/SRCREV_qtwebrtc_pn-qtwebrtc/g' ${PWD}/../auto.conf
-     sed -i 's/SRCREV_pn-xre-receiver-default /SRCREV_xre_default_xreplat_servicemanager_svcmgrplat_pn-xre-receiver-default/g' ${PWD}/../auto.conf
-     sed -i 's/SRCREV_pn-xre-receiver-default-headers/SRCREV_xrereceiverdefaultheaders_pn-xre-receiver-default-headers/g' ${PWD}/../auto.conf
      sed -i 's/SRCREV_pn-authservice/SRCREV_authservice_pn-authservice/g' ${PWD}/../auto.conf
      sed -i 's/SRCREV_pn-sdvagent/SRCREV_sdvagent_pn-sdvagent/g' ${PWD}/../auto.conf
      sed -i 's/SRCREV_pn-rdk-oss-ssa/SRCREV_rdk-oss-ssa:pn-rdk-oss-ssa/g' ${PWD}/../auto.conf
