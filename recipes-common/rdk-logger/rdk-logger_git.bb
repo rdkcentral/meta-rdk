@@ -4,10 +4,10 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-PV ?= "1.0.0"
+PV ?= "1.0.0.1"
 PR ?= "r1"
 
-SRCREV = "a3bacc8b8660a03f3e4a1ebdb6cf466a8d190ecb"
+SRCREV = "c2371440fbaff3badd4682a939bfce5887ba0586"
 SRCREV_FORMAT = "rdklogger"
 
 
