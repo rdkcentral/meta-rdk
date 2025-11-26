@@ -32,92 +32,86 @@ body:
         ---
         ## Definition of Done (DoD)
         
-  # --- Pair 1 ---
   - type: checkboxes
     id: dod-1
     attributes:
-      label: " "
+      label: "​"
       options:
         - label: Middleware component tags with changelog
   - type: input
     id: dod-1-details
     attributes:
-      label: " "
+      label: "​"
       placeholder: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
     validations:
       required: false
 
-  # --- Pair 2 ---
   - type: checkboxes
     id: dod-2
     attributes:
-      label: " "
+      label: "​"
       options:
         - label: Impact on Devices (STBs, TVs)
   - type: input
     id: dod-2-details
     attributes:
-      label: " "
+      label: "​"
       placeholder: Notes on Realtek, Broadcom, Amlogic, MediaTek...
     validations:
       required: false
 
-  # --- Pair 3 ---
   - type: checkboxes
     id: dod-3
     attributes:
-      label: " "
+      label: "​"
       options:
         - label: Dependent components
   - type: input
     id: dod-3-details
     attributes:
-      label: " "
+      label: "​"
       placeholder: Link dependent component release task if applicable
     validations:
       required: false
 
-  # --- Pair 4 ---
   - type: checkboxes
     id: dod-4
     attributes:
-      label: " "
+      label: "​"
       options:
         - label: Layer tags
   - type: input
     id: dod-4-details
     attributes:
-      label: " "
+      label: "​"
       placeholder: e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md
     validations:
       required: false
 
-  # --- Pair 5 ---
   - type: checkboxes
     id: dod-5
     attributes:
-      label: " "
+      label: "​"
       options:
         - label: Do Widgets Need Publishing
   - type: input
     id: dod-5-details
     attributes:
-      label: " "
+      label: "​"
       placeholder: Provide context if widgets are involved
     validations:
       required: false
 
-  # --- Pair 6 ---
   - type: checkboxes
     id: dod-6
     attributes:
-      label: " "
+      label: "​"
       options:
         - label: Copilot review Done
   - type: input
     id: dod-6-details
     attributes:
-      label: " "
+      label: "​"
       placeholder: Any comments on the review
     validations:
       required: false
