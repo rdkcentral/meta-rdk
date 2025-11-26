@@ -1,0 +1,68 @@
+name: RDK-E Middleware Change Request
+description: Change Request for RDK-E Middleware
+title: "<JIRA TICKET>:<Ticket Title> "
+labels: ["MW Change Request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Change Request for RDK-E Middleware
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and concise description of the feature or bug ticket
+      placeholder: Describe the changes you are bringing
+    validations:
+      required: true
+  
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or examples about the feature request
+      placeholder: Any other relevant information
+    validations:
+      required: false
+  
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ## Definition of Done (DoD)
+        
+        Please complete the following Middleware Layer Integration checklist items to ensure all requirements for changes to be merged.
+        
+        **IMPORTANT:** Do NOT provide any proprietary information including:
+        - Links to internal Automatics/CI builds
+        - Links to internal Confluence pages
+        - Any other Comcast/Sky proprietary or confidential information
+        
+        Only provide publicly accessible information and links.
+        
+  - type: textarea
+    id: dod-checklist
+    attributes:
+      label: DoD Checklist
+      description: Mark items with [x] and provide details in the line below.
+      value: |
+        - [ ] **Middleware component tags with changelog**
+          - Details: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
+
+        - [ ] **Impact on Devices (STBs, TVs)**
+          - Details: (Notes on Realtek, Broadcom, Amlogic, MediaTek...)
+
+        - [ ] **Dependent components**
+          - Details: (Link dependent component release task if applicable)
+
+        - [ ] **Layer tags**
+          - Details: (e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md)
+
+        - [ ] **Do Widgets Need Publishing**
+          - Details: (Provide context if widgets are involved)
+
+        - [ ] **Copilot review Done**
+          - Details: (Any comments on the review)
+    validations:
+      required: true
