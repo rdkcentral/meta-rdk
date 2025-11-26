@@ -48,21 +48,21 @@ body:
       description: Mark items with [x] and replace the placeholder text on Details lines with actual information.
       value: |
         - [ ] **Middleware component tags with changelog**
-          - Details: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
+        - Details: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
 
         - [ ] **Impact on Devices (STBs, TVs)**
-          - Details: (Notes on Realtek, Broadcom, Amlogic, MediaTek...)
+        - Details: (Notes on Realtek, Broadcom, Amlogic, MediaTek...)
 
         - [ ] **Dependent components**
-          - Details: (Link dependent component release task if applicable)
+        - Details: (Link dependent component release task if applicable)
 
         - [ ] **Layer tags**
-          - Details: (e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md)
+        - Details: (e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md)
 
         - [ ] **Do Widgets Need Publishing**
-          - Details: (Provide context if widgets are involved)
+        - Details: (Provide context if widgets are involved)
 
         - [ ] **Copilot review Done**
-          - Details: (Any comments on the review)
+        - Details: (Any comments on the review)
     validations:
       required: true
