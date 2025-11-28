@@ -6,6 +6,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
 
 SRCREV_FORMAT = "generic"
+SRCREV = "300d29e105f6a7244bff81fa0357dac914dd8913"
 # Release version - 1.3.1
 S = "${WORKDIR}/git"
 
