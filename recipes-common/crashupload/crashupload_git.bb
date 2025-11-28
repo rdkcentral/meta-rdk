@@ -9,7 +9,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 # To have a possibility to override SRC_URI later, we are introducing the following workaround:
 CRASHUPLOAD_SRC_URI ?= "${RDK_GENERIC_ROOT_GIT}/crashupload/generic;module=.;protocol=${RDK_GIT_PROTOCOL};branch=${RDK_GIT_BRANCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/crashupload;${CMF_GITHUB_SRC_URI_SUFFIX};module=."
-PV = "1.0"
+PV = "1.0.7"
 S = "${WORKDIR}/git"
 
 DEPENDS = "glib-2.0 libsyswrapper"
