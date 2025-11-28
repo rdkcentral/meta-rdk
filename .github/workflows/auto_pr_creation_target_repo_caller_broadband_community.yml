@@ -14,6 +14,7 @@ on:
 
 jobs:
   call_auto_pr_workflow:
+    if: github.event.pull_request.merged == true
     uses: rdkcentral/build_tools_workflows/.github/workflows/auto_pr_creation_rdkb_manifest.yml@develop
     secrets:
       RDKCM_RDKE: ${{ secrets.RDKCM_RDKE }}
