@@ -15,7 +15,7 @@ CFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'debug_curl_cdl', ' -DCURL_DE
 
 CFLAGS:append = " -DRDK_LOGGER"
 
-PV ?= "1.1.0"
+PV ?= "1.4.4"
 PR ?= "r0"
 
 S = "${WORKDIR}/git"
