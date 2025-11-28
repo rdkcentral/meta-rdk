@@ -4,6 +4,7 @@ DEPENDS = "libcap jsoncpp"
 S = "${WORKDIR}/git"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk-libunpriv.git;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdk-libunpriv"
 
+SRCREV = "547d202d421ed83bd60b677b5d057cad3b7ae8ad"
 SRCREV_FORMAT = "rdk-libunpriv"
 CXXFLAGS:append = "\
     -I${STAGING_INCDIR} \
