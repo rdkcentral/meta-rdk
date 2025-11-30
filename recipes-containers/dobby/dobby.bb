@@ -2,6 +2,9 @@ SUMMARY = "Dobby Container Manager"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c466d4ab8a68655eb1edf0bf8c1a8fb8"
 
+PV = "3.15.0"
+PR = "r0"
+
 include dobby.inc
 
 SRC_URI:append = " file://Fix_compile_gcc11.patch  \
@@ -97,5 +100,4 @@ FILES:${PN} += "${libexecdir}/DobbyInit"
 FILES:${PN} += "${libdir}/plugins/dobby/*.so*"
 FILES:${PN} += "${libdir}/libethanlog.so*"
 FILES:${PN} += "${libdir}/libocispec.so*"
-PV ?= "1.0.0"
-PR ?= "r0"
+

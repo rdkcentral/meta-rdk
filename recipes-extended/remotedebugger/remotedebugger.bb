@@ -2,8 +2,11 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+PV = "1.2.9"
+PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
+SRCREV:pn-remotedebugger = "300d29e105f6a7244bff81fa0357dac914dd8913"
 
 SRCREV_FORMAT = "generic"
 # Release version - 1.3.1

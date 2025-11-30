@@ -4,8 +4,12 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=24691c8ce48996ecd1102d29eab1216e"
 
 # To have a possibility to override SRC_URI later, we are introducing the following workaround:
 SRC_URI = "${CMF_GITHUB_ROOT}/common_utilities;module=.;${CMF_GITHUB_SRC_URI_SUFFIX}"
+SRCREV:pn-commonutilities = "5c7dfc405cd34da3ab1a1121caf8733ebe35d879"
 
+PV = "1.4.4"
+PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
+
 DEPENDS +=" cjson curl rdk-logger"
 
 #uncomment the following line to turn on debugging
@@ -14,9 +18,6 @@ DEPENDS +=" cjson curl rdk-logger"
 CFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'debug_curl_cdl', ' -DCURL_DEBUG', '', d)}"
 
 CFLAGS:append = " -DRDK_LOGGER"
-
-PV ?= "1.4.4"
-PR ?= "r0"
 
 S = "${WORKDIR}/git"
 
