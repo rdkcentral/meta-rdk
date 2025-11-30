@@ -6,6 +6,8 @@ LIC_FILES_CHKSUM = "file://${THISDIR}/files/Apache-2.0;md5=3b83ef96387f14655fc85
 SRC_URI = "file://50-sysctl.conf"
 SRC_URI += "file://98-sysctl-mw.conf"
 
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
+
 S = "${WORKDIR}"
 
 do_install() {
