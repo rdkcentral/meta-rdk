@@ -17,14 +17,17 @@ BBLAYERS ?= " \
   ${RDKROOT}/meta-openembedded/meta-filesystems \
   ${RDKROOT}/meta-openembedded/meta-oe \
   ${RDKROOT}/meta-openembedded/meta-networking \
-  ${@'' if os.path.isfile('${RDKROOT}/openembedded-core/meta/recipes-devtools/ruby/ruby.inc') else '${RDKROOT}/meta-openembedded/meta-ruby'} \
+  ${@'${RDKROOT}/meta-openembedded/meta-ruby' if os.path.isfile('${RDKROOT}/meta-openembedded/meta-ruby/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-linaro/meta-linaro' if os.path.isfile('${RDKROOT}/meta-linaro/meta-linaro/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-linaro/meta-linaro-toolchain' if os.path.isfile('${RDKROOT}/meta-linaro/meta-linaro-toolchain/conf/layer.conf') else ''} \
-  ${RDKROOT}/openembedded-core/meta \
+  ${@'${RDKROOT}/openembedded-core/meta' if os.path.isfile('${RDKROOT}/openembedded-core/meta/conf/layer.conf') else '${RDKROOT}/poky/meta'} \
   ${@'${RDKROOT}/meta-rust' if os.path.isfile('${RDKROOT}/meta-rust/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-clang' if os.path.isfile('${RDKROOT}/meta-clang/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-gplv2' if os.path.isfile('${RDKROOT}/meta-gplv2/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-python2' if os.path.isfile('${RDKROOT}/meta-python2/conf/layer.conf') else ''} \
+  ${@'${RDKROOT}/meta-rdk-auxiliary' if os.path.isfile('${RDKROOT}/meta-rdk-auxiliary/conf/layer.conf') else ''} \
+  ${@'${RDKROOT}/meta-rdk-oss-reference' if os.path.isfile('${RDKROOT}/meta-rdk-oss-reference/conf/layer.conf') else ''} \
+  ${@'${RDKROOT}/meta-rdk-oss-ext' if os.path.isfile('${RDKROOT}/meta-rdk-oss-ext/conf/layer.conf') else ''} \
   "
 
 # CPC requires dedicated licenses, we need to support build when CPC is not
@@ -38,7 +41,6 @@ BBLAYERS += "${@'${RDKROOT}/meta-rdk-broadband' if os.path.isfile('${RDKROOT}/me
 BBLAYERS =+ "${@'${RDKROOT}/meta-rdk-comcast-video' if os.path.isfile('${RDKROOT}/meta-rdk-comcast-video/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-video' if os.path.isfile('${RDKROOT}/meta-rdk-video/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-voice' if os.path.isfile('${RDKROOT}/meta-rdk-voice/conf/layer.conf') else ''}"
-BBLAYERS += "${@'${RDKROOT}/meta-rdk-ext' if os.path.isfile('${RDKROOT}/meta-rdk-ext/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-openembedded/meta-python' if os.path.isfile('${RDKROOT}/meta-openembedded/meta-python/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${RDKROOT}/meta-rdk-broadband-cmf-restricted' if os.path.isfile('${RDKROOT}/meta-rdk-broadband-cmf-restricted/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${RDKROOT}/meta-rtlwifi' if os.path.isfile('${RDKROOT}/meta-rtlwifi/conf/layer.conf') else ''}"
@@ -47,3 +49,5 @@ BBLAYERS =+ "${@'${RDKROOT}/meta-rdk-amazon' if os.path.isfile('${RDKROOT}/meta-
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-cujo' if os.path.isfile('${RDKROOT}/meta-rdk-cujo/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-broadband-cmf-poc' if os.path.isfile('${RDKROOT}/meta-rdk-broadband-cmf-poc/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-cognitive/meta-rdk-cognitive' if os.path.isfile('${RDKROOT}/meta-rdk-cognitive/meta-rdk-cognitive/conf/layer.conf') else ''}"
+BBLAYERS += "${@'${RDKROOT}/meta-rdk-wan' if os.path.isfile('${RDKROOT}/meta-rdk-wan/conf/layer.conf') else ''}"
+BBLAYERS += "${@'${RDKROOT}/meta-rdk-iot' if os.path.isfile('${RDKROOT}/meta-rdk-iot/conf/layer.conf') else ''}"

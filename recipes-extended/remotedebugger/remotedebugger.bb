@@ -13,7 +13,8 @@ CFLAGS += " -Wall -Werror"
 
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
 
-DEPENDS = "cjson iarmbus iarmmgrs rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper"
+DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper"
+DEPENDS:append:client = " iarmbus iarmmgrs"
 RDEPENDS:${PN}:append = " bash"
 RDEPENDS:${PN}:remove_morty = "bash"
 
@@ -30,8 +31,10 @@ INCLUDE_DIRS = " \
     -I${STAGING_INCDIR}/trower-base64 \
     -I${STAGING_INCDIR}/rbus \
     "
+
+
 # RBUS is now used for generic communication. Enable IARMBUS support for Video devices.
-EXTRA_OECONF:append = " --enable-iarmbusSupport=yes"
+EXTRA_OECONF:append:client = " --enable-iarmbusSupport=yes"
 
 SYSLOG-NG_FILTER = "remote-debugger"
 SYSLOG-NG_SERVICE_remote-debugger = "remote-debugger.service"
