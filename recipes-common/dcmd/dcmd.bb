@@ -6,7 +6,6 @@ DESCRIPTION = "dcmd"
 SECTION = "dcmd"
 DEPENDS += "rbus"
 DEPENDS += "commonutilities"
-#DEPENDS += "rdkcertconfig mountutils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=2441d6cdabdc0f370be5cd8a746eb647"
 
@@ -16,7 +15,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}:"
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-PV ?= "1.0.0"
+PV ?= "1.4.4"
 PR ?= "r0"
 
 
