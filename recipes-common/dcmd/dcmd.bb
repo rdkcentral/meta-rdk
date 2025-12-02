@@ -57,10 +57,10 @@ CFLAGS:append += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_ma
 #LDFLAGS:append = " -lsafec -lsecure_wrapper"
 
 do_install:append () {
-
+    install -d ${D}${bindir}
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${S}/dcmd.service ${D}${systemd_unitdir}/system
-    install -m 0755 ${S}/logupload ${D}${bindir}/
+    #install -m 0755 ${S}/logupload ${D}${bindir}/
 }
 
 # Add to do_compile if not using an external Makefile
