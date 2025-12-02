@@ -15,7 +15,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}:"
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-PV ?= "1.4.4"
+PV ?= "1.0.0"
 PR ?= "r0"
 
 
