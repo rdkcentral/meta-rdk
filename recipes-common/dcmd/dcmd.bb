@@ -85,5 +85,5 @@ do_install:append () {
 #}
 
 # Add any extra packaging if needed
-#FILES_${PN} += "${bindir}/logupload"
+FILES_${PN} += "${bindir}/logupload"
 SYSTEMD_SERVICE:${PN} += "dcmd.service"
