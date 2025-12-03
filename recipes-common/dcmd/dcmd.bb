@@ -37,7 +37,7 @@ ASNEEDED = ""
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror"
 
 # added for certselector
-EXTRA_OECONF:append = " --enable-t2api=yes"
+EXTRA_OECONF:append = " --enable-t2api=yes --enable-iarmevent"
 #EXTRA_OECONF:append = " --enable-mountutils=yes --enable-rdkcertselector=yes"
 
 #DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
