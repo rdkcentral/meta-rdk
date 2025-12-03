@@ -9,6 +9,7 @@ SRC_URI:append = " file://Fix_compile_gcc11.patch  \
                    file://dobby.generic.json \
                    file://dobby_start_after_apparmor.patch \
                    file://0001-RDKEMW-8825-enable-swap-limit.patch \
+                   file://remove_wpeframework_dependency.patch \
                  "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
