@@ -1,0 +1,2 @@
+#Disable USB KeyBoard and Mouse based on RFC parameter
+ACTION=="add", SUBSYSTEM=="input", SUBSYSTEMS=="usb",  ENV{ID_BUS}=="usb", ATTRS{authorized}=="1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="usb-input@$id.service"
