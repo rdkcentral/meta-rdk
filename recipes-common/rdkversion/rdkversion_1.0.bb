@@ -9,6 +9,7 @@ PR ?= "r0"
 
 SRCREV ?= "d461bbd2fc8299f6e5056f488ff944e90142e9b6"
 SRCREV_FORMAT     = "rdkversion"
+SRCREV = "d461bbd2fc8299f6e5056f488ff944e90142e9b6"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdkversion;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdkversion"
 S = "${WORKDIR}/git"

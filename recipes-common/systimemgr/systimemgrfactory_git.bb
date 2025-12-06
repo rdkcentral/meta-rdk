@@ -12,6 +12,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=sy
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRCREV_FORMAT = "systemtimemgrfactory"
+SRCREV = "f327d55479d559bfb94803d2e6d60501ab32f9f2"
 
 PV ?= "1.0.0"
 PR ?= "r0"

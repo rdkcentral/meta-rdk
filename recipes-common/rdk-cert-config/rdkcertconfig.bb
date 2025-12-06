@@ -9,6 +9,7 @@ PV = "1.0"
 DEPENDS += "  libsyswrapper "
 
 #code will be cloned from the following SRC_URI
+SRCREV = "e0e35743f7e96ad0595ac25b11d829b766f7062b"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk-cert-config;${CMF_GITHUB_SRC_URI_SUFFIX}"
 
 S = "${WORKDIR}/git"

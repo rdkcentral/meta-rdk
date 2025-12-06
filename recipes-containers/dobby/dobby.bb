@@ -9,6 +9,7 @@ SRC_URI:append = " file://Fix_compile_gcc11.patch  \
                    file://dobby.generic.json \
                    file://dobby_start_after_apparmor.patch \
                  "
+SRCREV = "59381966b7251d46a28ef7897a290662ca6009cb"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
