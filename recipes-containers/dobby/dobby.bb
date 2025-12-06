@@ -10,6 +10,8 @@ SRC_URI:append = " file://Fix_compile_gcc11.patch  \
                    file://dobby_start_after_apparmor.patch \
                  "
 
+SRCREV = "59381966b7251d46a28ef7897a290662ca6009cb"
+
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', ' systemd ', '', d)} libnl dbus jsoncpp boost yajl breakpad breakpad-wrapper libsyswrapper libcap"
