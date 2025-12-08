@@ -38,45 +38,44 @@ body:
         - Links to internal Automatics/CI builds
         - Links to internal Confluence pages
         - Any other Comcast/Sky proprietary or confidential information
+        - Development Build/Setup Details
 
         Only provide publicly accessible information and links. All proprietary information should be added to JIRA Ticket.
         
         ---
 
         - [ ] **Middleware component tags with changelog**
-          - Details: https://github.com/rdk-e/netmonitor/blob/1.4.0/CHANGELOG.md
+          - Details: For instance https://github.com/rdkcentral/hdmicec/blob/1.0.7/CHANGELOG.md. Include all components that need to go together for Builds to work.
 
-        - [ ] **Impact on Devices (STBs, TVs)**
-          - Details: (Notes on Realtek, Broadcom, Amlogic, MediaTek...)
+        - [ ] **Tested on STBs**
+        
+        - [ ] **Tested on TVs**
 
-        - [ ] **Dependent components**
-          - Details: (Link dependent component release task if applicable)
-
-        - [ ] **Layer tags**
+        - [ ] **Dependent Layer tags (App Layer, OSS, Product, Halif Headers, Vendor Layers)**
           - Details: (e.g. https://github.com/rdk-e/meta-image-support/blob/4.1.1/CHANGELOG.md)
 
         - [ ] **Do Widgets Need Publishing**
           - Details: (Provide context if widgets are involved)
 
-        - [ ] **Copilot review Done**
+        - [ ] **Copilot review for Components**
           - Details: (Any comments on the review)
           
-        - [ ] **Unit Testing for Component Changes**
-          - Details: Share L1/L2 Test runs if applicable. For example: https://github.com/rdkcentral/entservices-infra/actions/runs/19664345654/job/56317542489?pr=686
-
         - [ ] **Component Test**
           - Details: Share Testing done as part of components release
 
+        - [ ] **Integration Testing**
+          - Details: Provide details on Integration testing done within Middleware layer
+          
         - [ ] **E2E Testing**
-          - Details: Provide details on end to end testing done
+          - Details: Provide details on end to end testing done across all layers
 
         - [ ] **Performance Testing**
-          - Details: Provide details on any performance testing done
+          - Details: Provide details on performance testing done
 
         - [ ] **Static code analysis/Coverity**
-          - Details: Share any Coverity runs for components affected
+          - Details: Share Coverity runs for components affected
           
         - [ ] **Manual Functional Test**
-          - Details: Share details of manual Functional Testing done
+        
     validations:
       required: true
