@@ -30,6 +30,7 @@ LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-confi
 do_install:append () {
     install -d ${D}${base_libdir}/rdk/
     install -m 0755 ${S}/scripts/logMilestone.sh ${D}${base_libdir}/rdk
+    sed -i 's/layout=comcast_dated/layout=basic/' ${S}/log4crc
 }
 
 FILES:${PN} += "${base_libdir}/rdk/logMilestone.sh \
