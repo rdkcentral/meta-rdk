@@ -27,6 +27,10 @@ CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-confi
 CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
 LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 
+do_configure:prepend () {
+    sed -i 's/layout="comcast_dated"/layout="basic"/' ${S}/log4crc
+}
+
 do_install:append () {
     install -d ${D}${base_libdir}/rdk/
     install -m 0755 ${S}/scripts/logMilestone.sh ${D}${base_libdir}/rdk
