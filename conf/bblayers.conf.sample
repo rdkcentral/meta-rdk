@@ -50,4 +50,3 @@ BBLAYERS += "${@'${RDKROOT}/meta-rdk-broadband-cmf-poc' if os.path.isfile('${RDK
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-cognitive/meta-rdk-cognitive' if os.path.isfile('${RDKROOT}/meta-rdk-cognitive/meta-rdk-cognitive/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-wan' if os.path.isfile('${RDKROOT}/meta-rdk-wan/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-iot' if os.path.isfile('${RDKROOT}/meta-rdk-iot/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_MIXIN') if d.getVar('MANIFEST_PATH_META_MIXIN') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_MIXIN') + '/conf/layer.conf') else ''}"
