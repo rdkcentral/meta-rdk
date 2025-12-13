@@ -8,6 +8,9 @@ PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
+
+SRCREV = "b6da366e704a006394b33759f144c0a4256fd335"
+
 S = "${WORKDIR}/git"
 
 export cjson_CFLAGS = "-I$(PKG_CONFIG_SYSROOT_DIR)${includedir}/cjson"

@@ -7,6 +7,8 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1b8525f92b462b86205ffaba15
 
 SRC_URI = "git://github.com/RDKCentral/MemCapture.git;branch=main;name=src;destsuffix=git"
 
+SRCREV = "0cf90e07af97b70fb1f253ebd0f71edd5a9b8225"
+
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
