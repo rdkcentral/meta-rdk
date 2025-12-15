@@ -1,0 +1,79 @@
+From 6fc3fd84b63b5ea45630e0d5f53afbba83d54075 Mon Sep 17 00:00:00 2001
+From: Ganesh prasad Sahu <GaneshPrasad_Sahu@comcast.com>
+Date: Thu, 1 May 2025 18:37:24 +0000
+Subject: [PATCH] comcast manette gamepad digital trigger fix
+Source: COMCAST
+
+---
+ src/manettegamepad/manette_gamepad.cpp | 31 ++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
+
+diff --git a/src/manettegamepad/manette_gamepad.cpp b/src/manettegamepad/manette_gamepad.cpp
+index c4f1a04..c7a8336 100644
+--- a/src/manettegamepad/manette_gamepad.cpp
++++ b/src/manettegamepad/manette_gamepad.cpp
+@@ -28,6 +28,7 @@
+ #include <glib-unix.h>
+ #include <libmanette/libmanette.h>
+ #include <linux/input.h>
++#include <dlfcn.h>`
+ 
+ struct GamepadProxy;
+ 
+@@ -163,15 +164,38 @@ struct GamepadProvider
+     }
+   }
+ 
++  typedef gboolean (*manette_device_trigger_type_func)(ManetteDevice *device);
++
++  //Safe call for the trigger type api
++  static gboolean safe_manette_device_trigger_type(ManetteDevice *device)
++  {
++    static bool symbol_checked = false;
++    static manette_device_trigger_type_func manette_device_trigger_type_ptr = nullptr;
++
++    if (!symbol_checked) {
++        manette_device_trigger_type_ptr = (manette_device_trigger_type_func)
++            dlsym(RTLD_DEFAULT, "manette_device_trigger_type");
++        symbol_checked = true;
++    }
++
++    if (manette_device_trigger_type_ptr) {
++        return manette_device_trigger_type_ptr(device);
++    }
++
++    return TRUE; // Default to analog behavior when libmanette doesn't provide support
++  }
++
+   static void onButtonPressEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
+   {
+     uint16_t button;
+     double value = 1.0;
+     if (!manette_event_get_button(event, &button))
+         return;
+-    if (button == BTN_TL2 || button == BTN_TR2) {
++    //Send button pressed with absolute value if an analog trigger
++    if ( (button == BTN_TL2 || button == BTN_TR2) && safe_manette_device_trigger_type(device) ) {
+        manette_event_get_button_value(event, &value);
+        provider->analogButtonChanged(device, toStandardGamepadButton(button), value);
++       //g_warning("manette-gamepad: buttonPressEvent btn=%u (analog=y) val=%lf\n",button, value);
+     }
+     else
+       provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), true);
+@@ -183,9 +207,12 @@ struct GamepadProvider
+     double value = 0.0;
+     if (!manette_event_get_button(event, &button))
+         return;
+-    if (button == BTN_TL2 || button == BTN_TR2) {
++
++    //Send button released with absolute value if an analog trigger
++    if ( (button == BTN_TL2 || button == BTN_TR2) && safe_manette_device_trigger_type(device) ) {
+        manette_event_get_button_value(event, &value);
+        provider->analogButtonChanged(device, toStandardGamepadButton(button), value);
++       //g_warning("manette-gamepad: buttonReleaseEvent btn=%u (analog=y) val=%lf\n",button, value);
+     }
+     else
+       provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), false);
+-- 
+2.34.1
+
