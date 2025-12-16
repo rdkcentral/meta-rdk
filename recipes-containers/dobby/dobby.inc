@@ -1,4 +1,4 @@
-SRC_URI = "gitsm://github.com/rdkcentral/Dobby;protocol=https;branch=release/v3.16"
+SRC_URI = "gitsm://github.com/ssitar583/Dobby;protocol=https;branch=xione-17899-DEBUG"
 
-PV = "3.16.0+git${SRCPV}"
-SRCREV = "4c2accd3147fad18599427ead28ded0c112ad241"
+PV = "3.16.19+git${SRCPV}"
+SRCREV = "873e211eb069e04552211bc8662ae6652870f437"
