@@ -9,6 +9,8 @@ PV = "1.20.0"
 SRC_URI = "gitsm://github.com/open-telemetry/opentelemetry-cpp.git;branch=main"
 SRCREV = "6175aa0b213eea053247e43b4f35b8d201fa356e"
 
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
+
 FILESEXTRAPATHS:prepend := "${THISDIR}/opentelemetry:"
 # Bring in patch that links absl::strings from Abseil
 SRC_URI += "file://0001-link-absl-strings-into-common.patch"
