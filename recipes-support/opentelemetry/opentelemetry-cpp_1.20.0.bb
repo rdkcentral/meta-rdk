@@ -57,10 +57,25 @@ TARGET_LDFLAGS:append = " -Wl,--no-as-needed"
 
 
 
-EXTRA_OECMAKE = "\
+EXTRA_OECMAKE += "\
   -DBUILD_SHARED_LIBS=ON \
   -DWITH_ABI_VERSION_1=ON \
   -DWITH_ABI_VERSION_2=OFF \
   -DWITH_STL=OFF \
   -DCMAKE_CXX_STANDARD=17 \
+"
+
+# Treat unversioned .so as runtime libs
+SOLIBS = ".so"
+FILES:${PN} += "${libdir}/*.so"
+
+# Prevent Yocto from classifying them as -dev
+SOLIBSDEV = ""
+INSANE_SKIP:${PN} += "dev-so"
+
+# Explicitly define -dev content so it does NOT include ${libdir}/*.so
+FILES:${PN}-dev = "\
+    ${includedir} \
+    ${libdir}/pkgconfig \
+    ${libdir}/cmake \
 "
