@@ -4,12 +4,14 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
+PV = "1.0.7"
+PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 # To have a possibility to override SRC_URI later, we are introducing the following workaround:
 CRASHUPLOAD_SRC_URI ?= "${RDK_GENERIC_ROOT_GIT}/crashupload/generic;module=.;protocol=${RDK_GIT_PROTOCOL};branch=${RDK_GIT_BRANCH}"
+SRCREV = "8e7e22d2cb988ea58b9ba9d85b8b0812c6dc77d2"
 SRC_URI = "${CMF_GITHUB_ROOT}/crashupload;${CMF_GITHUB_SRC_URI_SUFFIX};module=."
-PV = "1.0"
 S = "${WORKDIR}/git"
 
 DEPENDS = "glib-2.0 libsyswrapper"
