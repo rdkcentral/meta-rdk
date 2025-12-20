@@ -72,3 +72,4 @@ BBLAYERS =+ "${@'${MANIFEST_PATH_PROFILE_CONFIG}' if os.path.isfile('${MANIFEST_
 BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_REGION_CONFIG') if d.getVar('MANIFEST_PATH_REGION_CONFIG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_REGION_CONFIG') + '/conf/layer.conf') else ''} \
     "
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_CLANG') if d.getVar('MANIFEST_PATH_META_CLANG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_CLANG') + '/conf/layer.conf') else ''}"
