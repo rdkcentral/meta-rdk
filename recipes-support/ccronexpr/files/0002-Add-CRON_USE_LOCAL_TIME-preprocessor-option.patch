@@ -1,0 +1,35 @@
+Date: Sept 21 08:49:52 2020
+
+From: 17475e10c2053650a86b1d25a692c2c20d74c420 Tue May 12 17:49:14 2020 +0100
+
+Subject: add CRON_USE_LOCAL_TIME preprocessor option
+
+When defined, this will use local time for crontab entries instead of UTC.
+
+Source: COMCAST
+
+
+Upstream-Status: Pending
+
+Signed-off-by: Thomas Lea <thomas_lea@comcast.com>
+---
+Index: git/ccronexpr.c
+===================================================================
+--- git.orig/ccronexpr.c
++++ git/ccronexpr.c
+@@ -96,6 +96,7 @@ time_t _mkgmtime(struct tm* tm);
+ #endif /* __MINGW32__ */
+ 
+ /* function definitions */
++#ifndef CRON_USE_LOCAL_TIME
+ time_t cron_mktime_gm(struct tm* tm) {
+ #if defined(_WIN32)
+ /* http://stackoverflow.com/a/22557778 */
+@@ -133,6 +134,7 @@ time_t cron_mktime_gm(struct tm* tm) {
+     return timegm(tm);
+ #endif
+ }
++#endif
+ 
+ struct tm* cron_time_gm(time_t* date, struct tm* out) {
+ #if defined(__MINGW32__)
