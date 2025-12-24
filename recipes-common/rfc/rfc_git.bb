@@ -6,6 +6,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=bef3b9130aa5d626df3f7171f2dadfe2"
 PACKAGECONFIG ??= "rfctool"
 PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
 
+PV = "1.1.9"
+PR = "r1"
+
+SRCREV = "dca43e79aa59ebf1edebe4ae1470ea37f8795879"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"

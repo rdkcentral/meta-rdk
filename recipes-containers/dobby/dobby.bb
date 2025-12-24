@@ -8,7 +8,6 @@ SRC_URI:append = " file://Fix_compile_gcc11.patch  \
                    file://Add_config_header_kirkstone.patch \
                    file://dobby.generic.json \
                    file://dobby_start_after_apparmor.patch \
-                   file://0001-RDKEMW-8825-enable-swap-limit.patch \
                  "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
@@ -30,7 +29,15 @@ S = "${WORKDIR}/git"
 inherit pkgconfig cmake systemd logrotate_config
 inherit syslog-ng-config-gen
 
-LOGROTATE_NAME="dobby"
+SYSLOG-NG_FILTER = "rdkappmanagers"
+SYSLOG-NG_SERVICE_rdkappmanagers = "dobby.service"
+SYSLOG-NG_DESTINATION_rdkappmanagers = "rdkappmanagers.log"
+SYSLOG-NG_LOGRATE_rdkappmanagers = "high"
+LOGROTATE_LOGNAME_rdkappmanagers = "rdkappmanagers.log"
+LOGROTATE_SIZE_MEM_rdkappmanagers = "10485760"
+LOGROTATE_ROTATION_MEM_rdkappmanagers = "4"
+
+LOGROTATE_NAME="dobby rdkappmanagers"
 LOGROTATE_LOGNAME_dobby="dobby.log"
 LOGROTATE_SIZE_dobby="1572864"
 LOGROTATE_ROTATION_dobby="3"
@@ -97,5 +104,5 @@ FILES:${PN} += "${libexecdir}/DobbyInit"
 FILES:${PN} += "${libdir}/plugins/dobby/*.so*"
 FILES:${PN} += "${libdir}/libethanlog.so*"
 FILES:${PN} += "${libdir}/libocispec.so*"
-PV ?= "1.0.0"
-PR ?= "r0"
+PV = "3.16.0"
+PR = "r0"
