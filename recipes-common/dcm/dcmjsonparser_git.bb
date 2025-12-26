@@ -11,7 +11,7 @@ RDEPENDS:${PN} = "cjson"
 SRC_URI = "${CMF_GIT_ROOT}/rdk/components/generic/dcm;protocol=${CMF_GIT_PROTOCOL};branch=${CMF_GIT_BRANCH}"
 
 PV = "${RDK_RELEASE}+git${SRCPV}"
-SRCREV ?= "8095cb6a22ba8087a853080f0d2acaeeb6a46878"
+SRCREV ?= "065da5cb555bd8e9328934bfb98b68745ecc618f"
 S = "${WORKDIR}/git"
 
 CFLAGS:append = " \
