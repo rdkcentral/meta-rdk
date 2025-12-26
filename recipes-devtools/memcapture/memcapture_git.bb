@@ -30,6 +30,3 @@ do_install () {
     install -d ${D}${bindir}
     install -m 4755 ${B}/MemCapture ${D}${bindir}
 }
-
-FILES:${PN} += "${bindir}/MemCapture \
-               "
