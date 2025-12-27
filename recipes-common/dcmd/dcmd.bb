@@ -77,10 +77,7 @@ do_install:append () {
 #        -lcurl -lrdkloggers -lRdkCertSelector -ldwnlutil -lfwutils -L$(PKG_CONFIG_SYSROOT_DIR)/usr/lib -L$(PKG_CONFIG_SYSROOT_DIR)/usr/lib64 -lrdkconfig
 #}
 
-# Install the binary to the image
-do_install:append() {
-     install -m644 ${S}/uploadstblogs/include/*.h ${D}${includedir}/uploadstblogs
-}
+
 
 # Add any extra packaging if needed
 FILES_${PN} += "${bindir}/logupload"
