@@ -78,11 +78,9 @@ do_install:append () {
 #}
 
 # Install the binary to the image
-#do_install:append() {
-#    install -d ${D}${bindir}
-#    install -d ${D}${bindir}
-#    install -m 0755 ${S}/logupload ${D}${bindir}/
-#}
+do_install:append() {
+     install -m644 ${S}/uploadstblogs/include/*.h ${D}${includedir}/uploadstblogs
+}
 
 # Add any extra packaging if needed
 FILES_${PN} += "${bindir}/logupload"
