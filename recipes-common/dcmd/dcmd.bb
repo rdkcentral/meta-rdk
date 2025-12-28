@@ -60,6 +60,8 @@ do_install:append () {
     install -d ${D}${bindir}
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${S}/dcmd.service ${D}${systemd_unitdir}/system
+    install -d ${D}${includedir}
+    install -m 0644 ${S}/uploadstblogs/include/uploadstblogs.h ${D}${includedir}/
     #install -m 0755 ${S}/logupload ${D}${bindir}/
 }
 
