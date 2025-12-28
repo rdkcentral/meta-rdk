@@ -16,7 +16,7 @@ CFLAGS += " -Wall -Werror"
 
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
 
-DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper"
+DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper dcmd"
 DEPENDS:append:client = " iarmbus iarmmgrs"
 RDEPENDS:${PN}:append = " bash"
 RDEPENDS:${PN}:remove_morty = "bash"
