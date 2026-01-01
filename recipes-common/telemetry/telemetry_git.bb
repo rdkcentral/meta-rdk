@@ -5,7 +5,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRCREV = "10e0d01761f40d33baf93d8e10c73f9107b3c6d4"
-SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;protocol=${CMF_GITHUB_PROTOCOL};branch=feature/RDKCOM-5420"
+SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS += "curl cjson glib-2.0 breakpad-wrapper rbus libsyswrapper libunpriv"
