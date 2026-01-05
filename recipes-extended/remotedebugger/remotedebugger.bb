@@ -64,5 +64,4 @@ FILES:${PN} += " \
                 ${sysconfdir}/rrd/remote_debugger.json \
                 ${bindir}/remotedebugger \
                 ${systemd_unitdir}/system/remote-debugger.service \
-                
 "
