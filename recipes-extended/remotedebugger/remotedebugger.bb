@@ -55,7 +55,6 @@ do_install:append () {
         install -d ${D}${sysconfdir}/rrd/
         install -d ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/scripts/remote-debugger.service ${D}${systemd_unitdir}/system
-        install -m 0755 ${S}/scripts/uploadRRDLogs.sh ${D}${base_libdir}/rdk/
         install -m 0600 ${S}/remote_debugger.json ${D}${sysconfdir}/rrd/
 }
 
