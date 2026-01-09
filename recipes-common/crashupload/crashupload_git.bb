@@ -20,6 +20,7 @@ export LINK = "${LD}"
 CFLAGS:append = " \
         -I=${libdir}/glib-2.0/include \
         -I=${includedir}/glib-2.0 \
+        -DLIBRDKCERTSELECTOR \
         "
 
 export GLIBS = "-lglib-2.0 -lz"
@@ -36,14 +37,15 @@ do_install() {
 }
 
 DEPENDS:append:client = " \
-			curl \
+				curl \
     			openssl \
-			zlib \
+				zlib \
 	    		libarchive \
     			libsyswrapper \
     			rdk-logger \
     			commonutilities \
-			"
+				rdkcertconfig \
+				"
 
 do_install:append:client() {
         install -d ${D}${bindir}
