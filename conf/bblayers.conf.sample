@@ -21,7 +21,6 @@ BBLAYERS ?= " \
   ${@'${RDKROOT}/meta-linaro/meta-linaro' if os.path.isfile('${RDKROOT}/meta-linaro/meta-linaro/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-linaro/meta-linaro-toolchain' if os.path.isfile('${RDKROOT}/meta-linaro/meta-linaro-toolchain/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/openembedded-core/meta' if os.path.isfile('${RDKROOT}/openembedded-core/meta/conf/layer.conf') else '${RDKROOT}/poky/meta'} \
-  ${@'${RDKROOT}/meta-rust' if os.path.isfile('${RDKROOT}/meta-rust/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-clang' if os.path.isfile('${RDKROOT}/meta-clang/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-gplv2' if os.path.isfile('${RDKROOT}/meta-gplv2/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-python2' if os.path.isfile('${RDKROOT}/meta-python2/conf/layer.conf') else ''} \
