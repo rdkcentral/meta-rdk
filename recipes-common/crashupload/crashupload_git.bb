@@ -30,7 +30,21 @@ LDFLAGS:append = "-Wl,-O1"
 
 LDFLAGS += "-lrfcapi"
 
-inherit autotools systemd coverity pkgconfig
+inherit autotools systemd coverity pkgconfig syslog-ng-config-gen logrotate_config
+
+SYSLOG-NG_FILTER = "crashupload"
+SYSLOG-NG_SERVICE_crashupload = "minidump-secure-upload.service minidump-upload.service coredump-secure-upload.service coredump-upload.service"
+SYSLOG-NG_DESTINATION_crashupload = "core_log.txt"
+SYSLOG-NG_LOGRATE_crashupload = "high"
+
+LOGROTATE_NAME="crashupload"
+LOGROTATE_LOGNAME_crashupload="core_log.txt"
+#HDD_ENABLE
+LOGROTATE_SIZE_crashupload="128000"
+LOGROTATE_ROTATION_crashupload="3"
+#HDD_DISABLE
+LOGROTATE_SIZE_MEM_crashupload="128000"
+LOGROTATE_ROTATION_MEM_crashupload="3"
 
 DEPENDS:append:client = " \
 				curl \
@@ -47,6 +61,7 @@ RDEPENDS:${PN} += "busybox commonutilities"
 do_install() {
         install -d ${D}${base_libdir}/rdk
         install -d ${D}${sysconfdir} ${D}${sysconfdir}/rfcdefaults
+		install -m 0755 ${WORKDIR}/git/runDumpUpload.sh ${D}${base_libdir}/rdk
         install -m 0755 ${WORKDIR}/git/uploadDumps.sh ${D}${base_libdir}/rdk
 }
 
@@ -76,4 +91,5 @@ PACKAGE_BEFORE_PN += "${PN}-conf"
 
 FILES:${PN}:append:client = " ${bindir}/crashupload"
 FILES:${PN}:append = " ${base_libdir}/rdk/uploadDumps.sh"
+FILES:${PN}:append = " ${base_libdir}/rdk/runDumpUpload.sh"
 FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
