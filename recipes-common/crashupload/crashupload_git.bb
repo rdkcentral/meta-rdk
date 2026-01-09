@@ -9,7 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "65f365c4a8bf2cfe7dd6e33c60742f1d33efdbc9"
+SRCREV = "59925c3570c89347a8e05d852401db923337c495"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -28,13 +28,9 @@ export USE_DBUS = "y"
 
 LDFLAGS:append = "-Wl,-O1"
 
-inherit autotools systemd coverity pkgconfig
+LDFLAGS += "-lrfcapi"
 
-do_install() {
-        install -d ${D}${base_libdir}/rdk
-        install -d ${D}${sysconfdir} ${D}${sysconfdir}/rfcdefaults
-        install -m 0755 ${S}/uploadDumps.sh ${D}${base_libdir}/rdk
-}
+inherit autotools systemd coverity pkgconfig
 
 DEPENDS:append:client = " \
 				curl \
@@ -44,34 +40,40 @@ DEPENDS:append:client = " \
     			libsyswrapper \
     			rdk-logger \
     			commonutilities \
-				rdkcertconfig \
+				rfc \
 				"
+RDEPENDS:${PN} += "busybox commonutilities"
+
+do_install() {
+        install -d ${D}${base_libdir}/rdk
+        install -d ${D}${sysconfdir} ${D}${sysconfdir}/rfcdefaults
+        install -m 0755 ${WORKDIR}/git/uploadDumps.sh ${D}${base_libdir}/rdk
+}
 
 do_install:append:client() {
         install -d ${D}${bindir}
-        install -m 0755 ${B}/crashupload ${D}${bindir}/crashupload
+        install -m 0755 ${B}/src/crashupload ${D}${bindir}/crashupload
 }
 
 do_install:append:broadband() {
         use_sysv="${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'false', 'true', d)}"
         $use_sysv || install -d ${D}${systemd_unitdir}/system
-        $use_sysv || install -m 0644 ${S}/coredump-upload.service ${D}${systemd_unitdir}/system/
-        $use_sysv || install -m 0644 ${S}/coredump-upload.path ${D}${systemd_unitdir}/system/
-        $use_sysv || install -m 0644 ${S}/minidump-on-bootup-upload.service ${D}${systemd_unitdir}/system/
-        $use_sysv || install -m 0644 ${S}/minidump-on-bootup-upload.timer ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${WORKDIR}/git/coredump-upload.service ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${WORKDIR}/git/coredump-upload.path ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${WORKDIR}/git/minidump-on-bootup-upload.service ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${WORKDIR}/git/minidump-on-bootup-upload.timer ${D}${systemd_unitdir}/system/
         install -d ${D}${sysconfdir}
-        install -m 0755 ${S}/uploadDumpsUtils.sh ${D}${base_libdir}/rdk
+        install -m 0755 ${WORKDIR}/git/uploadDumpsUtils.sh ${D}${base_libdir}/rdk
 }
 
 SYSTEMD_SERVICE:${PN}:append:broadband = " coredump-upload.service \
                                            coredump-upload.path \
                                            minidump-on-bootup-upload.service \
                                            minidump-on-bootup-upload.timer \
-"
-RDEPENDS:${PN} += "busybox commonutilities"
+										"
 
 PACKAGE_BEFORE_PN += "${PN}-conf"
 
-FILES:${PN}:append:client = "${bindir}/crashupload"
-FILES:${PN} += "${base_libdir}/rdk/uploadDumps.sh"
+FILES:${PN}:append:client = " ${bindir}/crashupload"
+FILES:${PN}:append = " ${base_libdir}/rdk/uploadDumps.sh"
 FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
