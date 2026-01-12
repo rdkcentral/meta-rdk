@@ -9,7 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "afc990c685aaac6ec3b1a93ee24cc249d51e80fe"
+SRCREV = "fc7e4adf4adf7a630037a5c1de694edeb9d0a0ff"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -21,6 +21,7 @@ CFLAGS:append = " \
         -I=${libdir}/glib-2.0/include \
         -I=${includedir}/glib-2.0 \
         -DLIBRDKCERTSELECTOR \
+        -DRFC_API_ENABLED \
         "
 
 export GLIBS = "-lglib-2.0 -lz"
