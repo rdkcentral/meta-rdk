@@ -9,7 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "fc7e4adf4adf7a630037a5c1de694edeb9d0a0ff"
+SRCREV = "e034ad84d1c628cab4c45225a1508e6be19a5336"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -23,13 +23,15 @@ CFLAGS:append = " \
         -DLIBRDKCERTSELECTOR \
         -DRFC_API_ENABLED \
         "
+#-DT2_EVENT_ENABLED \
+#"
 
 export GLIBS = "-lglib-2.0 -lz"
 export USE_DBUS = "y"
 
 LDFLAGS:append = "-Wl,-O1"
 
-LDFLAGS += "-lrfcapi"
+LDFLAGS += "-lrfcapi -ltelemetry_msgsender"
 
 inherit autotools systemd coverity pkgconfig syslog-ng-config-gen logrotate_config
 
@@ -56,8 +58,9 @@ DEPENDS:append:client = " \
     			rdk-logger \
     			commonutilities \
 				rfc \
+				telemetry \
 				"
-RDEPENDS:${PN} += "busybox commonutilities"
+RDEPENDS:${PN} += "busybox commonutilities telemetry"
 
 do_install() {
         install -d ${D}${base_libdir}/rdk
