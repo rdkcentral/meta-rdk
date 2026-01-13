@@ -3,7 +3,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=24691c8ce48996ecd1102d29eab1216e"
 
 # To have a possibility to override SRC_URI later, we are introducing the following workaround:
-SRCREV = "51660d4b961f1552f4a6976d545fc7d993e80096"
+SRCREV = "254e9ec7a0de4f07602dc05ee88f448174be29af"
 SRC_URI = "${CMF_GITHUB_ROOT}/common_utilities;module=.;${CMF_GITHUB_SRC_URI_SUFFIX}"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
