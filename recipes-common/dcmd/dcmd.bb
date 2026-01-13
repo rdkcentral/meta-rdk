@@ -61,24 +61,18 @@ do_install:append () {
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${S}/dcmd.service ${D}${systemd_unitdir}/system
     install -d ${D}${includedir}
-    install -m 0644 ${S}/uploadstblogs/include/*.h ${D}${includedir}/
-    #install -m 0755 ${S}/logupload ${D}${bindir}/
+    install -m 0644 ${S}/uploadstblogs/include/*.h ${D}${includedir}
 }
 
-# Add to do_compile if not using an external Makefile
-#do_compile:append() {
-# Compile logupload.cpp directly (adapt if you're using a Makefile)
-#    ${CXX} ${S}/logupload/logupload.cpp -o ${S}/logupload/logupload.bin -lcurl -lrdkloggers -I${S}/include
-#}
+inherit breakpad-wrapper
+DEPENDS += "breakpad breakpad-wrapper"
+BREAKPAD_BIN:append = "reboot-manager"
 
+PACKAGECONFIG:append = " breakpad"
+PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 
-#do_compile:append() {
-#    ${CXX} ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} \
-#        ${S}/logupload/logupload.cpp \
-#        -o ${S}/logupload/logupload.bin \
-#        -lcurl -lrdkloggers -lRdkCertSelector -ldwnlutil -lfwutils -L$(PKG_CONFIG_SYSROOT_DIR)/usr/lib -L$(PKG_CONFIG_SYSROOT_DIR)/usr/lib64 -lrdkconfig
-#}
-
+LDFLAGS += "-lbreakpadwrapper"
+CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 
 # Add any extra packaging if needed
