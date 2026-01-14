@@ -66,7 +66,7 @@ do_install:append () {
 
 inherit breakpad-wrapper
 DEPENDS += "breakpad breakpad-wrapper"
-BREAKPAD_BIN:append = "reboot-manager"
+BREAKPAD_BIN:append = "logupload"
 
 PACKAGECONFIG:append = " breakpad"
 PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
