@@ -6,7 +6,7 @@ HOMEPAGE = "https://github.com/LibertyGlobal/memcr"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI = "git://git@github.com/LibertyGlobal/memcr.git;branch=main;protocol=ssh"
+SRC_URI = "git://git@github.com/adrianM27/memcr.git;protocol=ssh"
 SRC_URI += " file://memcr.service"
 SRC_URI += " file://0001-RDK-47153-Option-to-set-dump-dir-and-compression-per.patch"
 SRC_URI += " file://0001-RDK-54059-retry-ptrace-seize-on-EPERM.patch"
@@ -15,7 +15,7 @@ INSANE_SKIP:${PN} += "ldflags"
 
 PV = "1.0+git${SRCPV}"
 # Code base from 22.07.2025
-SRCREV = "f46af4008d19cb527d5cede22bf0a3d0c7a8ed02"
+SRCREV = "f1fbeb530f65f53776a67b719fe618769d16e823"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -30,7 +30,8 @@ SYSTEMD_SERVICE:${PN} = "memcr.service"
 SYSTEMD_AUTO_ENABLE = "enable"
 
 do_compile () {
-	oe_runmake COMPRESS_LZ4=1 COMPRESS_ZSTD=1 CHECKSUM_MD5=1 ENCRYPT=1
+	LOG_LEVEL="${@bb.utils.contains('BUILD_VARIANT', 'prod', '1', '3', d)}"
+	oe_runmake COMPRESS_LZ4=1 COMPRESS_ZSTD=1 CHECKSUM_MD5=1 ENCRYPT=1 LOG_LEVEL=${LOG_LEVEL}
 }
 
 do_install () {
