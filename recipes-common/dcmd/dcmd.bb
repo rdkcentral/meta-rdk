@@ -38,23 +38,10 @@ CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror"
 
 # added for certselector
 EXTRA_OECONF:append = " --enable-t2api=yes --enable-iarmevent"
-#EXTRA_OECONF:append = " --enable-mountutils=yes --enable-rdkcertselector=yes"
-
-#DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
-#CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
-#CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
-#LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
-#certselector
-
 LDFLAGS:append = "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', '-lIARMBus', '', d)}"
-#LDFLAGS:append = "-lcurl -lrdkloggers -lRdkCertSelector -ldwnlutil -lfwutils -L$(PKG_CONFIG_SYSROOT_DIR)/usr/lib -L$(PKG_CONFIG_SYSROOT_DIR)/usr/lib64 -lrdkconfig"
-#LDFLAGS:append = "-lsafec"
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', 'iarmmgrs iarmbus', '', d)}"
 
 CFLAGS:append += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', '-DHAS_MAINTENANCE_MANAGER', '', d)}"
-
-#certselector
-#LDFLAGS:append = " -lsafec -lsecure_wrapper"
 
 do_install:append () {
     install -d ${D}${bindir}
