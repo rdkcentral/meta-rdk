@@ -9,7 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "c95fc157325595e1f8ff6a9221a25cf427db52ad"
+SRCREV = "4c3ca19313cc4a411336f89f265f22fcba04afe0"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -60,7 +60,7 @@ DEPENDS:append:client = " \
 				rfc \
 				telemetry \
 				"
-RDEPENDS:${PN} += "busybox commonutilities telemetry"
+RDEPENDS:${PN} += "busybox commonutilities"
 
 do_install() {
         install -d ${D}${base_libdir}/rdk
