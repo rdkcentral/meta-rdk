@@ -62,6 +62,8 @@ BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_BRINGUP') if d.getVar('MANIFEST_PATH_MIDDLEWARE_BRINGUP') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_BRINGUP') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_RDK_IMAGES') if d.getVar('MANIFEST_PATH_RDK_IMAGES') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_IMAGES') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_CSPC_IMAGES') if d.getVar('MANIFEST_PATH_CSPC_IMAGES') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_CSPC_IMAGES') + '/conf/layer.conf') else ''} \
+    ${@d.getVar('MANIFEST_PATH_RDK_MEDIAPIPELINE') if d.getVar('MANIFEST_PATH_RDK_MEDIAPIPELINE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_MEDIAPIPELINE') + '/conf/layer.conf') else ''} \
+    ${@d.getVar('MANIFEST_PATH_BINDER') if d.getVar('MANIFEST_PATH_BINDER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_BINDER') + '/conf/layer.conf') else ''} \
     "
 
 # Config layers: generic
