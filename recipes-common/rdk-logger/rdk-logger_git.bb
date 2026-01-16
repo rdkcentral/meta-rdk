@@ -18,7 +18,7 @@ PROVIDES = "getClockUptime"
 #Milestone Support
 CFLAGS:append = " -DLOGMILESTONE"
 
-inherit autotools pkgconfig coverity pkgconfig
+inherit autotools pkgconfig coverity
 
 CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
 CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
