@@ -58,6 +58,16 @@ LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-confi
 DEPENDS:append = " iarmmgrs iarmbus"
 LDFLAGS:append = " -lIARMBus"
 
+# generating minidumps symbols
+inherit breakpad-wrapper
+DEPENDS += "breakpad breakpad-wrapper"
+BREAKPAD_BIN:append = "reboot-manager"
+PACKAGECONFIG:append = " breakpad"
+PACKAGECONFIG[breakpad] = "--enable-breakpad,breakpad,"
+
+LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
+CXXFLAGS += "-DINCLUDE_BREAKPAD"
+
 do_install:append () {
         install -d ${D}${bindir}/
         install -d ${D}${sysconfdir}
