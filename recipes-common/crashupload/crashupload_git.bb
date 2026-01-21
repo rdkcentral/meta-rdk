@@ -16,7 +16,8 @@ SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}
 
 # Topic Work
 # SRCREV = "b7873a493189e083a4019ae9f5ccab4bd0e07562"
-SRCREV = "9b6b4c9d57b1efd28843f4535403bfe231b0c1c4"
+#SRCREV = "9b6b4c9d57b1efd28843f4535403bfe231b0c1c4"
+SRCREV = "0f0b95905b9eddb164d1ac003a6725afdf64a323"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
