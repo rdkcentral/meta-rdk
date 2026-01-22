@@ -15,9 +15,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}
 # SRCREV = "b1ae112af25bf4ded014fd0e81f03cbff75031f9"
 
 # Topic Work
-# SRCREV = "b7873a493189e083a4019ae9f5ccab4bd0e07562"
-#SRCREV = "9b6b4c9d57b1efd28843f4535403bfe231b0c1c4"
-SRCREV = "0f0b95905b9eddb164d1ac003a6725afdf64a323"
+SRCREV = "bbf76b9cf20388076b8408811303b137a14550f7"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -31,6 +29,7 @@ CFLAGS:append = " \
         		-DLIBRDKCERTSELECTOR \
 				-DRFC_API_ENABLED \
         		-DT2_EVENT_ENABLED \
+				-DRDK_LOGGER \
         		"
 
 export GLIBS = "-lglib-2.0 -lz"
@@ -58,6 +57,7 @@ do_install() {
         install -d ${D}${base_libdir}/rdk
         install -d ${D}${sysconfdir} ${D}${sysconfdir}/rfcdefaults
         install -m 0755 ${WORKDIR}/git/uploadDumps.sh ${D}${base_libdir}/rdk
+		install -m 0755 ${WORKDIR}/git/runDumpUpload.sh ${D}${base_libdir}/rdk
 }
 
 do_install:append:client() {
@@ -88,4 +88,5 @@ PACKAGE_BEFORE_PN += "${PN}-conf"
 
 FILES:${PN}:append:client = " ${bindir}/crashupload"
 FILES:${PN}:append = " ${base_libdir}/rdk/uploadDumps.sh"
+FILES:${PN}:append = " ${base_libdir}/rdk/runDumpUpload.sh"
 FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
