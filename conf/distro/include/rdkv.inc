@@ -141,3 +141,6 @@ DISTRO_FEATURES:append = " ENABLE_NETWORKMANAGER"
 
 #Distro feature for WPEFramework SecurityUtility Disable
 DISTRO_FEATURES:append = " wpe_security_util_disable"
+
+# Use WebKit 2.38 by defualt
+PREFERRED_VERSION_wpe-webkit ?= "2.38%"
