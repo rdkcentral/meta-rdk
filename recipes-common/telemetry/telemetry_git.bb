@@ -4,14 +4,16 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "b4171d7741714e1d003abf83c9b4763f7911dbea"
-SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
+SRC_URI = "git://github.com/rdkcentral/telemetry.git;protocol=https;branch=topic/RDK-60318"
+
+SRCREV = "fbc6847e57fb2b666389abd1e84610f0060961f2"
+
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-DEPENDS += "curl cjson glib-2.0 breakpad-wrapper rbus libsyswrapper libunpriv"
+DEPENDS += "curl cjson glib-2.0 breakpad-wrapper rbus libsyswrapper libunpriv dbus"
 DEPENDS += "rdk-logger"
 
-RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
+RDEPENDS:${PN} += "curl cjson glib-2.0 rbus dbus"
 
 
 PV = "1.7.4"
