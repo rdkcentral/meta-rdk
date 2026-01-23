@@ -15,7 +15,7 @@ PACKAGE_ARCH:pn-reboot-manager = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
 SRCREV_FORMAT = "rebootmanager"
-SRCREV = "d3afed6167a46059f62f88e2403abe4c8d32eedd"
+SRCREV = "7e5e6396f9143e0265c899e28c9b7e4cb1a7e567"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
 S = "${WORKDIR}/git"
