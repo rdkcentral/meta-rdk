@@ -34,7 +34,7 @@ LOGROTATE_ROTATION_reboot_reason="3"
 LOGROTATE_SIZE_MEM_reboot_reason="10240"
 LOGROTATE_ROTATION_MEM_reboot_reason="3"
 
-DEPENDS += "commonutilities telemetry"
+DEPENDS += "commonutilities telemetry rbus"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 EXTRA_OECONF:append = " --enable-t2api=yes"
