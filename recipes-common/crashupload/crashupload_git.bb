@@ -15,7 +15,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}
 # SRCREV = "b1ae112af25bf4ded014fd0e81f03cbff75031f9"
 
 # Topic Work
-SRCREV = "bbf76b9cf20388076b8408811303b137a14550f7"
+SRCREV = "8c9a37f28fb2ccd0c9d7012451dd42d881c319b9"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -30,6 +30,7 @@ CFLAGS:append = " \
 				-DRFC_API_ENABLED \
         		-DT2_EVENT_ENABLED \
 				-DRDK_LOGGER \
+				-DUSE_EXTENDED_LOGGER_INIT \
         		"
 
 export GLIBS = "-lglib-2.0 -lz"
