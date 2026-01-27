@@ -37,7 +37,8 @@ ASNEEDED = ""
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror"
 
 # added for certselector
-EXTRA_OECONF:append = " --enable-t2api=yes --enable-iarmevent -DUSE_EXTENDED_LOGGER_INIT"
+EXTRA_OECONF:append = " --enable-t2api=yes --enable-iarmevent"
+CFLAGS:append = " --DUSE_EXTENDED_LOGGER_INIT"
 LDFLAGS:append = "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', '-lIARMBus', '', d)}"
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', 'iarmmgrs iarmbus', '', d)}"
 
