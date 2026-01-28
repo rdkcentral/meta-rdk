@@ -9,13 +9,13 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-#SRCREV = "59925c3570c89347a8e05d852401db923337c495"
+# SRCREV = "59925c3570c89347a8e05d852401db923337c495"
 
-# Topic Mine LKG
-# SRCREV = "b1ae112af25bf4ded014fd0e81f03cbff75031f9"
+# Topic Work - line with develop
+# SRCREV = "75db8702230bf3100ac790fa50e26cc24d8c5c63"
 
-# Topic Work
-SRCREV = "75db8702230bf3100ac790fa50e26cc24d8c5c63"
+# topic/RDK-59955
+SRCREV = "4eb66b647e35773da34a61e21c7be98745666dc5"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
