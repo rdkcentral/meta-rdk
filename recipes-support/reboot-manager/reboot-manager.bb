@@ -14,8 +14,10 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
+SRC_URI:append = " ${RDKE_GITHUB_ROOT}/reboot-manager;${RDKE_GITHUB_SRC_URI_SUFFIX};module=.;name=rmcpc;destsuffix=git/src/rebootmanager-cpc"
 SRCREV_FORMAT = "rebootmanager"
-SRCREV_reboot-manager = "47a69827189cda6ae75a5c92754ddfeab5e0165d"
+SRCREV_reboot-manager = "e2a5034ac38258edf73aae33965645e638cbeca4"
+SRCREV_rmcpc = "6869a96fa9303d0087a52ab8153eeab35e44b63e"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
 S = "${WORKDIR}/git"
@@ -37,7 +39,7 @@ LOGROTATE_ROTATION_MEM_reboot_reason="3"
 DEPENDS += "commonutilities telemetry rbus"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
-EXTRA_OECONF:append = " --enable-t2api=yes"
+EXTRA_OECONF:append = " --enable-t2api=yes --enable-cpc=yes"
 
 # generating minidumps symbols
 inherit breakpad-wrapper
