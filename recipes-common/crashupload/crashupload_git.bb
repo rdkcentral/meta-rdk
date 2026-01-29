@@ -15,7 +15,10 @@ SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}
 # SRCREV = "75db8702230bf3100ac790fa50e26cc24d8c5c63"
 
 # topic/RDK-59955
-SRCREV = "4eb66b647e35773da34a61e21c7be98745666dc5"
+#SRCREV = "4eb66b647e35773da34a61e21c7be98745666dc5"
+
+# Previous Reboot + Ratelimit
+SRCREV = "7a2344091ad2a9e19edd0b73b1da01cc49ee4bfe"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
