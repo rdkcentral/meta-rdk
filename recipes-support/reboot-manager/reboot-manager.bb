@@ -52,3 +52,4 @@ LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 FILES:${PN} += "${bindir}/rebootnow"
+FILES:${PN} += "${bindir}/update-prev-reboot-info"
