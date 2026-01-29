@@ -16,7 +16,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
 SRC_URI:append = " ${RDKE_GITHUB_ROOT}/reboot-manager;${RDKE_GITHUB_SRC_URI_SUFFIX};module=.;name=rmcpc;destsuffix=git/src/rebootmanager-cpc"
 SRCREV_FORMAT = "rebootmanager"
-SRCREV_reboot-manager = "40c229869161eaa5a1046faec35b5b98aec4b870"
+SRCREV_reboot-manager = "ae0bde055b6ebbc9aac9d98e8adc557c7c47c6fd"
 SRCREV_rmcpc = "6869a96fa9303d0087a52ab8153eeab35e44b63e"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
@@ -37,6 +37,7 @@ LOGROTATE_SIZE_MEM_reboot_reason="10240"
 LOGROTATE_ROTATION_MEM_reboot_reason="3"
 
 DEPENDS += "commonutilities telemetry rbus"
+RDEPENDS:${PN}:append = " bash"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 EXTRA_OECONF:append = " --enable-t2api=yes --enable-cpc=yes"
@@ -51,12 +52,12 @@ PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
-FILES:${PN} += "${bindir}/rebootnow"
-FILES:${PN} += "${bindir}/update-prev-reboot-info"
-
 do_install:append() {
     install -d ${D}${bindir}
 
-    install -m 0755 ${B}/rebootnow ${D}${bindir}/
-    install -m 0755 ${B}/update-prev-reboot-info ${D}${bindir}/
+    install -m 0755 ${B}/src/rebootnow ${D}${bindir}/
+    install -m 0755 ${B}/src/update-prev-reboot-info ${D}${bindir}/
 }
+
+FILES:${PN} += "${bindir}/rebootnow"
+FILES:${PN} += "${bindir}/update-prev-reboot-info"
