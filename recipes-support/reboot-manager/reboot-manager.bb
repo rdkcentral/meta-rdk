@@ -16,7 +16,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
 SRC_URI:append = " ${RDKE_GITHUB_ROOT}/reboot-manager;${RDKE_GITHUB_SRC_URI_SUFFIX};module=.;name=rmcpc;destsuffix=git/src/rebootmanager-cpc"
 SRCREV_FORMAT = "rebootmanager"
-SRCREV_reboot-manager = "e2a5034ac38258edf73aae33965645e638cbeca4"
+SRCREV_reboot-manager = "40c229869161eaa5a1046faec35b5b98aec4b870"
 SRCREV_rmcpc = "6869a96fa9303d0087a52ab8153eeab35e44b63e"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
@@ -53,3 +53,10 @@ CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 FILES:${PN} += "${bindir}/rebootnow"
 FILES:${PN} += "${bindir}/update-prev-reboot-info"
+
+do_install:append() {
+    install -d ${D}${bindir}
+
+    install -m 0755 ${B}/rebootnow ${D}${bindir}/
+    install -m 0755 ${B}/update-prev-reboot-info ${D}${bindir}/
+}
