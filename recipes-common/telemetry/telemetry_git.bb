@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "git://github.com/rdkcentral/telemetry.git;protocol=https;branch=topic/RDK-60318"
 
-SRCREV = "08d9433a6e916db62dd216fd5ae18c028488d122"
+SRCREV = "31fbac5046415dab62658407d7180d4f3367097c"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
