@@ -52,12 +52,5 @@ PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
-do_install:append() {
-    install -d ${D}${bindir}
-
-    install -m 0755 ${B}/src/rebootnow ${D}${bindir}/
-    install -m 0755 ${B}/src/update-prev-reboot-info ${D}${bindir}/
-}
-
 FILES:${PN} += "${bindir}/rebootnow"
 FILES:${PN} += "${bindir}/update-prev-reboot-info"
