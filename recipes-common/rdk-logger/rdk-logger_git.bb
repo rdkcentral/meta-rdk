@@ -6,9 +6,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 S = "${WORKDIR}/git"
-SRCREV = "v2.3.0"
-PV = "2.3.0"
-PR = "r0"
+SRCREV = "v2.4.0"
+PV = "2.4.0"
+PR = "r1"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 
