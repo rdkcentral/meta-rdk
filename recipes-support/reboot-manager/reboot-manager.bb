@@ -16,8 +16,8 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
 SRC_URI:append = " ${RDKE_GITHUB_ROOT}/reboot-manager;${RDKE_GITHUB_SRC_URI_SUFFIX};module=.;name=rmcpc;destsuffix=git/src/rebootmanager-cpc"
 SRCREV_FORMAT = "rebootmanager"
-SRCREV_reboot-manager = "a45126131df3e6c4a9572b13b1173552382f19ec"
-SRCREV_rmcpc = "6869a96fa9303d0087a52ab8153eeab35e44b63e"
+SRCREV_reboot-manager = "59f583a9199f01fa70be7f318a9edfbc2e0f7dde"
+SRCREV_rmcpc = "23b65957ecc1fd69d291e206394119dadc470e7a"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
 S = "${WORKDIR}/git"
