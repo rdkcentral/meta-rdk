@@ -5,7 +5,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 PV = "1.2.9"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-SRCREV = "300d29e105f6a7244bff81fa0357dac914dd8913"
+SRCREV = "c613c0bd537704af56f7fdbf4a68a52edda1a64c"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
 
 SRCREV_FORMAT = "generic"
@@ -16,7 +16,7 @@ CFLAGS += " -Wall -Werror"
 
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
 
-DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper"
+DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper dcmd"
 DEPENDS:append:client = " iarmbus iarmmgrs"
 RDEPENDS:${PN}:append = " bash"
 RDEPENDS:${PN}:remove_morty = "bash"
