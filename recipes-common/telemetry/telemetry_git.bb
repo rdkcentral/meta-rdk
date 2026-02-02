@@ -4,9 +4,9 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRC_URI = "git://github.com/rdkcentral/telemetry.git;protocol=https;branch=topic/RDK-60318"
+SRC_URI = "git://github.com/rdkcentral/telemetry.git;protocol=https;branch=topic/RDK-60427"
 
-SRCREV = "3f8f32f5d31fcb60ef9da72c2151ef449eba18a9"
+SRCREV = "5d28a0cff28b6f89454597f0e434421be03b485c"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
