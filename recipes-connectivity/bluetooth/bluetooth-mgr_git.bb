@@ -4,10 +4,11 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-PV ?= "1.0.0"
-PR ?= "r0"
+PV = "1.0.8"
+PR = "r2"
 
 SRCREV_FORMAT = "bluetooth-mgr"
+SRCREV = "a3dc2dd172884a0606355c0c6b65a31edc13a816"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
@@ -84,8 +85,8 @@ CFLAGS:append =" ${@bb.utils.contains('RDEPENDS:${PN}', 'virtual/${MLPREFIX}medi
 ENABLE_RDK_LOGGER = "--enable-rdk-logger=${@bb.utils.contains('RDEPENDS:${PN}', '${MLPREFIX}rdk-logger', 'yes', 'no', d)}"
 EXTRA_OECONF += " ${ENABLE_RDK_LOGGER}"
 
-# Autoconnect feature enabled
-ENABLE_AUTO_CONNECT = "--enable-autoconnectfeature=${@bb.utils.contains('DISTRO_FEATURES', 'btr_enable_auto_connect','yes','no',d)}"
+# Autoconnect feature will always be enabled
+ENABLE_AUTO_CONNECT = "--enable-autoconnectfeature=yes"
 EXTRA_OECONF += " ${ENABLE_AUTO_CONNECT} "
 
 EXTRA_OECONF:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '--enable-systemd-notify', '', d)}"

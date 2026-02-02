@@ -1,0 +1,13 @@
+[Unit]
+Description=Broadband DAC (DSM)
+After=dobby.service rbus.service network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dsm
+WorkingDirectory=/home/root/
+Restart=no
+Environment="DSM_CONFIG_FILE=/etc/dsm.config"
+
+[Install]
+WantedBy=multi-user.target

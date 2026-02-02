@@ -1,0 +1,42 @@
+From b49d709fc2902abb7723c31c289a2141af8600c3 Mon Sep 17 00:00:00 2001
+From: Thomas Lea <thomas_lea@comcast.com>
+Date: Mon, 21 Sep 2020 08:56:02 -0500
+Subject: [PATCH] Added CMakeLists.txt
+Source: COMCAST
+Upstream-Status: Pending
+
+Signed-off-by: Thomas Lea <thomas_lea@comcast.com>
+---
+ CMakeLists.txt | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+index 0000000..2209ae3
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,21 @@
++cmake_minimum_required(VERSION 2.8)
++project(ccronexprd)
++
++add_definitions(-DCRON_USE_LOCAL_TIME)
++add_library(ccronexprd SHARED ccronexpr.c)
++
++target_include_directories(ccronexprd PUBLIC
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++    $<INSTALL_INTERFACE:include>
++)
++
++set_property(TARGET ccronexprd PROPERTY VERSION "1.0")
++
++install(TARGETS ccronexprd
++    ARCHIVE DESTINATION lib
++    LIBRARY DESTINATION lib
++    RUNTIME DESTINATION bin
++)
++
++install(FILES ccronexpr.h DESTINATION include)
++
+--
+2.25.1

@@ -6,6 +6,10 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=bef3b9130aa5d626df3f7171f2dadfe2"
 PACKAGECONFIG ??= "rfctool"
 PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
 
+PV = "1.2.1"
+PR = "r0"
+
+SRCREV = "5c94e13903e76ded4b0780ca5b3c0e358362b489"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
@@ -13,13 +17,14 @@ S = "${WORKDIR}/git"
 export cjson_CFLAGS = "-I$(PKG_CONFIG_SYSROOT_DIR)${includedir}/cjson"
 export cjson_LIBS = "-lcjson"
 
-DEPENDS="cjson curl commonutilities libsyswrapper iarmmgrs-hal-headers"
+DEPENDS="cjson curl commonutilities libsyswrapper"
+DEPENDS:append:client = " iarmmgrs-hal-headers"
 DEPENDS:append:broadband += " rbus"
 export rbus_CFLAGS = "-I$(PKG_CONFIG_SYSROOT_DIR)${includedir}/rbus"
 export rbus_LIBS = "-lrbus"
 
 EXTRA_OEMAKE += "-e MAKEFLAGS="
-EXTRA_OECONF:append = " --enable-iarmbus=yes --enable-tr69hostif=yes"
+EXTRA_OECONF:append:client = " --enable-iarmbus=yes --enable-tr69hostif=yes"
 EXTRA_OECONF:append:broadband = " --enable-rdkb=yes --enable-tr181set=yes"
 EXTRA_OEMAKE += "LIBS='-lsafec'"
 

@@ -4,6 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
+SRCREV = "b4171d7741714e1d003abf83c9b4763f7911dbea"
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -13,14 +14,16 @@ DEPENDS += "rdk-logger"
 RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
 
 
-PV ?= "1.0.1"
-PR ?= "r0"
+PV = "1.7.4"
+PR = "r0"
 
 S = "${WORKDIR}/git"
 
 #compiler warnings were fixed as part of RDK-55297
 #CFLAGS += " -Wall -Werror -Wextra -Wno-unused-parameter -Wno-pointer-sign -Wno-sign-compare -Wno-enum-compare -Wno-type-limits -Wno-enum-conversion -Wno-format-truncation"
 CFLAGS += " -Wall -Werror -Wextra"
+#FIXME, this is temporary workaround for broadband. It has to be verified and remove these suppression flags
+CFLAGS:append:broadband += " -DRDK_LOGGER -Wno-sign-compare -Wno-unused-parameter -Wno-pointer-sign"
 
 inherit pkgconfig autotools systemd ${@bb.utils.contains("DISTRO_FEATURES", "kirkstone", "python3native", "pythonnative", d)} breakpad-logmapper
 
