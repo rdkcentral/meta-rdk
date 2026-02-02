@@ -11,14 +11,11 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
 # SRCREV = "59925c3570c89347a8e05d852401db923337c495"
 
-# Topic Work - line with develop
-# SRCREV = "75db8702230bf3100ac790fa50e26cc24d8c5c63"
+# latest develop
+# SRCREV = "bb0b8390f55cb8f1e4267ac4aeb47488e6c73c14"
 
-# topic/RDK-59955
-SRCREV = "7ea3a17e054a48f1cb06bce02efa58aaba8c15d0"
-
-# Previous Reboot + Ratelimit
-#SRCREV = "7a2344091ad2a9e19edd0b73b1da01cc49ee4bfe"
+# rate-limit + previous fw check
+SRCREV = "c49e5485cb0c6d1c570357d28bcbc7f08e435345"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
