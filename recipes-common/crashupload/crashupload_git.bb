@@ -9,13 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-# SRCREV = "59925c3570c89347a8e05d852401db923337c495"
-
-# latest develop
-# SRCREV = "bb0b8390f55cb8f1e4267ac4aeb47488e6c73c14"
-
-# rate-limit + previous fw check
-SRCREV = "c49e5485cb0c6d1c570357d28bcbc7f08e435345"
+# SRCREV = "a7521a8110cfef623f511e4cb0dfb4626bd98557"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
