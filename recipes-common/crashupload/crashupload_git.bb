@@ -9,7 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-# SRCREV = "a7521a8110cfef623f511e4cb0dfb4626bd98557"
+SRCREV = "a7521a8110cfef623f511e4cb0dfb4626bd98557"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
