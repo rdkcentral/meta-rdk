@@ -64,8 +64,8 @@ DISTRO_FEATURES:append = " safec"
 DISTRO_FEATURES:append = " webconfig_bin"
 
 
-PREFERRED_VERSION_bluez5_dunfell ?= "5.54"
-PREFERRED_VERSION_bluez5:kirkstone ?= "5.48"
+#PREFERRED_VERSION_bluez5_dunfell ?= "5.54"
+#PREFERRED_VERSION_bluez5:kirkstone ?= "5.48"
 DISTRO_FEATURES:append = " logendpoints"
 DISTRO_FEATURES:remove_morty = " logendpoints"
 
