@@ -20,7 +20,6 @@ export LINK = "${LD}"
 CFLAGS:append = " \
                 -I=${libdir}/glib-2.0/include \
                 -I=${includedir}/glib-2.0 \
-                -DLIBRDKCERTSELECTOR \
                 -DRFC_API_ENABLED \
                 -DT2_EVENT_ENABLED \
                 -DRDK_LOGGER \
@@ -31,19 +30,16 @@ export GLIBS = "-lglib-2.0 -lz"
 export USE_DBUS = "y"
 
 LDFLAGS:append = " -Wl,-O1"
-LDFLAGS:append = " -lrfcapi -ltelemetry_msgsender -lRdkCertSelector -lrdkconfig"
+LDFLAGS:append = " -lrfcapi -ltelemetry_msgsender"
 
 inherit autotools systemd coverity pkgconfig
 
 DEPENDS:append:client = " \
-                        curl \
                         openssl \
-                        zlib \
                         libarchive \
                         libsyswrapper \
                         rdk-logger \
                         commonutilities \
-                        rdkcertconfig \
                         rfc \
                         telemetry \
                         "
@@ -85,4 +81,3 @@ FILES:${PN}:append:client = " ${bindir}/crashupload"
 FILES:${PN}:append = " ${base_libdir}/rdk/uploadDumps.sh"
 FILES:${PN}:append = " ${base_libdir}/rdk/runDumpUpload.sh"
 FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"
-
