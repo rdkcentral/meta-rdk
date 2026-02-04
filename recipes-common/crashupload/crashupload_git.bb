@@ -37,7 +37,6 @@ inherit autotools systemd coverity pkgconfig
 DEPENDS:append:client = " \
                         openssl \
                         libarchive \
-                        libsyswrapper \
                         rdk-logger \
                         commonutilities \
                         rfc \
