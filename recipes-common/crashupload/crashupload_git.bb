@@ -30,7 +30,7 @@ CFLAGS:append = " \
 export GLIBS = "-lglib-2.0 -lz"
 export USE_DBUS = "y"
 
-LDFLAGS:append = "-Wl,-O1"
+LDFLAGS:append = " -Wl,-O1"
 LDFLAGS:append = " -lrfcapi -ltelemetry_msgsender -lRdkCertSelector -lrdkconfig"
 
 inherit autotools systemd coverity pkgconfig
