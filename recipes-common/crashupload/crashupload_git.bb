@@ -9,7 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "d62af2db9d7748268353476fcda95c3b342c5428"
+SRCREV = "e19a482c0de583c45eac1e74d30f2804362e710f"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -30,7 +30,6 @@ export GLIBS = "-lglib-2.0 -lz"
 export USE_DBUS = "y"
 
 LDFLAGS:append = " -Wl,-O1"
-LDFLAGS:append = " -lrfcapi -ltelemetry_msgsender"
 
 inherit autotools systemd coverity pkgconfig
 
