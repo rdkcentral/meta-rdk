@@ -141,3 +141,7 @@ DISTRO_FEATURES:append = " ENABLE_NETWORKMANAGER"
 
 #Distro feature for WPEFramework SecurityUtility Disable
 DISTRO_FEATURES:append = " wpe_security_util_disable"
+
+#RDK-SSA Generic daemon and ca provider with PKCS11 support
+DISTRO_FEATURES:remove = "ssacertifier"
+DISTRO_FEATURES:append = " rdkvgenericssa"
