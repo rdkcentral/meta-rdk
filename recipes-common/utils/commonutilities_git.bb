@@ -3,7 +3,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=24691c8ce48996ecd1102d29eab1216e"
 
 # To have a possibility to override SRC_URI later, we are introducing the following workaround:
-SRCREV = "0244fc75ecca201b34e02ca4cc4c63523144384b"
+SRCREV = "aea4d385f7358ea3d6d5952a985577101db52ddc"
 SRC_URI = "${CMF_GITHUB_ROOT}/common_utilities;module=.;${CMF_GITHUB_SRC_URI_SUFFIX}"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
@@ -25,7 +25,7 @@ LDFLAGS:append = " -lsafec -lsecure_wrapper"
 CFLAGS:append = " -DRDK_LOGGER"
 
 PV = "1.5.0"
-PR = "r0"
+PR = "r1"
 
 S = "${WORKDIR}/git"
 
