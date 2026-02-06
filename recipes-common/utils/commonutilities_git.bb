@@ -24,7 +24,7 @@ LDFLAGS:append = " -lsafec -lsecure_wrapper"
 
 CFLAGS:append = " -DRDK_LOGGER"
 
-PV = "1.5.0"
+PV = "1.5.1"
 PR = "r1"
 
 S = "${WORKDIR}/git"
