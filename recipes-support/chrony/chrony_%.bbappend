@@ -1,9 +1,9 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 
-SRC_URI += "
-            file://chronyd.service \
-            "
+SRC_URI += "file://chronyd.service"
+            
+            
 
 do_install:append() {
     # Binaries
