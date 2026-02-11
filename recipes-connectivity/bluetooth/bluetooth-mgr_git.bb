@@ -36,9 +36,6 @@ EXTRA_OECONF:append:hybrid = " --enable-rpc"
 DEPENDS += " fcgi"
 DEPENDS += " rfc"
 
-#DEPENDS += " telemetry"
-#RDEPENDS:${PN} += " telemetry"
-
 DEPENDS += " rdk-logger"
 RDEPENDS:${PN} += " rdk-logger"
 
