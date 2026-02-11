@@ -183,11 +183,27 @@ static int chrony_socket_get_offset(double *offset_sec) {
 }
 
 static int chrony_socket_add_server(const char *address) {
-    (void)address;
-    // Implementing ADD_SOURCE is complex due to the large struct.
-    // For now we return error or log not implemented efficiently.
-    fprintf(stderr, "[ChronySocket] add_server not fully implemented in this turbo driver\n");
-    return -1;
+    CMD_Request req;
+    CMD_Reply reply;
+
+    memset(&req, 0, sizeof(req));
+    // Use the correct command constant from candm.h
+    req.command = htons(REQ_ADD_SOURCE);
+
+    // Copy the server address to the payload. Use the actual structure field from candm.h
+    // Replace 64 with the size of .name in your ADD_SOURCE struct.
+    strncpy(req.data.add_source.name, address, sizeof(req.data.add_source.name) - 1);
+    req.data.add_source.name[sizeof(req.data.add_source.name) - 1] = '\0';
+
+    // Other req.data.add_source fields can be zeroed for default settings.
+
+    if (send_request_and_get_reply(&req, &reply) != 0) {
+        fprintf(stderr, "[ChronySocket] Failed to add server: %s\n", address);
+        return -1;
+    }
+
+    printf("[ChronySocket] Added server: %s\n", address);
+    return 0;
 }
 
 static void chrony_socket_close(void) {
