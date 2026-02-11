@@ -7,7 +7,7 @@ SRC_URI += "file://chronyd.service"
 
 do_install:append() {
     # Binaries
-     install -d ${D}${base_libdir}/rdk
+     #install -d ${D}${base_libdir}/rdk
     install -m 0755 ${S}/chronyc ${D}${sbindir}
 
     #config File
