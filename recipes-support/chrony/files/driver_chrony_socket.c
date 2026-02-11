@@ -192,11 +192,10 @@ static int chrony_socket_add_server(const char *address) {
 
     // Copy the server address to the payload. Use the actual structure field from candm.h
     // Replace 64 with the size of .name in your ADD_SOURCE struct.
-    strncpy(req.data.add_source.name, address, sizeof(req.data.add_source.name) - 1);
-    req.data.add_source.name[sizeof(req.data.add_source.name) - 1] = '\0';
+    strncpy(req.data.ntp_source.name, address, sizeof(req.data.ntp_source.name) - 1);
+    req.data.ntp_source.name[sizeof(req.data.ntp_source.name) - 1] = '\0';
 
-    // Other req.data.add_source fields can be zeroed for default settings.
-
+    
     if (send_request_and_get_reply(&req, &reply) != 0) {
         fprintf(stderr, "[ChronySocket] Failed to add server: %s\n", address);
         return -1;
