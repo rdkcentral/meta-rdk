@@ -1,6 +1,7 @@
 [Unit]
 Description=NTP client/server
 Documentation=man:chronyd(8) man:chrony.conf(5)
+After=sntp.service ntpdate.service
 Conflicts=systemd-timesyncd.service
 ConditionCapability=CAP_SYS_TIME
 
