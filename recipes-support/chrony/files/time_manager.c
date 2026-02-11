@@ -15,13 +15,14 @@ void handle_step_req()
 
 void handle_offset_req()
 {
+    int offset;
     printf("This is a handler for offset req\n");
     if (driver->get_offset(&offset) == 0) {
     printf("[Daemon] Current Offset: %.9f seconds\n", offset);
     }
 }
 
-void handle_add_Server_req()
+void handle_add_server_req()
 {
     printf("This is a handler for adding New Server\n");
     const char *new_server = "time.google.com";
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]) {
     driver = &chrony_driver_socket;
 
     signal(SIGUSR1, handle_offset_req);
-    #signal(SIGUSR2, handle_step_req);
+    //signal(SIGUSR2, handle_step_req);
     signal(SIGUSR2, handle_add_server_req);
     if (driver->init() != 0) {
         fprintf(stderr, "Failed to initialize driver %s\n", driver->name);
@@ -63,9 +64,9 @@ int main(int argc, char *argv[]) {
         }
 
         sleep(5);
-        */
+        
     }
-
+*/
     driver->close();
     return 0;
 }
