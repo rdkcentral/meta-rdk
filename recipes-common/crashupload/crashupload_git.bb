@@ -9,7 +9,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "bfcf858ee17c28683a4790001dcb31319d2f21da"
+SRCREV = "eb311c0ac60d5fa85adff41ee38078b09435ec14"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
@@ -24,12 +24,14 @@ CFLAGS:append = " \
                 -DT2_EVENT_ENABLED \
                 -DRDK_LOGGER \
                 -DUSE_EXTENDED_LOGGER_INIT \
+                -DRBUS_API_ENABLED \
                 "
 
 export GLIBS = "-lglib-2.0 -lz"
 export USE_DBUS = "y"
 
 LDFLAGS:append = " -Wl,-O1"
+LDFLAGS:append = " -lrbus"
 
 inherit autotools systemd coverity pkgconfig
 
