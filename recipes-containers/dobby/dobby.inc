@@ -1,4 +1,4 @@
-SRC_URI = "gitsm://github.com/ks734/Dobby;protocol=https;branch=topic/RDKEMW-10995"
+SRC_URI = "gitsm://github.com/rdkcentral/Dobby;protocol=https;branch=release/v3.16"
 
-PV = "3.16.0+git${SRCPV}"
-SRCREV = "e100580926cd14757b2492ab4cd86c6ff8a3db18"
+PV = "3.16.1+git${SRCPV}"
+SRCREV = "d54ef816b97ddc8dcd72d4c4ff485f486500e361"
