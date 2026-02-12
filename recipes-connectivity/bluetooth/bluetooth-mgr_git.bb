@@ -29,7 +29,7 @@ EXTRA_OECONF += " ${ENABLE_SAFEC}"
 
 #ENABLE_BRCM_PCM_SINK = "--enable-brcm-build=${@bb.utils.contains('DISTRO_FEATURES', 'btr_bcm_pcm_sink','yes', 'no', d)}"
 #EXTRA_OECONF += " ${ENABLE_BRCM_PCM_SINK}"
-EXTRA_OECONF += "--enable-brcm-build=yes"
+EXTRA_OECONF += " --enable-brcm-build=yes"
 
 # RPC-IARM Must be Enabled for Video Platforms only; Also iarmbus is dependency for Video Platforms
 DEPENDS:append:client = " iarmbus ${@bb.utils.contains('DISTRO_FEATURES', 'ENABLE_NETWORKMANAGER', '', 'netsrvmgr', d)}"
