@@ -24,8 +24,6 @@ CFLAGS += " -Wall -Werror -Wextra"
 
 inherit pkgconfig autotools systemd ${@bb.utils.contains("DISTRO_FEATURES", "kirkstone", "python3native", "pythonnative", d)} breakpad-logmapper
 
-CFLAGS += " -DDROP_ROOT_PRIV "
-
 LDFLAGS:append = " \
         -lbreakpadwrapper \
         -lpthread \
