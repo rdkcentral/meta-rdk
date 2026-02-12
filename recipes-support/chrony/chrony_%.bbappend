@@ -1,18 +1,20 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 
-SRC_URI += "file://chronyd.service \
+SRC_URI += "
            file://chrony.conf \
+           file://chrony_Envfile \
            "
          
 
 do_install:append() {
     # Binaries
     install -m 0755 ${S}/chronyc ${D}${sbindir}
+    install -m 0755 ${S}/chrony_Envfile ${D}${sysconfdir}/default/chronyd
 
 
     #config File
-    install -m 644 ${WORKDIR}/chrony.conf ${D}${sbindir}
+    install -m 644 ${WORKDIR}/chrony.conf ${D}${sysconfdir}
 
     # service to start chrony
     #rm ${D}${systemd_unitdir}/system/chronyd.service
