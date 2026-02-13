@@ -1,9 +1,8 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 
-SRC_URI += "
-           file://chrony.conf \
-           file://chrony_Envfile \
+SRC_URI += "file://chrony.conf \
+            file://chrony_Envfile \
            "
          
 
