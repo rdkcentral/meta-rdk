@@ -10,7 +10,7 @@ Type=forking
 PIDFile=/run/chrony/chronyd.pid
 ExecStartPre=/bin/sh -c '/bin/mkdir -p /var/lib/chrony'
 ExecStartPre=/bin/sh -c '/lib/rdk/logMilestone.sh "STARTING_CHRONYD"' #TBD
-ExecStart=/usr/sbin/chronyd -r -f /opt/chrony.conf  #TBD
+ExecStart=/usr/sbin/chronyd -r -f /etc/default/chrony.conf  #TBD
 ExecStartPost=/bin/sh -c '/lib/rdk/logMilestone.sh "NTP_CLIENT_STARTED"' 
 
 [Install]
