@@ -12,20 +12,19 @@ do_install:append() {
     install -d ${D}${sysconfdir}/default
     install -m 0755 ${WORKDIR}/chrony_Envfile ${D}${sysconfdir}/default/chronyd  #(TBD- review permissions)
 
-
     #config File
-    install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}
+    install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/default/chrony.conf
 
     # service to start chrony
-    #rm ${D}${systemd_unitdir}/system/chronyd.service
-    #install -m 0644 ${WORKDIR}/chronyd.service ${D}${systemd_unitdir}/system/
+    rm ${D}${systemd_unitdir}/system/chronyd.service
+    install -m 0644 ${WORKDIR}/chronyd.service ${D}${systemd_unitdir}/system/
 
 }
 
 FILES:${PN} += "${sbindir}/chronyc"
-CONFFILES:${PN} = "${sysconfdir}/chrony.conf"
+CONFFILES:${PN} = "${sysconfdir}/default/chrony.conf"
 
-#SYSTEMD_SERVICE:${PN} += "chronyd.service"
+SYSTEMD_SERVICE:${PN} += "chronyd.service"
 
 
 inherit syslog-ng-config-gen
