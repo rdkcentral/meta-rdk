@@ -9,7 +9,8 @@ SRC_URI += "file://chrony.conf \
 do_install:append() {
     # Binaries
     install -m 0755 ${S}/chronyc ${D}${sbindir}
-    install -m 0755 ${WORKDIR}/chrony_Envfile ${D}${sysconfdir}/default/chronyd
+    install -d ${D}${sysconfdir}/default
+    install -m 0755 ${WORKDIR}/chrony_Envfile ${D}${sysconfdir}/default/chronyd  #(TBD- review permissions)
 
 
     #config File
