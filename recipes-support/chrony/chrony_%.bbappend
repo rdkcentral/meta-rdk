@@ -2,18 +2,18 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 
 SRC_URI += "file://chrony.conf \
-            file://chrony_Envfile \
+            file://chronyd.service \
+            file://rdk_chrony.conf \
            "
-         
 
 do_install:append() {
     # Binaries
     install -m 0755 ${S}/chronyc ${D}${sbindir}
-    install -d ${D}${sysconfdir}/default
-    install -m 0755 ${WORKDIR}/chrony_Envfile ${D}${sysconfdir}/default/chronyd  #(TBD- review permissions)
 
     #config File
-    install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/default/chrony.conf
+    rm ${D}${sysconfdir}/chrony.conf 
+    install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/
+    install -m 755 ${WORKDIR}/rdk_chrony.conf ${D}${sysconfdir}/
 
     # service to start chrony
     rm ${D}${systemd_unitdir}/system/chronyd.service
@@ -22,7 +22,8 @@ do_install:append() {
 }
 
 FILES:${PN} += "${sbindir}/chronyc"
-CONFFILES:${PN} = "${sysconfdir}/default/chrony.conf"
+CONFFILES:${PN} += "${sysconfdir}/default/chrony.conf"
+CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
 
