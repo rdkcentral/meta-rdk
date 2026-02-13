@@ -14,7 +14,7 @@ do_install:append() {
 
 
     #config File
-    install -m 644 ${WORKDIR}/chrony.conf ${D}${sysconfdir}
+    install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}
 
     # service to start chrony
     #rm ${D}${systemd_unitdir}/system/chronyd.service
