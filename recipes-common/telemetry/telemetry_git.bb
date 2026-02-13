@@ -55,6 +55,7 @@ do_install:append () {
 FILES:${PN} = "\
     ${bindir}/telemetry2_0 \
     ${bindir}/telemetry2_0_client \
+    ${bindir}/curl_leak_test \
     ${systemd_unitdir}/system \
 "
 FILES:${PN} += "${libdir}/*.so*"
