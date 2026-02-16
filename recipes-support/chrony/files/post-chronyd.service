@@ -1,0 +1,12 @@
+[Unit]
+Description=Notify when Chrony time sync is completed
+Documentation=man:chronyc(1)
+After=chronyd.service
+Requires=chronyd.service
+
+[Service]
+Type=oneshot
+ExecStart=/lib/rdk/chrony-sync-notify.sh
+
+[Install]
+WantedBy=multi-user.target
