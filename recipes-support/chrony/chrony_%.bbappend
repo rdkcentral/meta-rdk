@@ -29,7 +29,7 @@ do_install:append() {
 
 FILES:${PN} += "${sbindir}/chronyc"
 FILES:${PN} += "${base_libdir}/rdk/chrony-sync-notify.sh"
-CONFFILES:${PN} += "${sysconfdir}/default/chrony.conf"
+CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
