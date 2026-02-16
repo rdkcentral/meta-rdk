@@ -8,7 +8,7 @@ PV = "1.0.8"
 PR = "r2"
 
 SRCREV_FORMAT = "bluetooth-mgr"
-SRCREV = "970dd08f07f5b04114777f8e43c46dde4d5238ea"
+SRCREV = "a3dc2dd172884a0606355c0c6b65a31edc13a816"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
