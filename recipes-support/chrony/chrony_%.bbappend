@@ -22,7 +22,7 @@ do_install:append() {
 }
 
 FILES:${PN} += "${sbindir}/chronyc"
-CONFFILES:${PN} += "${sysconfdir}/default/chrony.conf"
+CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
