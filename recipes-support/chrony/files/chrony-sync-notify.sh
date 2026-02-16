@@ -1,0 +1,53 @@
+#!/bin/sh
+
+LOG_TAG="chrony-first-sync"
+NTP_DIR="/tmp/systimemgr"
+NTP_FILE="$NTP_DIR/ntp"
+CLOCK_EVENT="/tmp/clock-event"
+SYSTEMD_CLOCK="/var/lib/systemd/clock" #TBD
+
+log() {
+    echo "$1"
+}
+
+milestone() {
+    sh /lib/rdk/logMilestone.sh "$1"
+}
+
+is_synced() {
+    chronyc tracking 2>/dev/null | grep -q "Leap status *: Normal"
+}
+
+
+# Wait for sync only if not already synced
+if is_synced; then
+    log "Chrony already synchronised"
+else
+    log "Waiting for Chrony synchronisation..."
+    chronyc waitsync 0 0.0 0.0 0.1 || {
+        log "waitsync failed"
+        exit 1
+    }
+fi
+
+log "Chrony Sync Done"
+
+touch "$CLOCK_EVENT" && log "Created $CLOCK_EVENT"
+milestone "CLOCK_EVENT_CREATED"
+
+# Create required directory
+if [ ! -d "$NTP_DIR" ]; then
+    log "Creating $NTP_DIR"
+    mkdir -p "$NTP_DIR"
+fi
+
+# Create flag files
+touch "$NTP_FILE" && log "Created $NTP_FILE"
+milestone "SYSTIMEMGR_NTP_CREATED"
+
+touch "$SYSTEMD_CLOCK" && log "Created $SYSTEMD_CLOCK"
+milestone "SYSTEMD_CLOCK_CREATED"
+
+echo "Synchronized" > /tmp/ntp_status
+
+exit 0
