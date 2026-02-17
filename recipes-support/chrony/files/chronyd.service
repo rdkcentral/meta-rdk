@@ -1,7 +1,8 @@
 [Unit]
 Description=NTP client/server
 Documentation=man:chronyd(8) man:chrony.conf(5)
-#After=var-lib.mount nvram.service
+wants=network-up.target
+After=network-up.target
 Conflicts=systemd-timesyncd.service
 ConditionCapability=CAP_SYS_TIME
 
