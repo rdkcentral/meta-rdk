@@ -9,4 +9,4 @@ Type=oneshot
 ExecStart=/lib/rdk/chrony-sync-notify.sh
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=chronyd.service
