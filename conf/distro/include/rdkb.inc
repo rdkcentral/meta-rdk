@@ -204,7 +204,7 @@ SRCREV:pn-crashupload = "8e7e22d2cb988ea58b9ba9d85b8b0812c6dc77d2"
 SRCREV:pn-rdkcertconfig = "e0e35743f7e96ad0595ac25b11d829b766f7062b"
 SRCREV_caupdate = "9859720a8748331038e5476321cf039e7d17c5f1"
 #topic branch - rdk-ca-store
-SRCREV_rdk-ca-store = "378b7d149a0a0c71be7eb41c0ac0fc79a3ca1cf9"
+#SRCREV_rdk-ca-store = "378b7d149a0a0c71be7eb41c0ac0fc79a3ca1cf9"
 #topic branch - ssacpc
 SRCREV_ssacpc = "a80a17d26cb141b7aac3443e981c42c7d3092673"
 #topic branch -cedmcpc
