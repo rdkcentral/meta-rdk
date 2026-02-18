@@ -13,7 +13,7 @@ SRC_URI += " file://0001-RDK-54059-retry-ptrace-seize-on-EPERM.patch"
 
 INSANE_SKIP:${PN} += "ldflags"
 
-PV = "1.0.2"
+PV = "1.0.4"
 PR = "r0"
 # Code base from 14.01.2026
 SRCREV = "82f4d70a58789068453adbdd5ef039f2570d349a"
