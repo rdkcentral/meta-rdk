@@ -1,81 +1,62 @@
-SUMMARY = "Crash Upload Utility for RDK Platforms"
+SUMMARY = "Crashupload application"
 SECTION = "console/utils"
 
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://../LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-PV = "2.0.0"
+PV = "1.0.7"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "e4b80deef60735bfa3ed3cfe2766554c97a91e0b"
-
-S = "${WORKDIR}/git/c_sourcecode"
+# To have a possibility to override SRC_URI later, we are introducing the following workaround:
+CRASHUPLOAD_SRC_URI ?= "${RDK_GENERIC_ROOT_GIT}/crashupload/generic;module=.;protocol=${RDK_GIT_PROTOCOL};branch=${RDK_GIT_BRANCH}"
+SRCREV = "8e7e22d2cb988ea58b9ba9d85b8b0812c6dc77d2"
+SRC_URI = "${CMF_GITHUB_ROOT}/crashupload;${CMF_GITHUB_SRC_URI_SUFFIX};module=."
+S = "${WORKDIR}/git"
 
 DEPENDS = "glib-2.0 libsyswrapper"
 
 export LINK = "${LD}"
 
-CFLAGS:append = " \
-                -I=${libdir}/glib-2.0/include \
-                -I=${includedir}/glib-2.0 \
-                -DRFC_API_ENABLED \
-                -DT2_EVENT_ENABLED \
-                -DRDK_LOGGER \
-                -DUSE_EXTENDED_LOGGER_INIT \
-                "
+CFLAGS += " \
+        -I=${libdir}/glib-2.0/include \
+        -I=${includedir}/glib-2.0 \
+        "
 
 export GLIBS = "-lglib-2.0 -lz"
 export USE_DBUS = "y"
 
-LDFLAGS:append = " -Wl,-O1"
+LDFLAGS += "-Wl,-O1"
 
-inherit autotools systemd coverity pkgconfig
-
-DEPENDS:append:client = " \
-                        openssl \
-                        libarchive \
-                        rdk-logger \
-                        commonutilities \
-                        rfc \
-                        telemetry \
-                        "
+inherit coverity
+inherit systemd
 
 do_install() {
         install -d ${D}${base_libdir}/rdk
         install -d ${D}${sysconfdir} ${D}${sysconfdir}/rfcdefaults
-        install -m 0755 ${WORKDIR}/git/uploadDumps.sh ${D}${base_libdir}/rdk
-        install -m 0755 ${WORKDIR}/git/runDumpUpload.sh ${D}${base_libdir}/rdk
-}
-
-do_install:append:client() {
-        install -d ${D}${bindir}
-        install -m 0755 ${B}/src/crashupload ${D}${bindir}/crashupload
+        install -m 0755 ${S}/uploadDumps.sh ${D}${base_libdir}/rdk
 }
 
 do_install:append:broadband() {
         use_sysv="${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'false', 'true', d)}"
         $use_sysv || install -d ${D}${systemd_unitdir}/system
-        $use_sysv || install -m 0644 ${WORKDIR}/git/coredump-upload.service ${D}${systemd_unitdir}/system/
-        $use_sysv || install -m 0644 ${WORKDIR}/git/coredump-upload.path ${D}${systemd_unitdir}/system/
-        $use_sysv || install -m 0644 ${WORKDIR}/git/minidump-on-bootup-upload.service ${D}${systemd_unitdir}/system/
-        $use_sysv || install -m 0644 ${WORKDIR}/git/minidump-on-bootup-upload.timer ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${S}/coredump-upload.service ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${S}/coredump-upload.path ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${S}/minidump-on-bootup-upload.service ${D}${systemd_unitdir}/system/
+        $use_sysv || install -m 0644 ${S}/minidump-on-bootup-upload.timer ${D}${systemd_unitdir}/system/
         install -d ${D}${sysconfdir}
-        install -m 0755 ${WORKDIR}/git/uploadDumpsUtils.sh ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/uploadDumpsUtils.sh ${D}${base_libdir}/rdk
 }
 
 SYSTEMD_SERVICE:${PN}:append:broadband = " coredump-upload.service \
                                            coredump-upload.path \
                                            minidump-on-bootup-upload.service \
                                            minidump-on-bootup-upload.timer \
-                                         "
-
-RDEPENDS:${PN} += "busybox commonutilities"
+"
+RDEPENDS:${PN} += "busybox"
 
 PACKAGE_BEFORE_PN += "${PN}-conf"
 
-FILES:${PN}:append:client = " ${bindir}/crashupload"
-FILES:${PN}:append = " ${base_libdir}/rdk/uploadDumps.sh"
-FILES:${PN}:append = " ${base_libdir}/rdk/runDumpUpload.sh"
+FILES:${PN} += "${base_libdir}/rdk/uploadDumps.sh"
+
 FILES:${PN}:append:broadband = " ${base_libdir}/rdk/uploadDumpsUtils.sh"

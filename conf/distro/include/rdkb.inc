@@ -200,17 +200,13 @@ IMAGE_CLASSES:remove = " post-rootfs-hooks "
 
 SRCREV:pn-libsyswrapper = "5143ba5b92f5dc77b436837d51f2f612d5846b7b"
 SRCREV_rdk-libunpriv = "a0dbea7d368a630158abf56ef8bd7f3855910ec5"
-SRCREV:pn-telemetry = "0d73470cc038f1e47ffee483a7d05e51bf88751e"
 SRCREV:pn-crashupload = "8e7e22d2cb988ea58b9ba9d85b8b0812c6dc77d2"
-SRCREV:pn-commonutilities = "071361f284ba9049bf7d8cb9a75b583b9b1e353b"
-SRCREV:pn-rfc = "b6da366e704a006394b33759f144c0a4256fd335"
 SRCREV:pn-rdkcertconfig = "e0e35743f7e96ad0595ac25b11d829b766f7062b"
 SRCREV_caupdate = "9859720a8748331038e5476321cf039e7d17c5f1"
 #topic branch - rdk-ca-store
 SRCREV_rdk-ca-store = "378b7d149a0a0c71be7eb41c0ac0fc79a3ca1cf9"
-SRCREV:pn-sslcerts = "2d3ef2f7c1b54c7552cac2ab1e41f1ce3871c3d6"
 #topic branch - ssacpc
-SRCREV_ssacpc = "f238816d57f9956d1ddcd6754b170eafec0ec47e"
+SRCREV_ssacpc = "a80a17d26cb141b7aac3443e981c42c7d3092673"
 #topic branch -cedmcpc
 SRCREV_cedmcpc = "a82a07c5c2639a81d4bcd2e2d665ce06c999019c"
 SRCREV_ecfsgeneric= "822d726d14e575ec9c73198ce939733abd0d365b"

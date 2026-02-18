@@ -5,19 +5,20 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 PV = "1.2.9"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-SRCREV = "c613c0bd537704af56f7fdbf4a68a52edda1a64c"
+#SRCREV = "c613c0bd537704af56f7fdbf4a68a52edda1a64c"
+SRCREV = "d7901687ace0dd13c04b5aced6e3a57bf17953f7"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
 
 SRCREV_FORMAT = "generic"
 # Release version - 1.3.1
 S = "${WORKDIR}/git"
 
-CFLAGS += " -Wall -Werror"
+CFLAGS += " -Wall -Werror -Wno-format"
 
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
 
-DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper dcmd"
-DEPENDS:append:client = " iarmbus iarmmgrs"
+DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper "
+DEPENDS:append:client = " iarmbus iarmmgrs dcmd"
 RDEPENDS:${PN}:append = " bash"
 RDEPENDS:${PN}:remove_morty = "bash"
 
