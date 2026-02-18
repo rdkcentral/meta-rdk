@@ -28,10 +28,10 @@ SYSLOG-NG_LOGRATE_reboot-reason = "low"
 LOGROTATE_NAME="reboot_reason"
 LOGROTATE_LOGNAME_reboot_reason="rebootreason.log"
 #HDD_ENABLE
-LOGROTATE_SIZE_reboot_reason="10240"
+LOGROTATE_SIZE_reboot_reason="1572864"
 LOGROTATE_ROTATION_reboot_reason="3"
 #HDD_DISABLE
-LOGROTATE_SIZE_MEM_reboot_reason="10240"
+LOGROTATE_SIZE_MEM_reboot_reason="1572864"
 LOGROTATE_ROTATION_MEM_reboot_reason="3"
 
 DEPENDS += "commonutilities telemetry rbus"
