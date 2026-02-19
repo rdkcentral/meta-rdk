@@ -43,7 +43,7 @@ EXTRA_OECONF:append = " --enable-t2api=yes --enable-cpc=yes"
 # generating minidumps symbols
 inherit breakpad-wrapper
 DEPENDS += "breakpad breakpad-wrapper"
-BREAKPAD_BIN:append = "reboot-manager"
+BREAKPAD_BIN:append = " reboot-manager"
 PACKAGECONFIG:append = " breakpad"
 PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 
