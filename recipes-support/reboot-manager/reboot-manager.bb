@@ -4,7 +4,6 @@
 
 DESCRIPTION = "reboot-manager: Updating RebootInfo Reason"
 SECTION = "reboot-manager"
-LICENSE = "Apache-2.0"
 
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
