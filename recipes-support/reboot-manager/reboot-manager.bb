@@ -5,7 +5,6 @@
 DESCRIPTION = "reboot-manager: Updating RebootInfo Reason"
 SECTION = "reboot-manager"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=1234567890abcdef1234567890abcdef"
 
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
