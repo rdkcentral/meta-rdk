@@ -14,7 +14,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "f982182c7dc79a670a77eba8d23e6493d4b407bc"
+SRCREV_reboot-manager = "d4f3ca531e45c4251770b38590eaaeb1e448aef0"
 
 S = "${WORKDIR}/git"
 
