@@ -5,7 +5,7 @@ S = "${WORKDIR}/git"
 PV = "1.0.2"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-SRCREV_rdk-libunpriv = "4b06c668ed224f2f8373ce64d3aab31c1a7fc4ef"
+SRCREV_rdk-libunpriv = "810b357f41605d9c3e09d2c47f9f3365da1b3b76"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk-libunpriv.git;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdk-libunpriv"
 
 SRCREV_FORMAT = "rdk-libunpriv"
