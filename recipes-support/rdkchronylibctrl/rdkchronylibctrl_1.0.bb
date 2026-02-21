@@ -1,3 +1,4 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SUMMARY = "Chrony Control Shared Library"
 DESCRIPTION = "A thread-safe library to control chronyd via its binary protocol"
 LICENSE = "CLOSED"
