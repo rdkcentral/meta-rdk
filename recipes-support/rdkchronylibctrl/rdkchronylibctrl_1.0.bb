@@ -5,10 +5,10 @@ LICENSE = "CLOSED"
 #LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = " \
-    file://src/libchronyctl.c \
-    file://include/libchronyctl.h \
-    file://include/candm.h \
-    file://include/addressing.h \
+    file://libchronyctl.c \
+    file://libchronyctl.h \
+    file://candm.h \
+    file://addressing.h \
 "
 
 S = "${WORKDIR}"
