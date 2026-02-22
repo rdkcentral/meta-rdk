@@ -16,7 +16,7 @@ S = "${WORKDIR}"
 # Compilation directly in the recipe
 do_compile() {
     ${CC} ${CFLAGS} ${LDFLAGS} -Wl,-soname,libchronyctl.so -shared \
-        -I${S}/include ${S}/src/libchronyctl.c -o ${B}/libchronyctl.so -lpthread -lm
+        -I${S}/include ${S}/libchronyctl.c -o ${B}/libchronyctl.so -lpthread -lm
 }
 
 do_install() {
