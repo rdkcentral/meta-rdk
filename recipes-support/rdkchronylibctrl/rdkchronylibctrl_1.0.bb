@@ -24,7 +24,7 @@ do_install() {
     install -m 0755 ${B}/libchronyctl.so ${D}${libdir}
     
     install -d ${D}${includedir}
-    install -m 0644 ${S}/include/libchronyctl.h ${D}${includedir}
+    install -m 0644 ${S}/libchronyctl.h ${D}${includedir}
 }
 
 FILES:${PN} = "${libdir}/libchronyctl.so"
