@@ -9,6 +9,7 @@ SRC_URI = " \
     file://libchronyctl.h \
     file://candm.h \
     file://addressing.h \
+    file://test_chronyctl.c \
 "
 
 S = "${WORKDIR}"
@@ -17,6 +18,9 @@ S = "${WORKDIR}"
 do_compile() {
     ${CC} ${CFLAGS} ${LDFLAGS} -Wl,-soname,libchronyctl.so -shared \
         -I${S}/include ${S}/libchronyctl.c -o ${B}/libchronyctl.so -lpthread -lm
+
+   ${CC} ${CFLAGS} ${LDFLAGS} -I${S}/include ${S}/examples/test_chronyctl.c \
+        -L${B} -lchronyctl -o ${B}/test_chronyctl -lpthread -lm
 }
 
 do_install() {
@@ -25,10 +29,15 @@ do_install() {
     
     install -d ${D}${includedir}
     install -m 0644 ${S}/libchronyctl.h ${D}${includedir}
+
+    install -d ${D}${bindir}
+    install -m 0755 ${B}/test_chronyctl ${D}${bindir}
 }
 
 FILES:${PN} = "${libdir}/libchronyctl.so"
 FILES:${PN}-dev = "${includedir}/libchronyctl.h"
+FILES:${PN} = "${libdir}/libchronyctl.so ${bindir}/test_chronyctl"
+
 
 # This is a library, so we might need some rdepends if it were calling other bins
 # but here it is self-contained.
