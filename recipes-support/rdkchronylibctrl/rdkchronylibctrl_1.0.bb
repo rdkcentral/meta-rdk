@@ -16,8 +16,12 @@ S = "${WORKDIR}"
 
 # Compilation directly in the recipe
 do_compile() {
-    ${CC} ${CFLAGS} ${LDFLAGS} -Wl,-soname,libchronyctl.so -shared \
-        -I${S}/include ${S}/libchronyctl.c -o ${B}/libchronyctl.so -lpthread -lm
+    # Compile object with PIC
+    ${CC} ${CFLAGS} -fPIC -I${S}/include -c ${S}/libchronyctl.c -o ${B}/libchronyctl.o
+
+    # Create shared library
+    ${CC} ${LDFLAGS} -shared -Wl,-soname,libchronyctl.so \
+        ${B}/libchronyctl.o -o ${B}/libchronyctl.so -lpthread -lm
 
    ${CC} ${CFLAGS} ${LDFLAGS} -I${S}/include ${S}/test_chronyctl.c \
         -L${B} -lchronyctl -o ${B}/test_chronyctl -lpthread -lm
