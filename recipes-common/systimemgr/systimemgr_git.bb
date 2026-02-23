@@ -19,6 +19,7 @@ PV = "1.0"
 CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/WPEFramework/powercontroller"
 LDFLAGS:append = " \
 	-lWPEFrameworkPowerController\
+    -lchronyctl \
       "
 
 S = "${WORKDIR}/git"
