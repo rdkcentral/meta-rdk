@@ -281,7 +281,8 @@ int chronyctl_add_server(const char *address, int minpoll, int maxpoll) {
     REQ_NTP_Source payload;
     memset(&payload, 0, sizeof(payload));
     payload.type = htonl(REQ_ADDSRC_SERVER);
-    strncpy((char *)payload.name, address, 255);
+    strncpy((char *)payload.name, address, sizeof(payload.name) - 1);
+    payload.name[sizeof(payload.name) - 1] = '\0';
     payload.port = htonl(123);
     payload.minpoll = htonl(minpoll);
     payload.maxpoll = htonl(maxpoll);
