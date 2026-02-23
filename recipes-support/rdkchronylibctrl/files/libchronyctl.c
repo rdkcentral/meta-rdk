@@ -98,7 +98,7 @@ static int connect_to_chronyd(void) {
             return -1;
         }
     }
-    chmod(local_addr.sun_path, 0666);
+    chmod(local_addr.sun_path, 0600);
 
     for (int i = 0; socket_paths[i] != NULL; i++) {
         struct sockaddr_un addr;

@@ -33,19 +33,19 @@ int main() {
     ret = chronyctl_makestep();
     check_err(ret, "Make Step");
 
-    printf("\n3. Testing add_server (pool.ntp.org)...\n");
+    printf("\n3. Testing add_server (time.xfinity.com)...\n");
     ret = chronyctl_add_server("time.xfinity.com", 6, 10);
     check_err(ret, "Add Server");
 
-    printf("\n4. Testing set_poll (pool.ntp.org)...\n");
-    ret = chronyctl_set_poll("pool.ntp.org", 7, 11);
+    printf("\n4. Testing set_poll (time.xfinity.com)...\n");
+    ret = chronyctl_set_poll("time.xfinity.com", 7, 11);
     check_err(ret, "Set Poll");
 
-    printf("\n5. Testing delete_server (pool.ntp.org)...\n");
+    printf("\n5. Testing delete_server (time.xfinity.com)...\n");
     printf("Note: This might fail if the server address resolved differently than what was added.\n");
     /* Ideally we should resolve the address first, but for testing we'll try the name if the protocol allows, 
        or use a known IP. Chronyd often requires IP for deletion. */
-    ret = chronyctl_delete_server("pool.ntp.org");
+    ret = chronyctl_delete_server("time.xfinity.com");
     check_err(ret, "Delete Server");
 
     chronyctl_cleanup();

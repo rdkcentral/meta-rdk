@@ -34,13 +34,9 @@ do_install() {
     install -m 0755 ${B}/test_chronyctl ${D}${bindir}
 }
 
-FILES:${PN} = "${libdir}/libchronyctl.so"
-FILES:${PN}-dev = "${includedir}/libchronyctl.h"
 FILES:${PN} = "${libdir}/libchronyctl.so ${bindir}/test_chronyctl"
-
+FILES:${PN}-dev = "${includedir}/libchronyctl.h"
 
 # This is a library, so we might need some rdepends if it were calling other bins
 # but here it is self-contained.
-RDEPENDS:${PN} = "chrony"
-
 RDEPENDS:${PN} = "chrony"
