@@ -31,7 +31,7 @@ SYSLOG-NG_SERVICE_systimemgr = "systimemgr.service"
 SYSLOG-NG_DESTINATION_systimemgr = "systimemgr.log"
 SYSLOG-NG_LOGRATE_systimemgr = "low"
 
-RDEPENDS:${PN} += "systimemgrfactory"
+RDEPENDS:${PN} += "systimemgrfactory rdkchronylibctrl"
 
 EXTRA_OECONF = "--enable-t2api=yes"
 do_install:append() {
