@@ -7,7 +7,7 @@ SRC_URI += "file://chrony.conf \
             file://chrony-sync-notify.sh \
             file://chrony-sync-notify.service \
             file://chrony-conf-update.sh \
-           "
+           
 
 do_install:append() {
     # Binaries
