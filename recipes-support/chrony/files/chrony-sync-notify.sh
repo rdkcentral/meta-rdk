@@ -20,6 +20,7 @@ is_synced() {
 
 
 # Wait for sync only if not already synced
+#This command will wait (indefinitely, retrying every 0.1 seconds) until chrony reports that the system clock is synchronized
 if is_synced; then
     log "Chrony already synchronised"
 else
