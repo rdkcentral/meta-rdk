@@ -33,6 +33,9 @@ if [ -f /etc/env_setup.sh ]; then
     . /etc/env_setup.sh
 fi
 
+create directory if not already available
+/bin/mkdir -p /var/lib/chrony
+
 #Log framework to print timestamp and source script name
 ntpLog()
 {
