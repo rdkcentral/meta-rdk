@@ -70,7 +70,7 @@ validate_url() {
     fi
     
     # Additional check: ensure no consecutive dots or special chars
-    if echo "$url" | grep -qE '\.\.|--|__|:-|_:|--'; then
+    if echo "$url" | grep -qE '\.\.|--|__|:-|_:'; then
         return 1
     fi
     
