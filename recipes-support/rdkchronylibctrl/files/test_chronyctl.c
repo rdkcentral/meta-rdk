@@ -16,7 +16,7 @@ void print_usage(const char *progname) {
     printf("Usage: %s <command> [args]\n", progname);
     printf("Commands:\n");
     printf("  makestep           - Force a time step\n");
-    printf("  server [host]      - Add a server (default: time.xfinity.com)\n");
+    printf("  server [host] [min] [max] - Add a server (default: time.xfinity.com 6 10)\n");
     printf("  delete_server [host]- Delete a server (default: pool.ntp.org)\n");
     printf("  offset_check       - Get current offset\n");
 }
@@ -51,8 +51,10 @@ int main(int argc, char *argv[]) {
         check_err(ret, "Make Step");
     } else if (strcmp(cmd, "server") == 0) {
         const char *host = (argc > 2) ? argv[2] : "time.xfinity.com";
-        printf("\nTesting add_server (%s)...\n", host);
-        ret = chronyctl_add_server(host, 6, 10);
+        int minpoll = (argc > 3) ? atoi(argv[3]) : 6;
+        int maxpoll = (argc > 4) ? atoi(argv[4]) : 10;
+        printf("\nTesting add_server (%s, minpoll=%d, maxpoll=%d)...\n", host, minpoll, maxpoll);
+        ret = chronyctl_add_server(host, minpoll, maxpoll);
         check_err(ret, "Add Server");
     } else if (strcmp(cmd, "delete_server") == 0) {
         const char *host = (argc > 2) ? argv[2] : "pool.ntp.org";
