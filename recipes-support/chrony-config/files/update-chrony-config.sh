@@ -61,9 +61,16 @@ validate_url() {
     esac
     
     # NTP servers in chrony should be hostnames or IP addresses, not full URLs
-    # Basic validation: hostname/URL should only contain alphanumeric, dots, hyphens, underscores, and colons (for ports)
-    # This regex allows for hostnames, IP addresses, and URLs with ports
-    if ! echo "$url" | grep -qE '^[a-zA-Z0-9]([a-zA-Z0-9._:-]*[a-zA-Z0-9])?$'; then
+    # Validate hostname/IP format:
+    # - Hostnames: alphanumeric segments separated by dots, with optional port
+    # - IP addresses: IPv4 format with optional port
+    # This pattern prevents consecutive dots, leading/trailing dots, and other invalid formats
+    if ! echo "$url" | grep -qE '^[a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?(\.([a-zA-Z0-9]([a-zA-Z0-9_-]*[a-zA-Z0-9])?))*(:([0-9]{1,5}))?$'; then
+        return 1
+    fi
+    
+    # Additional check: ensure no consecutive dots or special chars
+    if echo "$url" | grep -qE '\.\.|--|__|:-|_:|--'; then
         return 1
     fi
     
@@ -88,8 +95,8 @@ if [ -n "$PARTNER_URL" ]; then
     
     # Write the chrony server configuration
     # Format: server $URL iburst minpoll 10 maxpoll 12
-    # Use proper quoting to prevent shell injection
-    echo "server $PARTNER_URL iburst minpoll 10 maxpoll 12" > "$CHRONY_CONF"
+    # Use printf for predictable output formatting
+    printf "server %s iburst minpoll 10 maxpoll 12\n" "$PARTNER_URL" > "$CHRONY_CONF"
     
     echo "Successfully updated $CHRONY_CONF"
     exit 0
