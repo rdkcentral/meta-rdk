@@ -74,6 +74,14 @@ validate_url() {
         return 1
     fi
     
+    # Validate port number range if present (must be 1-65535)
+    if echo "$url" | grep -q ':'; then
+        local port=$(echo "$url" | sed 's/.*://')
+        if [ "$port" -gt 65535 ] 2>/dev/null || [ "$port" -lt 1 ] 2>/dev/null; then
+            return 1
+        fi
+    fi
+    
     return 0
 }
 
