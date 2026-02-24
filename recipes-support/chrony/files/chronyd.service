@@ -10,7 +10,7 @@ ConditionCapability=CAP_SYS_TIME
 [Service]
 Type=forking
 PIDFile=/run/chrony/chronyd.pid
-ExecStartPre=/bin/mkdir -p /var/lib/chrony
+ExecStartPre=/lib/rdk/chrony-conf-update.sh 
 ExecStart=/usr/sbin/chronyd  
 ExecStartPost=/lib/rdk/logMilestone.sh "NTP_CLIENT_STARTED"
 
