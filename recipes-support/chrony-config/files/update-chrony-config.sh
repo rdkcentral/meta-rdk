@@ -28,7 +28,8 @@ CHRONY_CONF="${CHRONY_CONF:-/etc/rdk_chrony.conf}"
 read_partner_url() {
     if [ -f "$PARTNER_URL_FILE" ]; then
         # Read the URL from the file (expect format: PARTNER_NTP_URL=<url>)
-        URL=$(grep -E "^PARTNER_NTP_URL=" "$PARTNER_URL_FILE" | cut -d'=' -f2 | tr -d ' ')
+        # Use cut -d'=' -f2- to handle URLs with = characters
+        URL=$(grep -E "^PARTNER_NTP_URL=" "$PARTNER_URL_FILE" | cut -d'=' -f2- | tr -d ' ')
         
         if [ -n "$URL" ]; then
             echo "$URL"
@@ -45,10 +46,35 @@ read_partner_url() {
     return 1
 }
 
+# Function to validate URL/hostname
+validate_url() {
+    local url="$1"
+    
+    # Check for newlines, which could allow config injection
+    if echo "$url" | grep -q $'\n'; then
+        return 1
+    fi
+    
+    # Basic validation: hostname/URL should only contain alphanumeric, dots, hyphens, underscores, and colons (for ports)
+    # This regex allows for hostnames, IP addresses, and URLs with ports
+    if ! echo "$url" | grep -qE '^[a-zA-Z0-9]([a-zA-Z0-9._:-]*[a-zA-Z0-9])?$'; then
+        return 1
+    fi
+    
+    return 0
+}
+
 # Main execution
 PARTNER_URL=$(read_partner_url)
 
 if [ -n "$PARTNER_URL" ]; then
+    # Validate the URL before using it
+    if ! validate_url "$PARTNER_URL"; then
+        echo "Error: Invalid partner NTP URL format: $PARTNER_URL"
+        echo "URL must contain only alphanumeric characters, dots, hyphens, underscores, and colons"
+        exit 1
+    fi
+    
     echo "Updating $CHRONY_CONF with partner NTP server: $PARTNER_URL"
     
     # Create directory if it doesn't exist
@@ -56,6 +82,7 @@ if [ -n "$PARTNER_URL" ]; then
     
     # Write the chrony server configuration
     # Format: server $URL iburst minpoll 10 maxpoll 12
+    # Use proper quoting to prevent shell injection
     echo "server $PARTNER_URL iburst minpoll 10 maxpoll 12" > "$CHRONY_CONF"
     
     echo "Successfully updated $CHRONY_CONF"
