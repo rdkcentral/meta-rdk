@@ -1,8 +1,8 @@
 [Unit]
 Description=NTP client/server
 Documentation=man:chronyd(8) man:chrony.conf(5)
-wants=network-up.target
-After=network-up.target
+wants=nvram.service tr69hostif.service network-up.target
+After=nvram.service tr69hostif.service network-up.target
 ConditionPathExists=/opt/chronyd_enabled
 Conflicts=systemd-timesyncd.service
 ConditionCapability=CAP_SYS_TIME
