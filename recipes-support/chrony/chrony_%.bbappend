@@ -6,6 +6,7 @@ SRC_URI += "file://chrony.conf \
             file://rdk_chrony.conf \
             file://chrony-sync-notify.sh \
             file://chrony-sync-notify.service \
+            file://chrony-conf-update.sh \
            "
 
 do_install:append() {
@@ -18,6 +19,7 @@ do_install:append() {
     install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/
     install -m 755 ${WORKDIR}/rdk_chrony.conf ${D}${sysconfdir}/
     install -m 755 ${WORKDIR}/chrony-sync-notify.sh ${D}${base_libdir}/rdk
+     install -m 755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
     
 
     # service to start chrony
@@ -31,6 +33,7 @@ FILES:${PN} += "${sbindir}/chronyc"
 FILES:${PN} += "${base_libdir}/rdk/chrony-sync-notify.sh"
 CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
+FILES:${PN} += "${base_libdir}/rdk/chrony-conf-update.sh"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
 SYSTEMD_SERVICE:${PN} += "chrony-sync-notify.service"
