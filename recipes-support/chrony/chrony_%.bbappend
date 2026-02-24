@@ -29,6 +29,10 @@ do_install:append() {
 
 }
 
+python __anonymous() {
+    bb.note("meta-rdk: chrony_%.bbappend is parsed and executed!")
+}
+
 FILES:${PN} += "${sbindir}/chronyc"
 FILES:${PN} += "${base_libdir}/rdk/chrony-sync-notify.sh"
 CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
