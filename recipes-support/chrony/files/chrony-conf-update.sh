@@ -108,7 +108,12 @@ done
 partnerHostnames="$hostName $hostName2 $hostName3 $hostName4 $hostName5"
 ntpLog "NTP Server URL for the partner:$partnerHostnames"
 
-partnerHostnames
-printf "server %s iburst minpoll 10 maxpoll 12\n" "$partnerHostnames" > "$CHRONY_CONF"
-
+for host in $partnerHostnames; do
+    # Only write non-empty hostnames
+    if [ -n "$host" ]; then
+        printf "server %s iburst minpoll 10 maxpoll 12\n" "$host" >> "$CHRONY_CONF"
+    fi
+done
+printf "maxsources 1\n"  >> "$CHRONY_CONF"
+ntplog "Successfully updated $CHRONY_CONF
 exit 0
