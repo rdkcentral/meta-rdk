@@ -51,10 +51,16 @@ validate_url() {
     local url="$1"
     
     # Check for newlines, which could allow config injection
-    if echo "$url" | grep -q $'\n'; then
-        return 1
-    fi
+    # Use POSIX-compliant approach by checking if the string contains a newline
+    case "$url" in
+        *"
+"*)
+            # Contains a newline
+            return 1
+            ;;
+    esac
     
+    # NTP servers in chrony should be hostnames or IP addresses, not full URLs
     # Basic validation: hostname/URL should only contain alphanumeric, dots, hyphens, underscores, and colons (for ports)
     # This regex allows for hostnames, IP addresses, and URLs with ports
     if ! echo "$url" | grep -qE '^[a-zA-Z0-9]([a-zA-Z0-9._:-]*[a-zA-Z0-9])?$'; then
