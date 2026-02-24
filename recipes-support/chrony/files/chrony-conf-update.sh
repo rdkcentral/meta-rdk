@@ -27,6 +27,7 @@ count=0
 LOG_FILE="/opt/logs/chrony.log"
 attempts=1
 max_attempts=5
+CHRONY_CONF=/etc/rdk_chrony.conf
 
 if [ -f /etc/env_setup.sh ]; then
     . /etc/env_setup.sh
@@ -107,6 +108,7 @@ done
 partnerHostnames="$hostName $hostName2 $hostName3 $hostName4 $hostName5"
 ntpLog "NTP Server URL for the partner:$partnerHostnames"
 
-
+partnerHostnames
+printf "server %s iburst minpoll 10 maxpoll 12\n" "$partnerHostnames" > "$CHRONY_CONF"
 
 exit 0
