@@ -6,31 +6,27 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 S = "${WORKDIR}/git"
-SRCREV = "v2.3.0"
-PV = "2.3.0"
-PR = "r1"
+SRCREV = "eacd6915758e48b62fbb011d94f1b0ffe67ec4ef"
+PV = "3.0.0"
+PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-
 
 DEPENDS = "log4c glib-2.0"
 DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
 
-#Milestone Support
-EXTRA_OECONF += " --enable-milestone"
 PROVIDES = "getClockUptime"
+#Milestone Support
 CFLAGS:append = " -DLOGMILESTONE"
-CXXFLAGS:append = " -DLOGMILESTONE"
 
-inherit autotools pkgconfig coverity pkgconfig
+inherit autotools pkgconfig coverity
 
 CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
-
 CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
 LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 
 do_install:append () {
     install -d ${D}${base_libdir}/rdk/
-    install -m 0755 ${D}${bindir}/rdkLogMileStone ${D}${base_libdir}/rdk/logMilestone.sh
+    install -m 0755 ${S}/scripts/logMilestone.sh ${D}${base_libdir}/rdk
 }
 
 FILES:${PN} += "${base_libdir}/rdk/logMilestone.sh \

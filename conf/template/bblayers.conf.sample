@@ -53,6 +53,7 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_SKY') if d.getVar('MANIFEST_PATH_RDK
 BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_RDK_COMCAST') if d.getVar('MANIFEST_PATH_RDK_COMCAST') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_COMCAST') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_COMCAST_VIDEO') if d.getVar('MANIFEST_PATH_COMCAST_VIDEO') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_COMCAST_VIDEO') + '/conf/layer.conf') else ''} \
+    ${@d.getVar('MANIFEST_PATH_APPMANAGERS_TEST') if d.getVar('ENABLE_RDK_APPMANAGERS') == "true" and d.getVar('MANIFEST_PATH_APPMANAGERS_TEST') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_APPMANAGERS_TEST') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_COMCAST_VOICE_SDK') if d.getVar('MANIFEST_PATH_COMCAST_VOICE_SDK') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_COMCAST_VOICE_SDK') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_META_QT5') if d.getVar('MANIFEST_PATH_META_QT5') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_QT5') + '/conf/layer.conf') else ''} \
     ${@d.getVar('MANIFEST_PATH_MEDIARITE') if d.getVar('MANIFEST_PATH_MEDIARITE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MEDIARITE') + '/conf/layer.conf') else ''} \
@@ -71,3 +72,5 @@ BBLAYERS =+ "${@'${MANIFEST_PATH_PROFILE_CONFIG}' if os.path.isfile('${MANIFEST_
 BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_REGION_CONFIG') if d.getVar('MANIFEST_PATH_REGION_CONFIG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_REGION_CONFIG') + '/conf/layer.conf') else ''} \
     "
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_MIXIN') if d.getVar('MANIFEST_PATH_META_MIXIN') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_MIXIN') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_CLANG') if d.getVar('MANIFEST_PATH_META_CLANG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_CLANG') + '/conf/layer.conf') else ''}"

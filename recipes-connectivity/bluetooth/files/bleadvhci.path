@@ -1,0 +1,9 @@
+[Unit]
+Description= RCP Beaconing 
+
+[Path]
+PathExists=/tmp/bluezup
+Unit=bleadvhci.service
+
+[Install]
+WantedBy=multi-user.target

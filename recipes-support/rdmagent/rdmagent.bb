@@ -8,9 +8,14 @@ DEPENDS += "rbus"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=8700a1d105cac2a90d4f51290ac6e466"
 
+PV = "2.1.3"
+PR = "r1"
+PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
+
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
+SRCREV = "18f68fc271daa1259b22a0707ff73765ae96da0a"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
 SRCREV_FORMAT = "rdmagent"
 
@@ -42,6 +47,13 @@ LDFLAGS:append = " -lsecure_wrapper"
 DEPENDS += "libsyswrapper"
 
 EXTRA_OECONF:append = " --enable-iarmbusSupport=yes --enable-t2api=yes"
+
+EXTRA_OEMAKE += "LIBS='-lsafec'"
+
+DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
+CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec',  ' `pkg-config --cflags libsafec`', '-fPIC', d)}"
+CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC_DUMMY_API', d)}"
+LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 
 DEPENDS:append = " iarmmgrs iarmbus"
 LDFLAGS:append = " -lIARMBus"

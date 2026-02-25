@@ -4,6 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
+SRCREV = "5660e9c1811f366837dffb529f93d052c2613857"
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -13,18 +14,20 @@ DEPENDS += "rdk-logger"
 RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
 
 
-PV ?= "1.0.1"
-PR ?= "r0"
+PV = "1.8.0"
+PR = "r0"
 
 S = "${WORKDIR}/git"
 
 #compiler warnings were fixed as part of RDK-55297
 #CFLAGS += " -Wall -Werror -Wextra -Wno-unused-parameter -Wno-pointer-sign -Wno-sign-compare -Wno-enum-compare -Wno-type-limits -Wno-enum-conversion -Wno-format-truncation"
 CFLAGS += " -Wall -Werror -Wextra"
+#FIXME, this is temporary workaround for broadband. It has to be verified and remove these suppression flags
+CFLAGS:append:broadband += " -DRDK_LOGGER -Wno-sign-compare -Wno-unused-parameter -Wno-pointer-sign"
 
 inherit pkgconfig autotools systemd ${@bb.utils.contains("DISTRO_FEATURES", "kirkstone", "python3native", "pythonnative", d)} breakpad-logmapper
 
-CFLAGS += " -DDROP_ROOT_PRIV "
+CFLAGS += " -DDROP_ROOT_PRIV -DENABLE_MTLS "
 
 LDFLAGS:append = " \
         -lbreakpadwrapper \
