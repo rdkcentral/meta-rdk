@@ -1,13 +1,14 @@
+
 DESCRIPTION = "Linux process monitor - track and record the execution times of all processes"
 
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=894d9b830cb1f38db58741000f9c2c7f"
 
 #SRC_URI = "https://github.com/TeknoVenus/ProcessMonitor.git;branch=main"
-#SRCREV = "dc9c218e78c2e1a766df3d439b90f471da3db8fb"
-
-SRC_URI = "git://github.com/gomathishankar37/ProcessMonitor.git;protocol=https;branch=custom-config"
-SRCREV = "77355998479781a68cf7e0841223a528d98bf004"
+SRC_URI = "git://github.com/gomathishankar37/ProcessMonitor.git;protocol=https;branch=exit-handler"
+# Check-Point 1
+#SRCREV = "b8836281bd7ddefd032ec7c932c656f82b6751b2" 
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/git/build"
@@ -18,7 +19,7 @@ EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=Release"
 
 inherit cmake systemd
 
-do_install() {
+do_install:append() {
     install -d ${D}${bindir}
     install -d ${D}${systemd_unitdir}/system
     install -m 0755 ${B}/ProcessMonitor ${D}${bindir}/ProcessMonitor
@@ -30,3 +31,4 @@ do_install() {
 
 FILES:${PN} += "${systemd_system_unitdir}/process-monitor.service"
 FILES:${PN} += "${bindir}/ProcessMonitor"
+FILES:${PN} += "${libdir}/libexithandler.so*" 
