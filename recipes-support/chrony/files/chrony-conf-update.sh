@@ -117,6 +117,5 @@ for host in $partnerHostnames; do
         printf "server %s iburst minpoll 10 maxpoll 12\n" "$host" >> "$CHRONY_CONF"
     fi
 done
-printf "maxsources 1\n"  >> "$CHRONY_CONF"
-ntplog "Successfully updated $CHRONY_CONF
+ntpLog "Successfully updated $CHRONY_CONF"
 exit 0
