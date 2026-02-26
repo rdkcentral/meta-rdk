@@ -4,7 +4,7 @@ Documentation=man:chronyd(8) man:chrony.conf(5)
 wants=nvram.service tr69hostif.service network-up.target
 After=nvram.service tr69hostif.service network-up.target
 ConditionPathExists=/opt/chronyd_enabled
-Conflicts=systemd-timesyncd.service
+#Conflicts=systemd-timesyncd.service
 ConditionCapability=CAP_SYS_TIME
 
 [Service]
