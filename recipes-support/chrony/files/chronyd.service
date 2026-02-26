@@ -1,0 +1,18 @@
+[Unit]
+Description=NTP client/server
+Documentation=man:chronyd(8) man:chrony.conf(5)
+wants=nvram.service tr69hostif.service network-up.target
+After=nvram.service tr69hostif.service network-up.target
+ConditionPathExists=/opt/chronyd_enabled
+Conflicts=systemd-timesyncd.service
+ConditionCapability=CAP_SYS_TIME
+
+[Service]
+Type=forking
+PIDFile=/run/chrony/chronyd.pid
+ExecStartPre=/lib/rdk/chrony-conf-update.sh 
+ExecStart=/usr/sbin/chronyd  
+ExecStartPost=/lib/rdk/logMilestone.sh "NTP_CLIENT_STARTED"
+
+[Install]
+WantedBy=network-up.target
