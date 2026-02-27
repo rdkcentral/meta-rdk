@@ -13,10 +13,10 @@ SRC_URI += " file://0001-RDK-54059-retry-ptrace-seize-on-EPERM.patch"
 
 INSANE_SKIP:${PN} += "ldflags"
 
-PV = "1.0.3"
+PV = "1.0.4"
 PR = "r0"
-# Code base from 18.08.2025
-SRCREV = "e58cf09b092b5e269acb5e8a3aa311b6d748bfe0"
+# Code base from 14.01.2026
+SRCREV = "82f4d70a58789068453adbdd5ef039f2570d349a"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -31,7 +31,8 @@ SYSTEMD_SERVICE:${PN} = "memcr.service"
 SYSTEMD_AUTO_ENABLE = "enable"
 
 do_compile () {
-	oe_runmake COMPRESS_LZ4=1 COMPRESS_ZSTD=1 CHECKSUM_MD5=1 ENCRYPT=1
+	LOG_LEVEL="${@bb.utils.contains('BUILD_VARIANT', 'prod', '1', '3', d)}"
+	oe_runmake COMPRESS_LZ4=1 COMPRESS_ZSTD=1 CHECKSUM_MD5=1 ENCRYPT=1 LOG_LEVEL=${LOG_LEVEL}
 }
 
 do_install () {
