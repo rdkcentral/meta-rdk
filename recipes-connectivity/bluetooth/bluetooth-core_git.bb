@@ -5,17 +5,17 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 BLUEZ ?= "${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth', bb.utils.contains('DISTRO_FEATURES', 'bluez5', 'bluez5', 'bluez4', d), '', d)}"
 
-DEPENDS = "dbus ${BLUEZ} rdk-logger"
+DEPENDS = "dbus ${BLUEZ} rdk-logger telemetry"
 DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " ", d)}"
 DEPENDS:append = "${@bb.utils.contains('DISTRO_FEATURES', 'gdbus_bluez5', 'glib-2.0-native', '', d)}"
 
-RDEPENDS:${PN} = "dbus ${BLUEZ} rdk-logger"
+RDEPENDS:${PN} = "dbus ${BLUEZ} rdk-logger telemetry"
 PV = "1.0.8"
 PR = "r2"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "e41d0bb5fede75a1dcec133382a1eb890dfa25ac"
+SRCREV = "f6ff607176adcede2b0b63aa5546d1de773c9c48"
 SRCREV_FORMAT = "bluetooth-core"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth;${CMF_GITHUB_SRC_URI_SUFFIX}"
