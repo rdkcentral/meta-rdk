@@ -5,7 +5,7 @@ DESCRIPTION = "Timer , publishing and subscription interfaces."
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-DEPENDS = "systimemgrinetrface systimemgrfactory rdk-logger libsyswrapper wpeframework-clientlibraries  telemetry"
+DEPENDS = "systimemgrinetrface systimemgrfactory rdk-logger libsyswrapper wpeframework-clientlibraries  telemetry rdkchronylibctrl"
 
 SRCREV_systemtimemgr = "f7c52d3ebe5203134d7ecc242f86fbbd96d39c05"
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgr"
@@ -20,7 +20,8 @@ PR = "r0"
 
 CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/WPEFramework/powercontroller"
 LDFLAGS:append = " \
-	-lWPEFrameworkPowerController\
+	-lWPEFrameworkPowerController \
+	-lchronyctl\
       "
 
 S = "${WORKDIR}/git"
@@ -30,7 +31,7 @@ SYSLOG-NG_SERVICE_systimemgr = "systimemgr.service"
 SYSLOG-NG_DESTINATION_systimemgr = "systimemgr.log"
 SYSLOG-NG_LOGRATE_systimemgr = "low"
 
-RDEPENDS:${PN} += "systimemgrfactory"
+RDEPENDS:${PN} += "systimemgrfactory rdkchronylibctrl"
 
 EXTRA_OECONF = "--enable-t2api=yes"
 do_install:append() {

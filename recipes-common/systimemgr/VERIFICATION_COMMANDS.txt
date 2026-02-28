@@ -1,0 +1,129 @@
+================================================================================
+QUICK REFERENCE: Verify libchronyctl linkage to systimemgr
+================================================================================
+
+BUILD-TIME VERIFICATION (before deploying to target)
+----------------------------------------------------
+
+1. Check binary dependencies:
+   $ ldd /path/to/sysTimeMgr | grep chrony
+   → Should show: libchronyctl.so => /usr/lib/libchronyctl.so
+
+2. Check ELF NEEDED entries:
+   $ readelf -d /path/to/sysTimeMgr | grep NEEDED | grep chrony
+   → Should show: Shared library: [libchronyctl.so]
+
+3. Check dynamic dependencies:
+   $ objdump -p /path/to/sysTimeMgr | grep NEEDED | grep chrony
+   → Should show: NEEDED               libchronyctl.so
+
+4. Check symbol references:
+   $ nm -D /path/to/sysTimeMgr | grep chronyctl_
+   → Should show undefined chrony functions (marked with U)
+
+
+RUNTIME VERIFICATION (on target device)
+----------------------------------------
+
+5. Find systimemgr process:
+   $ ps -ef | grep systimemgr
+   → Note the PID (e.g., 14968)
+
+6. Check loaded libraries in process memory:
+   $ cat /proc/14968/maps | grep chrony
+   → Should show memory regions with libchronyctl.so
+
+7. Alternative: Use pmap:
+   $ pmap 14968 | grep chrony
+   → Should show: libchronyctl.so entries
+
+8. Check with ldd on target:
+   $ ldd /usr/bin/sysTimeMgr | grep chrony
+   → Should show: libchronyctl.so => /usr/lib/libchronyctl.so
+
+9. Verify library file exists:
+   $ ls -la /usr/lib/libchronyctl.so
+   → Should exist with execute permissions
+
+10. Check installed package:
+    $ opkg list-installed | grep chrony
+    → Should show: rdkchronylibctrl - 1.0-r0
+
+
+ONE-LINER CHECKS
+----------------
+
+# Quick check all three aspects:
+ls /usr/lib/libchronyctl.so && \
+ldd /usr/bin/sysTimeMgr | grep chrony && \
+cat /proc/$(pidof sysTimeMgr)/maps | grep chrony
+
+# Alternative with error handling:
+PID=$(pidof sysTimeMgr)
+if [ -n "$PID" ]; then
+  echo "=== Library file exists? ==="
+  ls -la /usr/lib/libchronyctl.so
+  echo ""
+  echo "=== Binary depends on it? ==="
+  ldd /usr/bin/sysTimeMgr | grep chrony
+  echo ""
+  echo "=== Process has it loaded? ==="
+  cat /proc/$PID/maps | grep chrony
+else
+  echo "ERROR: sysTimeMgr is not running"
+fi
+
+
+BUILD SYSTEM VERIFICATION (Yocto/BitBake)
+------------------------------------------
+
+11. Check recipe dependencies:
+    $ grep "DEPENDS.*chronylibctrl" recipes-common/systimemgr/systimemgr_git.bb
+    → Should show: DEPENDS = "... rdkchronylibctrl"
+
+12. Check linker flags:
+    $ grep "LDFLAGS.*chronyctl" recipes-common/systimemgr/systimemgr_git.bb
+    → Should show: -lchronyctl
+
+13. Check runtime dependencies:
+    $ grep "RDEPENDS.*chronylibctrl" recipes-common/systimemgr/systimemgr_git.bb
+    → Should show: RDEPENDS:${PN} += "... rdkchronylibctrl"
+
+14. Check build logs:
+    $ bitbake -e systimemgr | grep ^WORKDIR=
+    $ cat <WORKDIR>/temp/log.do_compile | grep chronyctl
+    → Should show: -lchronyctl in linker command
+
+
+TROUBLESHOOTING GUIDE
+---------------------
+
+Problem: "ldd shows library but /proc/PID/maps doesn't"
+Solution: Library linked but not loaded. Functions may not be called yet.
+          Try: LD_BIND_NOW=1 /usr/bin/sysTimeMgr &
+
+Problem: "Library file missing on target"
+Solution: Missing RDEPENDS in recipe. Add:
+          RDEPENDS:${PN} += "rdkchronylibctrl"
+
+Problem: "ldd doesn't show library"
+Solution: Missing LDFLAGS in recipe. Add:
+          LDFLAGS:append = " -lchronyctl"
+
+Problem: "Build fails - library not found"
+Solution: Missing DEPENDS in recipe. Add:
+          DEPENDS = "... rdkchronylibctrl"
+
+
+EXPECTED COMPLETE INTEGRATION
+------------------------------
+
+In recipes-common/systimemgr/systimemgr_git.bb:
+
+  DEPENDS = "... rdkchronylibctrl"          # Build-time
+  LDFLAGS:append = " -lchronyctl"           # Link-time
+  RDEPENDS:${PN} += "... rdkchronylibctrl"  # Runtime
+
+All three are required for complete library integration!
+
+================================================================================
