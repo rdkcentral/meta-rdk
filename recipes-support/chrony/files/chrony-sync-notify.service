@@ -2,7 +2,8 @@
 Description=Notify when Chrony time sync is completed
 Documentation=man:chronyc(1)
 After=chronyd.service
-Requires=chronyd.service
+BindsTo=chronyd.service
+ConditionPathExists=/opt/chronyd_enabled
 
 [Service]
 Type=oneshot
