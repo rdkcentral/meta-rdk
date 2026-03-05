@@ -138,6 +138,8 @@ fi
 [ -z "$minPoll" ] && minPoll="10"
 [ -z "$maxPoll" ] && maxPoll="12"
 
+ntplog "Minpoll:$minPoll MaxPoll:$maxPoll"
+
 # Write to chrony conf
 > "$CHRONY_CONF" # clear file
 for host in $partnerHostnamesFiltered; do
