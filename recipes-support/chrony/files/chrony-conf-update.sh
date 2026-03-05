@@ -50,6 +50,8 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      hostName3=`/lib/rdk/getPartnerProperty.sh ntpHost3`
      hostName4=`/lib/rdk/getPartnerProperty.sh ntpHost4`
      hostName5=`/lib/rdk/getPartnerProperty.sh ntpHost5`
+     minPoll=`/lib/rdk/getPartnerProperty.sh ntpMinPoll`
+     maxPoll=`/lib/rdk/getPartnerProperty.sh ntpMaxPoll`
 fi
 }
 
@@ -81,7 +83,12 @@ get_ntp_hosts_from_bootstrap() {
     [ -z "$hostName3" ] && hostName3="$bs3"
     [ -z "$hostName4" ] && hostName4="$bs4"
     [ -z "$hostName5" ] && hostName5="$bs5"
-
+    if [ -z "$minPoll" ]; then
+        minPoll="$(get_bs_val 'Device.Time.MinPoll')"
+    fi
+    if [ -z "$maxPoll" ]; then
+        maxPoll="$(get_bs_val 'Device.Time.MaxPoll')"
+    fi
     return 0
 }
 
@@ -111,10 +118,31 @@ done
 partnerHostnames="$hostName $hostName2 $hostName3 $hostName4 $hostName5"
 ntpLog "NTP Server URL for the partner:$partnerHostnames"
 
+# Remove empty strings from server list
+partnerHostnamesFiltered=""
 for host in $partnerHostnames; do
-    # Only write non-empty hostnames
     if [ -n "$host" ]; then
-        printf "server %s iburst minpoll 10 maxpoll 12\n" "$host" >> "$CHRONY_CONF"
+        partnerHostnamesFiltered="$partnerHostnamesFiltered $host"
+    fi
+done
+partnerHostnamesFiltered=$(echo $partnerHostnamesFiltered | xargs) # trim spaces
+
+# If after all attempts no NTP server, use default
+if [ -z "$partnerHostnamesFiltered" ]; then
+    partnerHostnamesFiltered="time.google.com"
+    ntpLog "No valid NTP server found, using default: time.google.com"
+fi
+
+
+# Use defaults if not set
+[ -z "$minPoll" ] && minPoll="10"
+[ -z "$maxPoll" ] && maxPoll="12"
+
+# Write to chrony conf
+> "$CHRONY_CONF" # clear file
+for host in $partnerHostnamesFiltered; do
+    if [ -n "$host" ]; then
+        printf "server %s iburst minpoll %s maxpoll %s\n" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
     fi
 done
 ntpLog "Successfully updated $CHRONY_CONF"
