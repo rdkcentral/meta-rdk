@@ -122,41 +122,30 @@ done
 # Use defaults if not set
 [ -z "$minPoll" ] && minPoll="10"
 [ -z "$maxPoll" ] && maxPoll="12"
-ntplog "Minpoll:$minPoll MaxPoll:$maxPoll"
+ntpLog "Minpoll:$minPoll MaxPoll:$maxPoll"
 
-partnerHostnames="$hostName $hostName2 $hostName3 $hostName4 $hostName5"
+hosts=("$hostName" "$hostName2" "$hostName3" "$hostName4" "$hostName5")
 directives=("$directive1" "$directive2" "$directive3" "$directive4" "$directive5")
-ntpLog "NTP Server URL for the partner:$partnerHostnames"
+ntpLog "NTP Server URL for the partner:$hosts"
 
-# Remove empty hosts and keep correspondence with directives
-valid_hosts=()
-valid_directives=()
+conf_written=0
+> "$CHRONY_CONF"
 for i in $(seq 0 4); do
-    if [ -n "${hosts[$i]}" ]; then
-        valid_hosts+=("${hosts[$i]}")
-        # Use the corresponding directive or "server" as default
-        if [ -n "${directives[$i]}" ]; then
-            valid_directives+=("${directives[$i]}")
-        else
-            valid_directives+=("server")
-        fi
+    host="${hosts[$i]}"
+    directive="${directives[$i]}"
+    if [ -n "$host" ]; then
+        # use directive if set, else default to server
+        [ -z "$directive" ] && directive="server"
+        printf "%s %s iburst minpoll %s maxpoll %s\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
+        conf_written=1
     fi
 done
 
-# If after all attempts, nothing valid, fall back to default
-if [ ${#valid_hosts[@]} -eq 0 ]; then
-    valid_hosts=("time.google.com")
-    valid_directives=("server")
-    ntpLog "No valid NTP server found, using default: time.google.com"
+# fallback if no valid host found
+if [ "$conf_written" -eq 0 ]; then
+    printf "server time.google.com iburst minpoll %s maxpoll %s\n" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
+    ntpLog "No valid NTP servers found, using fallback: time.google.com"
 fi
-
-# Write to chrony conf
-> "$CHRONY_CONF" # clear file
-for i in "${!valid_hosts[@]}"; do
-    host="${valid_hosts[$i]}"
-    directive="${valid_directives[$i]}"
-    printf "%s %s iburst minpoll %s maxpoll %s\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
-done
 
 ntpLog "Successfully updated $CHRONY_CONF"
 exit 0
