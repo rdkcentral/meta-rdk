@@ -51,7 +51,7 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      hostName4=`/lib/rdk/getPartnerProperty.sh ntpHost4`
      hostName5=`/lib/rdk/getPartnerProperty.sh ntpHost5`
      minPoll=`/lib/rdk/getPartnerProperty.sh NTPMinpoll`
-     maxPoll=`/lib/rdk/getPartnerProperty.sh NTPMinpoll`
+     maxPoll=`/lib/rdk/getPartnerProperty.sh NTPMaxpoll`
 fi
 }
 
