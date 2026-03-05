@@ -8,14 +8,14 @@ DEPENDS += "rbus"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=8700a1d105cac2a90d4f51290ac6e466"
 
-PV = "2.1.3"
+PV = "2.1.4"
 PR = "r1"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "18f68fc271daa1259b22a0707ff73765ae96da0a"
+SRCREV = "ced35aa2dc58a6963715fe78d3a48c156c18769f"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
 SRCREV_FORMAT = "rdmagent"
 
@@ -23,10 +23,6 @@ SRCREV_FORMAT = "rdmagent"
 S = "${WORKDIR}/git"
 
 inherit autotools coverity systemd syslog-ng-config-gen
-SYSLOG-NG_FILTER = "apps-rdm"
-SYSLOG-NG_SERVICE_apps-rdm = "apps-rdm.service"
-SYSLOG-NG_DESTINATION_apps-rdm = "rdm_status.log"
-SYSLOG-NG_LOGRATE_apps-rdm = "high"
 
 LOGROTATE_NAME="rdm_status"
 LOGROTATE_LOGNAME_rdm_status="rdm_status.log"
