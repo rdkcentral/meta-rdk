@@ -9,7 +9,7 @@ PV = "1.0.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "b796f1532d1863748e4bbe71c9feaada3f5cac50"
+SRCREV = "0f959929d2ced006660d44f848ba1ac04222cda9"
 SRC_URI = "git://github.com/tabbas651/MemCapture.git;branch=main;name=src;destsuffix=git"
 
 S = "${WORKDIR}/git"
