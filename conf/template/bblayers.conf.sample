@@ -26,6 +26,7 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_EXT') if d.getVar('MANIFEST_PATH_OSS
 
 # Common layers: optional
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') if d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_VENDOR_IMAGE_PACKAGER') if d.getVar('MANIFEST_PATH_VENDOR_IMAGE_PACKAGER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_VENDOR_IMAGE_PACKAGER') + '/conf/layer.conf') else ''}"
 
 # Release layers: generic
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_RELEASE') if d.getVar('MANIFEST_PATH_OSS_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OSS_RELEASE') + '/conf/layer.conf') else ''}"
