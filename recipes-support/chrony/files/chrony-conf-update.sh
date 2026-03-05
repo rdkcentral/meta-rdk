@@ -50,8 +50,8 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      hostName3=`/lib/rdk/getPartnerProperty.sh ntpHost3`
      hostName4=`/lib/rdk/getPartnerProperty.sh ntpHost4`
      hostName5=`/lib/rdk/getPartnerProperty.sh ntpHost5`
-     minPoll=`/lib/rdk/getPartnerProperty.sh ntpMinPoll`
-     maxPoll=`/lib/rdk/getPartnerProperty.sh ntpMaxPoll`
+     minPoll=`/lib/rdk/getPartnerProperty.sh NTPMinpoll`
+     maxPoll=`/lib/rdk/getPartnerProperty.sh NTPMinpoll`
 fi
 }
 
@@ -84,10 +84,10 @@ get_ntp_hosts_from_bootstrap() {
     [ -z "$hostName4" ] && hostName4="$bs4"
     [ -z "$hostName5" ] && hostName5="$bs5"
     if [ -z "$minPoll" ]; then
-        minPoll="$(get_bs_val 'Device.Time.MinPoll')"
+        minPoll="$(get_bs_val 'Device.Time.NTPMinpoll')"
     fi
     if [ -z "$maxPoll" ]; then
-        maxPoll="$(get_bs_val 'Device.Time.MaxPoll')"
+        maxPoll="$(get_bs_val 'Device.Time.NTPMinpoll')"
     fi
     return 0
 }
