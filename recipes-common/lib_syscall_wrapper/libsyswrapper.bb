@@ -3,8 +3,8 @@ LICENSE = "Apache-2.0"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-PV = "1.3.3"
-PR = "r1"
+PV = "1.3.4"
+PR = "r2"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
 DEPENDS += "rdk-logger"
