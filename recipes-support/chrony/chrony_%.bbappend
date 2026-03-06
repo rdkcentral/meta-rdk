@@ -7,6 +7,9 @@ SRC_URI += "file://chrony.conf \
             file://chrony-sync-notify.sh \
             file://chrony-sync-notify.service \
             file://chrony-conf-update.sh \
+            file://chrony-tracking.timer \
+            file://chrony-tracking.service \
+            file://chrony_tracking.sh \
            "
 
 do_install:append() {
@@ -19,13 +22,16 @@ do_install:append() {
     install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/
     install -m 755 ${WORKDIR}/rdk_chrony.conf ${D}${sysconfdir}/
     install -m 755 ${WORKDIR}/chrony-sync-notify.sh ${D}${base_libdir}/rdk
-     install -m 755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
+    install -m 755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
+    install -m 755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
     
 
     # service to start chrony
     rm ${D}${systemd_unitdir}/system/chronyd.service
     install -m 0644 ${WORKDIR}/chronyd.service ${D}${systemd_unitdir}/system/
     install -m 755 ${WORKDIR}/chrony-sync-notify.service ${D}${systemd_unitdir}/system/
+    install -m 755 ${WORKDIR}/chrony-tracking.service ${D}${systemd_unitdir}/system/
+    install -m 755 ${WORKDIR}/chrony-tracking.timer ${D}${systemd_unitdir}/system/
 
 }
 
@@ -38,9 +44,12 @@ FILES:${PN} += "${base_libdir}/rdk/chrony-sync-notify.sh"
 CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 FILES:${PN} += "${base_libdir}/rdk/chrony-conf-update.sh"
+FILES:${PN} += "${base_libdir}/rdk/chrony_tracking.sh"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
 SYSTEMD_SERVICE:${PN} += "chrony-sync-notify.service"
+SYSTEMD_SERVICE:${PN} += "chrony-tracking.service"
+SYSTEMD_SERVICE:${PN} += "chrony-tracking.timer"
 
 
 inherit syslog-ng-config-gen
