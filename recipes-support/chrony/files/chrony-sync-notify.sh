@@ -11,10 +11,6 @@ log() {
     echo "$1" >> "$LOG_FILE"
 }
 
-milestone() {
-    sh /lib/rdk/logMilestone.sh "$1"
-}
-
 is_synced() {
     chronyc tracking 2>/dev/null | grep -q "Leap status *: Normal"
 }
@@ -24,11 +20,11 @@ is_synced() {
 #This command will wait up to about 5 minutes (3000 tries * 0.1 seconds each) until chrony reports that the system clock is synchronized
 if is_synced; then
     log "Chrony already synchronised"
-    exit 0       #TBD - Dont log milestones whenever chronyd started
+    exit 0       #TBD - Don't log milestones whenever chronyd started
  else
     log "Waiting for Chrony synchronisation..."
     chronyc waitsync 3000 0 0 0.1 || {
-        log "waitsync failed or timeout after for 5 minutes"
+        log "waitsync failed or timed out after 5 minutes"
         exit 1
     }
 fi
