@@ -26,6 +26,8 @@ LOG_FILE="/opt/logs/chrony.log"
 attempts=1
 max_attempts=5
 CHRONY_CONF=/etc/rdk_chrony.conf
+DEFAULT_MINPOLL="10"
+DEFAULT_MAXPOLL="12"
 
 if [ -f /etc/env_setup.sh ]; then
     . /etc/env_setup.sh
@@ -122,8 +124,14 @@ while [ "$attempts" -le "$max_attempts" ]; do
 done
 
 # Use defaults if not set
-[ -z "$minPoll" ] && minPoll="10"
-[ -z "$maxPoll" ] && maxPoll="12"
+[ -z "$minPoll" ] && minPoll="$DEFAULT_MINPOLL"
+[ -z "$maxPoll" ] && maxPoll="$DEFAULT_MAXPOLL"
+
+if [ "$minPoll" -gt "$maxPoll" ]; then
+    ntpLog "ERROR: minPoll ($minPoll) is greater than maxPoll ($maxPoll), resetting both to defaults ($DEFAULT_MINPOLL/$DEFAULT_MAXPOLL)"
+    minPoll="$DEFAULT_MINPOLL"
+    maxPoll="$DEFAULT_MAXPOLL"
+fi
 ntpLog "Minpoll:$minPoll MaxPoll:$maxPoll"
 
 hosts=("$hostName" "$hostName2" "$hostName3" "$hostName4" "$hostName5")
@@ -150,6 +158,12 @@ for i in $(seq 0 4); do
     if [ -n "$host" ]; then
         # use directive if set, else default to server
         [ -z "$directive" ] && directive="server"
+
+         # Only allow server or pool, default to server otherwise
+        if [ "$directive" != "server" ] && [ "$directive" != "pool" ]; then
+            directive="server"
+        fi
+
         printf "%s %s iburst minpoll %s maxpoll %s\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
         conf_written=1
     fi
