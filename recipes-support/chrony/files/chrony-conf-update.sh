@@ -60,6 +60,8 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      directive3=$( /lib/rdk/getPartnerProperty.sh NTPServer3Directive )
      directive4=$( /lib/rdk/getPartnerProperty.sh NTPServer4Directive )
      directive5=$( /lib/rdk/getPartnerProperty.sh NTPServer5Directive )
+
+     maxstep=`/lib/rdk/getPartnerProperty.sh NTPMaxstep`
   
 fi
 }
