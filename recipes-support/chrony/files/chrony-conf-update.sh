@@ -155,6 +155,16 @@ for i in $(seq 0 4); do
     fi
 done
 
+TMP_FILE="/tmp/rdk_chrony.deduped"
+awk '
+/^(server|pool)[ \t]+/ {
+    if (!seen[$0]++) print
+    next
+}
+{ print }
+' "$CHRONY_CONF" > "$TMP_FILE"
+cat "$TMP_FILE" > "$CHRONY_CONF"
+
 # fallback if no valid host found
 if [ "$conf_written" -eq 0 ]; then
     printf "server time.google.com iburst minpoll %s maxpoll %s\n" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
