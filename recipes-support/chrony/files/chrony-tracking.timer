@@ -1,5 +1,6 @@
 [Unit]
 Description=Run chrony telemetry collection every 15 minutes
+ConditionPathExists=/opt/secure/RFC/chrony/chronyd_enabled
 
 [Timer]
 OnBootSec=120s
