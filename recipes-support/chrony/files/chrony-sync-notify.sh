@@ -5,7 +5,7 @@ NTP_DIR="/tmp/systimemgr"
 NTP_FILE="$NTP_DIR/ntp"
 CLOCK_EVENT="/tmp/clock-event"
 SYSTEMD_DIR="/var/lib/systemd/"
-SYSTEMD_CLOCK="$SYSTEMD_DIR/clock" 
+SYSTEMD_CLOCK="$SYSTEMD_DIR/clock"
 
 log() {
     echo "$1" >> "$LOG_FILE"
