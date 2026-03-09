@@ -34,7 +34,6 @@ fi
 
 if [ ! -f "$CLOCK_EVENT" ]; then
 touch "$CLOCK_EVENT" && log "Created $CLOCK_EVENT"
-milestone "CLOCK_EVENT_CREATED"
 fi
 
 # Create required directory
@@ -46,12 +45,10 @@ fi
 # Create flag files
 if [ ! -f "$NTP_FILE" ]; then
 touch "$NTP_FILE" && log "Created $NTP_FILE"
-milestone "SYSTIMEMGR_NTP_CREATED"
 fi
 
 if [ ! -f "$SYSTEMD_CLOCK" ]; then
 touch "$SYSTEMD_CLOCK" && log "Created $SYSTEMD_CLOCK"
-milestone "SYSTEMD_CLOCK_CREATED"
 fi
 
 echo "Synchronized" > /tmp/ntp_status
