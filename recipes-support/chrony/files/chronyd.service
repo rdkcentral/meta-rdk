@@ -9,6 +9,7 @@ ConditionCapability=CAP_SYS_TIME
 
 [Service]
 Type=forking
+Restart=always
 PIDFile=/run/chrony/chronyd.pid
 ExecStartPre=/lib/rdk/chrony-conf-update.sh
 ExecStart=/usr/sbin/chronyd
