@@ -132,6 +132,18 @@ ntpLog "NTP Server URL for the partner:$hosts"
 
 conf_written=0
 > "$CHRONY_CONF"
+
+if [ -n "$maxstep" ]; then
+    if echo "$maxstep" | grep -Eq '^[0-9]+(\.[0-9]+)?,[0-9]+$'; then
+        stepval="${maxstep%%,*}"
+        stepcount="${maxstep##*,}"
+        echo "makestep $stepval $stepcount" >> "$CHRONY_CONF"
+        ntpLog "Added makestep $stepval $stepcount to $CHRONY_CONF"
+    else
+        ntpLog "NTPMaxstep value '$maxstep' is invalid, skipping makestep directive"
+    fi
+fi
+
 for i in $(seq 0 4); do
     host="${hosts[$i]}"
     directive="${directives[$i]}"
