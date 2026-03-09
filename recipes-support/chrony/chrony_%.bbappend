@@ -14,7 +14,7 @@ SRC_URI += "file://chrony.conf \
 
 do_install:append() {
     # Binaries
-    install -m 0755 ${S}/chronyc ${D}${sbindir}
+
     install -d ${D}${base_libdir}/rdk
 
     #config File
@@ -39,7 +39,7 @@ python __anonymous() {
     bb.note("meta-rdk: chrony_%.bbappend is parsed and executed!")
 }
 
-FILES:${PN} += "${sbindir}/chronyc"
+
 FILES:${PN} += "${base_libdir}/rdk/chrony-sync-notify.sh"
 CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
