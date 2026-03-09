@@ -27,6 +27,9 @@ EXTRA_OECONF = " ${ENABLE_GST1}"
 ENABLE_SAFEC = "--enable-safec=${@bb.utils.contains('DISTRO_FEATURES', 'safec','yes', 'no', d)}"
 EXTRA_OECONF += " ${ENABLE_SAFEC}"
 
+ENABLE_BRCM_BUILD = "--enable-brcm-build=${@bb.utils.contains('DISTRO_FEATURES', 'btr_bcm_pcm_sink','yes', 'no', d)}"
+EXTRA_OECONF += " ${ENABLE_BRCM_BUILD}"
+
 # RPC-IARM Must be Enabled for Video Platforms only; Also iarmbus is dependency for Video Platforms
 DEPENDS:append:client = " iarmbus ${@bb.utils.contains('DISTRO_FEATURES', 'ENABLE_NETWORKMANAGER', '', 'netsrvmgr', d)}"
 DEPENDS:append:hybrid = " iarmbus"
