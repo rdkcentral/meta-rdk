@@ -46,7 +46,6 @@ FILES:${PN} += "${base_libdir}/rdk/chrony_tracking.sh"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
 SYSTEMD_SERVICE:${PN} += "chrony-sync-notify.service"
-SYSTEMD_SERVICE:${PN} += "chrony-tracking.service"
 SYSTEMD_SERVICE:${PN} += "chrony-tracking.timer"
 
 
