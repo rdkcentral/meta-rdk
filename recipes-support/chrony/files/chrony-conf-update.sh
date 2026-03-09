@@ -17,13 +17,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##############################################################################
-# Purpose : To update the timesyncd configuration file
+# Purpose : To generate the chrony configuration file  (/etc/rdk_chrony.conf)
 # Scope : RDK Devices
-# Usage : Invoke by systemd service
+# Usage : Invoke by systemd service as part of chrony integration
 
 
-output=""
-count=0
 LOG_FILE="/opt/logs/chrony.log"
 attempts=1
 max_attempts=5
