@@ -1,5 +1,5 @@
 #!/bin/sh
-LOGFILE="/opt/logs/chrony_telemetry.log"
+LOGFILE="/opt/logs/chrony.log"
 
 timestamp=$(date "+%Y-%m-%d %H:%M:%S")
 
