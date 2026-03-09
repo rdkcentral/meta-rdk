@@ -18,26 +18,23 @@ do_install:append() {
     install -d ${D}${base_libdir}/rdk
 
     #config File
-    rm ${D}${sysconfdir}/chrony.conf 
-    install -m 755 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/
-    install -m 755 ${WORKDIR}/rdk_chrony.conf ${D}${sysconfdir}/
-    install -m 755 ${WORKDIR}/chrony-sync-notify.sh ${D}${base_libdir}/rdk
-    install -m 755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
-    install -m 755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
+    rm -rf ${D}${sysconfdir}/chrony.conf 
+    install -m 0644 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/
+    install -m 0644 ${WORKDIR}/rdk_chrony.conf ${D}${sysconfdir}/
+    install -m 0644 ${WORKDIR}/chrony-sync-notify.sh ${D}${base_libdir}/rdk
+    install -m 0644 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
+    install -m 0644 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
     
 
     # service to start chrony
-    rm ${D}${systemd_unitdir}/system/chronyd.service
+    rm -rf ${D}${systemd_unitdir}/system/chronyd.service
     install -m 0644 ${WORKDIR}/chronyd.service ${D}${systemd_unitdir}/system/
-    install -m 755 ${WORKDIR}/chrony-sync-notify.service ${D}${systemd_unitdir}/system/
-    install -m 755 ${WORKDIR}/chrony-tracking.service ${D}${systemd_unitdir}/system/
-    install -m 755 ${WORKDIR}/chrony-tracking.timer ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/chrony-sync-notify.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/chrony-tracking.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/chrony-tracking.timer ${D}${systemd_unitdir}/system/
 
 }
 
-python __anonymous() {
-    bb.note("meta-rdk: chrony_%.bbappend is parsed and executed!")
-}
 
 FILES:${PN} += "${sbindir}/chronyc"
 FILES:${PN} += "${base_libdir}/rdk/chrony-sync-notify.sh"
@@ -58,5 +55,3 @@ SYSLOG-NG_SERVICE_chronyd = "chronyd.service"
 SYSLOG-NG_DESTINATION_chronyd = "chrony.log"
 SYSLOG-NG_LOGRATE_chronyd = "low"
 
-# Separate the client program into its own package
-#FILES:${PN} += "${sbindir}/chrony_ctl_daemon"
