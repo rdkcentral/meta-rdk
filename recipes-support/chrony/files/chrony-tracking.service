@@ -1,5 +1,7 @@
 [Unit]
 Description=Chrony telemetry data collection service
+After=chronyd.service
+ConditionPathExists=/opt/secure/RFC/chrony/chronyd_enabled
 
 [Service]
 Type=oneshot
