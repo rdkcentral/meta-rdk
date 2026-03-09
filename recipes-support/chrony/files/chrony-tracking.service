@@ -1,6 +1,5 @@
 [Unit]
 Description=Chrony telemetry data collection service
-After=nvram.service chronyd.service
 ConditionPathExists=/opt/secure/RFC/chrony/chronyd_enabled
 
 [Service]
