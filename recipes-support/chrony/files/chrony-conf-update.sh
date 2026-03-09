@@ -75,8 +75,10 @@ get_ntp_hosts_from_bootstrap() {
     # Helper to fetch key=value from bootstrap.ini (first match)
     get_bs_val() {
         key="$1"
+        # Escape regex metacharacters in key so it is matched literally
+        escaped_key=$(printf '%s\n' "$key" | sed 's/[][\\.^$*]/\\&/g')
         # Extract RHS after '=' and trim whitespace
-        grep -m1 -E "^[[:space:]]*$key=" "$BOOTSTRAP" 2>/dev/null | \
+        grep -m1 -E "^[[:space:]]*$escaped_key=" "$BOOTSTRAP" 2>/dev/null | \
             cut -d'=' -f2- | sed 's/^[[:space:]]*//; s/[[:space:]]*$//'
     }
 
