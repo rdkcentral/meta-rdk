@@ -1,5 +1,5 @@
 [Unit]
-Description=Parse chrony tracking log and emit metrics
+Description=Chrony telemetry data collection service
 
 [Service]
 Type=oneshot
