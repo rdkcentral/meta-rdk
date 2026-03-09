@@ -1,13 +1,13 @@
 #!/bin/sh
 
-LOG_TAG="chrony-first-sync"
+LOG_FILE=/opt/logs/chrony.log
 NTP_DIR="/tmp/systimemgr"
 NTP_FILE="$NTP_DIR/ntp"
 CLOCK_EVENT="/tmp/clock-event"
 SYSTEMD_CLOCK="/var/lib/systemd/clock" #TBD -is this used?
 
 log() {
-    echo "$1"
+    echo "$1" >> $LOG_FILE
 }
 
 milestone() {
@@ -26,8 +26,8 @@ if is_synced; then
     exit 0       #TBD - Dont log milestones whenever chronyd started
  else
     log "Waiting for Chrony synchronisation..."
-    chronyc waitsync 0 0.0 0.0 0.1 || {
-        log "waitsync failed"
+    chronyc waitsync 3000 0 0 0.1 || {
+        log "waitsync failed or Timeout after for 5 minutes"
         exit 1
     }
 fi
