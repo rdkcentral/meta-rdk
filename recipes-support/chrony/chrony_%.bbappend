@@ -1,5 +1,6 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+RDEPENDS:${PN} += "bash"
 
 SRC_URI += "file://chrony.conf \
             file://chronyd.service \
