@@ -1,61 +1,34 @@
-From 606936f872353578fc998135fb1b39c60f07c137 Mon Sep 17 00:00:00 2001
+From 97cadc7023ba936642b0dd3ec1833cf4c0d55c57 Mon Sep 17 00:00:00 2001
 From: Gurdal Oruklu <gurdal_oruklu@comcast.com>
-Date: Mon, 9 Mar 2026 20:00:35 +0000
-Subject: [PATCH] RDKEMW-15176: increased swap limit for the container
+Date: Mon, 9 Mar 2026 20:23:45 +0000
+Subject: [PATCH] RDKEMW-15176: increased swap limit for containers
 
 ---
- bundle/lib/source/DobbySpecConfig.cpp                          | 3 +++
- bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template  | 2 +-
- .../lib/source/templates/OciConfigJsonVM1.0.2-dobby.template   | 2 +-
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ bundle/lib/source/DobbySpecConfig.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/bundle/lib/source/DobbySpecConfig.cpp b/bundle/lib/source/DobbySpecConfig.cpp
-index 326d428a..c2605483 100644
+index c2605483..d339dfd9 100644
 --- a/bundle/lib/source/DobbySpecConfig.cpp
 +++ b/bundle/lib/source/DobbySpecConfig.cpp
-@@ -62,6 +62,8 @@ static const ctemplate::StaticTemplateString USERNS_DISABLED =
+@@ -65,6 +65,8 @@ static const ctemplate::StaticTemplateString MEM_LIMIT =
+ static const ctemplate::StaticTemplateString MEM_SWAP_LIMIT =
+     STS_INIT(MEM_SWAP_LIMIT, "MEM_SWAP_LIMIT");
  
- static const ctemplate::StaticTemplateString MEM_LIMIT =
-     STS_INIT(MEM_LIMIT, "MEM_LIMIT");
-+static const ctemplate::StaticTemplateString MEM_SWAP_LIMIT =
-+    STS_INIT(MEM_SWAP_LIMIT, "MEM_SWAP_LIMIT");
- 
++static constexpr unsigned MEM_SWAP_LIMIT_EXTRA_BYTES = 200u * 1024u * 1024u;
++
  static const ctemplate::StaticTemplateString CPU_SHARES_ENABLED =
      STS_INIT(CPU_SHARES_ENABLED, "CPU_SHARES_ENABLED");
-@@ -1274,6 +1276,7 @@ bool DobbySpecConfig::processMemLimit(const Json::Value& value,
+ static const ctemplate::StaticTemplateString CPU_SHARES_VALUE =
+@@ -1276,7 +1278,7 @@ bool DobbySpecConfig::processMemLimit(const Json::Value& value,
      }
  
      dictionary->SetIntValue(MEM_LIMIT, memLimit);
-+    dictionary->SetIntValue(MEM_SWAP_LIMIT, memLimit + (200 * 1024 * 1024));
+-    dictionary->SetIntValue(MEM_SWAP_LIMIT, memLimit + (200 * 1024 * 1024));
++    dictionary->SetIntValue(MEM_SWAP_LIMIT, memLimit + MEM_SWAP_LIMIT_EXTRA_BYTES);
  
      return true;
  }
-diff --git a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
-index 6cbdabd4..6b9dd85f 100644
---- a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
-+++ b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
-@@ -328,7 +328,7 @@ static const char* ociJsonTemplate = R"JSON(
-             ],
-             "memory": {
-                 "limit": {{MEM_LIMIT}},
--                "swap": {{MEM_LIMIT}},
-+                "swap": {{MEM_SWAP_LIMIT}},
-                 "swappiness": 60
-             },
-             "cpu": {
-diff --git a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
-index 21fe91d3..1dc6eb3b 100644
---- a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
-+++ b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
-@@ -339,7 +339,7 @@ static const char* ociJsonTemplate = R"JSON(
-             ],
-             "memory": {
-                 "limit": {{MEM_LIMIT}},
--                "swap": {{MEM_LIMIT}},
-+                "swap": {{MEM_SWAP_LIMIT}},
-                 "swappiness": 60
-             },
-             "cpu": {
 -- 
 2.34.1
 
