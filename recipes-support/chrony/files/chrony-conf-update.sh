@@ -126,7 +126,7 @@ ntpLog "Minpoll:$minPoll MaxPoll:$maxPoll"
 
 hosts=("$hostName" "$hostName2" "$hostName3" "$hostName4" "$hostName5")
 directives=("$directive1" "$directive2" "$directive3" "$directive4" "$directive5")
-ntpLog "NTP Server URL for the partner:$hosts"
+ntpLog "NTP Server URL for the partner:${hosts[*]}"
 
 conf_written=0
 > "$CHRONY_CONF"
