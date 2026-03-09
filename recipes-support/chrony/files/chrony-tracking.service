@@ -1,8 +1,11 @@
 [Unit]
 Description=Chrony telemetry data collection service
-After=chronyd.service
+After=nvram.service chronyd.service
 ConditionPathExists=/opt/secure/RFC/chrony/chronyd_enabled
 
 [Service]
 Type=oneshot
 ExecStart=/lib/rdk/chrony_tracking.sh
+
+[Install]
+WantedBy=multi-user.target
