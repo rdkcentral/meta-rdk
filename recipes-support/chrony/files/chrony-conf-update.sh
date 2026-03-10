@@ -164,7 +164,11 @@ for i in $(seq 0 4); do
             directive="server"
         fi
 
-        printf "%s %s iburst minpoll %s maxpoll %s\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
+        if [ "$directive" = "pool" ]; then
+           printf "%s %s iburst minpoll %s maxpoll %s maxsources 4\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
+        else
+           printf "%s %s iburst minpoll %s maxpoll %s\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF" 
+        fi
         conf_written=1
     fi
 done
