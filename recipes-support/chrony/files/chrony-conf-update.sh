@@ -190,4 +190,23 @@ if [ "$conf_written" -eq 0 ]; then
 fi
 
 ntpLog "Successfully updated $CHRONY_CONF"
+
+CLOCK_FILE="/opt/secure/clock.txt"
+if [ ! -f "$CLOCK_FILE" ]; then
+  echo "File not found: $CLOCK_FILE"
+  exit 1
+fi
+
+TIME_VAL=$(cat "$CLOCK_FILE")
+if ! [[ "$TIME_VAL" =~ ^[0-9]+$ ]]; then
+  echo "Invalid time value in $CLOCK_FILE"
+  exit 1
+fi
+
+# Convert to date string (optional, just for log)
+HUMAN_DATE=$(date -d "@$TIME_VAL")
+
+echo "Setting system time to LKG: $HUMAN_DATE (epoch $TIME_VAL)"
+date -s "@$TIME_VAL"
+
 exit 0
