@@ -199,26 +199,26 @@ if [ ! -f "$CLOCK_FILE" ]; then
     # Extract the BUILD_TIME value
     BUILD_TIME=$(grep '^BUILD_TIME=' "$VERSION_FILE" | cut -d= -f2- | tr -d '"')
     if [ -n "$BUILD_TIME" ]; then
-       echo "Setting system time to build time: $BUILD_TIME"
+       ntpLog "Setting system time to build time: $BUILD_TIME"
        date -s "$BUILD_TIME"
        exit 0
     else
-        echo "BUILD_TIME not found in $VERSION_FILE"
+        ntpLog "BUILD_TIME not found in $VERSION_FILE"
     fi
   else
-      echo "Neither $CLOCK_FILE nor $VERSION_FILE found"
+      ntpLog "Neither $CLOCK_FILE nor $VERSION_FILE found"
   fi
 fi
 
 TIME_VAL=$(cat "$CLOCK_FILE")
 if ! [[ "$TIME_VAL" =~ ^[0-9]+$ ]]; then
-  echo "Invalid time value in $CLOCK_FILE"
+  ntpLog "Invalid time value in $CLOCK_FILE"
 fi
 
 # Convert to date string (optional, just for log)
 HUMAN_DATE=$(date -d "@$TIME_VAL")
 
-echo "Setting system time to LKG: $HUMAN_DATE (epoch $TIME_VAL)"
+ntpLog "Setting system time to LKG: $HUMAN_DATE (epoch $TIME_VAL)"
 date -s "@$TIME_VAL"
 
 exit 0
