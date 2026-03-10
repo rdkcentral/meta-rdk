@@ -192,15 +192,27 @@ fi
 ntpLog "Successfully updated $CHRONY_CONF"
 
 CLOCK_FILE="/opt/secure/clock.txt"
+VERSION_FILE="/version.txt"
+
 if [ ! -f "$CLOCK_FILE" ]; then
-  echo "File not found: $CLOCK_FILE"
-  exit 1
+  if [ -f "$VERSION_FILE" ]; then
+    # Extract the BUILD_TIME value
+    BUILD_TIME=$(grep '^BUILD_TIME=' "$VERSION_FILE" | cut -d= -f2- | tr -d '"')
+    if [ -n "$BUILD_TIME" ]; then
+       echo "Setting system time to build time: $BUILD_TIME"
+       date -s "$BUILD_TIME"
+       exit 0
+    else
+        echo "BUILD_TIME not found in $VERSION_FILE"
+    fi
+  else
+      echo "Neither $CLOCK_FILE nor $VERSION_FILE found"
+  fi
 fi
 
 TIME_VAL=$(cat "$CLOCK_FILE")
 if ! [[ "$TIME_VAL" =~ ^[0-9]+$ ]]; then
   echo "Invalid time value in $CLOCK_FILE"
-  exit 1
 fi
 
 # Convert to date string (optional, just for log)
