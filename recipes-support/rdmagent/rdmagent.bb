@@ -8,14 +8,14 @@ DEPENDS += "rbus"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=8700a1d105cac2a90d4f51290ac6e466"
 
-PV = "2.1.3"
+PV = "2.2.0"
 PR = "r1"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "18f68fc271daa1259b22a0707ff73765ae96da0a"
+SRCREV = "2930040f670f2c3d2e00f604bc1ff72dd5d0b03e"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
 SRCREV_FORMAT = "rdmagent"
 
