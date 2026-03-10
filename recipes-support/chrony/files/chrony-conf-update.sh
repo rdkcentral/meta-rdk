@@ -48,32 +48,26 @@ ntpLog()
 CLOCK_FILE="/opt/secure/clock.txt"
 VERSION_FILE="/version.txt"
 
-if [ ! -f "$CLOCK_FILE" ]; then
-  if [ -f "$VERSION_FILE" ]; then
-    # Extract the BUILD_TIME value
+if [ -f "$CLOCK_FILE" ]; then
+    TIME_VAL=$(cat "$CLOCK_FILE")
+    if [[ "$TIME_VAL" =~ ^[0-9]+$ ]]; then
+        HUMAN_DATE=$(date -d "@$TIME_VAL")
+        ntpLog "Setting system time to LKG: $HUMAN_DATE (epoch $TIME_VAL)"
+        date -s "@$TIME_VAL"
+    else
+        ntpLog "Invalid time value in $CLOCK_FILE"
+    fi
+elif [ -f "$VERSION_FILE" ]; then
     BUILD_TIME=$(grep '^BUILD_TIME=' "$VERSION_FILE" | cut -d= -f2- | tr -d '"')
     if [ -n "$BUILD_TIME" ]; then
-       ntpLog "Setting system time to build time: $BUILD_TIME"
-       date -s "$BUILD_TIME"
+        ntpLog "Setting system time to build time: $BUILD_TIME"
+        date -s "$BUILD_TIME"
     else
         ntpLog "BUILD_TIME not found in $VERSION_FILE"
     fi
-  else
-      ntpLog "Neither $CLOCK_FILE nor $VERSION_FILE found"
-  fi
+else
+    ntpLog "Neither $CLOCK_FILE nor $VERSION_FILE found"
 fi
-
-# Read LKG time, ensure it is a valid numeric value
-TIME_VAL=$(cat "$CLOCK_FILE")
-if ! [[ "$TIME_VAL" =~ ^[0-9]+$ ]]; then
-  ntpLog "Invalid time value in $CLOCK_FILE"
-fi
-
-# Convert epoch time to human-readable date for logging
-HUMAN_DATE=$(date -d "@$TIME_VAL")
-
-ntpLog "Setting system time to LKG: $HUMAN_DATE (epoch $TIME_VAL)"
-date -s "@$TIME_VAL"
 
 # -----------------------------------------------------------------------------
 # Fetch NTP server hostnames and poll intervals using property scripts
