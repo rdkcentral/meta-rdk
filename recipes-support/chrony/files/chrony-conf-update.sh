@@ -42,7 +42,9 @@ ntpLog()
     echo "`/bin/timestamp` : $0: $*" >> "$LOG_FILE"
 }
 
-# To Set LKG Time - To be fixed permanently later
+# -----------------------------------------------------------------------------
+# Set system time based on LKG value or build time, if neither is available, log error
+# -----------------------------------------------------------------------------
 CLOCK_FILE="/opt/secure/clock.txt"
 VERSION_FILE="/version.txt"
 
@@ -62,18 +64,21 @@ if [ ! -f "$CLOCK_FILE" ]; then
   fi
 fi
 
+# Read LKG time, ensure it is a valid numeric value
 TIME_VAL=$(cat "$CLOCK_FILE")
 if ! [[ "$TIME_VAL" =~ ^[0-9]+$ ]]; then
   ntpLog "Invalid time value in $CLOCK_FILE"
 fi
 
-# Convert to date string (optional, just for log)
+# Convert epoch time to human-readable date for logging
 HUMAN_DATE=$(date -d "@$TIME_VAL")
 
 ntpLog "Setting system time to LKG: $HUMAN_DATE (epoch $TIME_VAL)"
 date -s "@$TIME_VAL"
 
-# NTP URL from the property file
+# -----------------------------------------------------------------------------
+# Fetch NTP server hostnames and poll intervals using property scripts
+# -----------------------------------------------------------------------------
 get_ntp_hosts() {
 if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      hostName=`/lib/rdk/getPartnerProperty.sh ntpHost`
@@ -97,6 +102,7 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
 fi
 }
 
+# Fallback: Fetch NTP hosts from bootstrap.ini if property script returns nothing
 get_ntp_hosts_from_bootstrap() {
     BOOTSTRAP="/opt/secure/RFC/bootstrap.ini"
 
@@ -154,7 +160,8 @@ while [ "$attempts" -le "$max_attempts" ]; do
 
 done
 
-# Use defaults if not set
+# Use default polling intervals if not configured
+# Validate that minPoll is not greater than maxPoll
 [ -z "$minPoll" ] && minPoll="$DEFAULT_MINPOLL"
 [ -z "$maxPoll" ] && maxPoll="$DEFAULT_MAXPOLL"
 
@@ -172,6 +179,7 @@ ntpLog "NTP Server URL for the partner:${hosts[*]}"
 conf_written=0
 > "$CHRONY_CONF"
 
+# Add makestep directive to chrony config to control threshold/step correction
 if [ -n "$maxstep" ]; then
     if echo "$maxstep" | grep -Eq '^[0-9]+(\.[0-9]+)?,[0-9]+$'; then
         stepval="${maxstep%%,*}"
@@ -182,6 +190,8 @@ if [ -n "$maxstep" ]; then
         ntpLog "NTPMaxstep value '$maxstep' is invalid, skipping makestep directive"
     fi
 fi
+
+# Add NTP servers ("server" or "pool" directive) to the configuration file
 
 for i in $(seq 0 4); do
     host="${hosts[$i]}"
@@ -204,6 +214,8 @@ for i in $(seq 0 4); do
     fi
 done
 
+# Remove duplicate NTP server entries, preserving only unique definitions
+
 TMP_FILE="/tmp/rdk_chrony.deduped"
 awk '
 /^(server|pool)[ \t]+/ {
@@ -214,7 +226,7 @@ awk '
 ' "$CHRONY_CONF" > "$TMP_FILE"
 cat "$TMP_FILE" > "$CHRONY_CONF"
 
-# fallback if no valid host found
+# Fallback: If no valid NTP hosts found, use Google's public time server
 if [ "$conf_written" -eq 0 ]; then
     printf "server time.google.com iburst minpoll %s maxpoll %s\n" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
     ntpLog "No valid NTP servers found, using fallback: time.google.com"
