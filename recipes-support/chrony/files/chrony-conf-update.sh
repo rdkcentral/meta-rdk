@@ -222,6 +222,7 @@ awk '
 { print }
 ' "$CHRONY_CONF" > "$TMP_FILE"
 cat "$TMP_FILE" > "$CHRONY_CONF"
+rm -f "$TMP_FILE"
 
 # Fallback: If no valid NTP hosts found, use Google's public time server
 if [ "$conf_written" -eq 0 ]; then
