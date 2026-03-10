@@ -55,7 +55,6 @@ if [ ! -f "$CLOCK_FILE" ]; then
     if [ -n "$BUILD_TIME" ]; then
        ntpLog "Setting system time to build time: $BUILD_TIME"
        date -s "$BUILD_TIME"
-       exit 0
     else
         ntpLog "BUILD_TIME not found in $VERSION_FILE"
     fi
