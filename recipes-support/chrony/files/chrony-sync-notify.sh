@@ -1,4 +1,4 @@
-!/bin/bash
+!/bin/sh
 ##############################################################################
 # If not stated otherwise in this file or this component's LICENSE file the
 # following copyright and licenses apply:
@@ -20,8 +20,6 @@
 # Purpose : To Notify First synchronisation of chrony
 # Scope : RDK Devices
 # Usage : Invoke by systemd service as part of chrony integration
-
-#!/bin/sh
 
 LOG_FILE=/opt/logs/chrony.log
 NTP_DIR="/tmp/systimemgr"
