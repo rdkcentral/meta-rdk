@@ -187,8 +187,12 @@ if [ -n "$maxstep" ]; then
         echo "makestep $stepval $stepcount" >> "$CHRONY_CONF"
         ntpLog "Added makestep $stepval $stepcount to $CHRONY_CONF"
     else
-        ntpLog "NTPMaxstep value '$maxstep' is invalid, skipping makestep directive"
+        echo "makestep 1.0 3" >> "$CHRONY_CONF"
+        ntpLog "NTPMaxstep value '$maxstep' is invalid, using default makestep 1.0 3 in $CHRONY_CONF"
     fi
+else
+    echo "makestep 1.0 3" >> "$CHRONY_CONF"
+    ntpLog "NTPMaxstep is not set, using default makestep 1.0 3 in $CHRONY_CONF"
 fi
 
 # Add NTP servers ("server" or "pool" directive) to the configuration file
