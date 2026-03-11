@@ -21,6 +21,7 @@ RDEPENDS:packagegroup-rdk-media-common = "\
     virtual/mfrlib \
     iarm-set-powerstate \
     iarm-query-powerstate \
+    power-state-monitor \
     crashupload \
     crashupload-conf \
     key-simulator \

@@ -20,5 +20,4 @@ RDEPENDS:packagegroup-rdk-generic-mediaserver = "\
     sys-utils \
     xfsprogs \
     ntp \
-    power-state-monitor \
     "
