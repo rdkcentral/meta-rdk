@@ -5,7 +5,7 @@ After=chronyd.service
 ConditionPathExists=/opt/secure/RFC/chrony/chronyd_enabled
 
 [Service]
-Type=oneshot
+Type=simple
 ExecStart=/lib/rdk/chrony-sync-notify.sh
 
 [Install]
