@@ -44,8 +44,8 @@ if is_synced; then
     exit 0       #TBD - Don't log milestones whenever chronyd started
  else
     log "Waiting for Chrony synchronisation..."
-    chronyc waitsync 3000 0 0 0.1 || {
-        log "waitsync failed or timed out after 5 minutes"
+    chronyc waitsync 0 0 0 0.1 || {
+        log "waitsync failed"
         exit 1
     }
 fi
