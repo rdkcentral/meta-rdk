@@ -12,6 +12,8 @@ SRC_URI += "file://chrony.conf \
             file://chrony_tracking.sh \
            "
 
+PACKAGECONFIG:remove = "editline"
+
 do_install:append() {
     # Binaries
 
