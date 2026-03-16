@@ -1,0 +1,12 @@
+[Unit]
+Description=Notify when Chrony time sync is completed
+Documentation=man:chronyc(1)
+After=chronyd.service
+ConditionPathExists=/opt/secure/RFC/chrony/chronyd_enabled
+
+[Service]
+Type=simple
+ExecStart=/lib/rdk/chrony-sync-notify.sh
+
+[Install]
+WantedBy=chronyd.service
