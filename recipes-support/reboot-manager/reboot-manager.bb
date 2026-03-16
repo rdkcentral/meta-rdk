@@ -16,7 +16,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "0b0a0f0dd3536f008f21ae237a3c405c5d3c5e89"
+SRCREV_reboot-manager = "5e8ce48174ce48fd6d55c6987a741ab0aa011ac5"
 
 S = "${WORKDIR}/git"
 
@@ -45,4 +45,5 @@ PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
+FILES:${PN}-dev += "${includedir}/rebootnow/rbus_interface.h"
 FILES:${PN} += "${bindir}/rebootnow"
