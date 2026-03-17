@@ -5,7 +5,7 @@ LICENSE = "Apache-2.0"
 
 LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1b8525f92b462b86205ffaba159b4481"
 
-SRC_URI = "git://github.com/rdkcentral/meminsight.git;branch=main;name=src;destsuffix=git"
+SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
 
 SRC_URI_append = " file://meminsight-runner.service \
                    file://meminsight-runner.path \
