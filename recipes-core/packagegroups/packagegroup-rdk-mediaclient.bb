@@ -13,7 +13,6 @@ PACKAGES = "\
 RDEPENDS:packagegroup-rdk-generic-mediaclient = "\
     dnsmasq \
     tr69hostif \
-    tenablehdcp \
     netsrvmgr \
     util-linux-sfdisk \
     webkitbrowser-plugin \
