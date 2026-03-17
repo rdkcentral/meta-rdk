@@ -12,7 +12,6 @@ PACKAGES = "\
 # Generic RDK components
 RDEPENDS:packagegroup-rdk-generic-mediaserver = "\
     rmfstreamer \
-    tenablehdcp \
     tr69hostif \
     hdparm \
     dibbler-client \
