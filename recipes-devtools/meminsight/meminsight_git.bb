@@ -17,7 +17,7 @@ SRC_URI_append = " file://meminsight-runner.service \
                    file://start_meminsight.sh \
                    "
 
-# Feb 17, 2026
+# Mar 2, 2026
 # v1.0.0
 SRCREV = "a7e1e7375b5eaaa4cffd26fc2a40dbd359bc0b1f"
 PV = "1.0.0"
