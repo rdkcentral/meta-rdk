@@ -15,7 +15,7 @@ PR = "r2"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "f324dbbf9d0372e6a7c0bb5f10edfb4f22ea67ab"
+SRCREV = "e24bde4d5dc2bacd0e52838d97c82cb0ded58b9f"
 SRCREV_FORMAT = "bluetooth-core"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth;${CMF_GITHUB_SRC_URI_SUFFIX}"
