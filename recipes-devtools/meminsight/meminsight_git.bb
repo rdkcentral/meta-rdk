@@ -45,7 +45,7 @@ do_install_append_client() {
     if ${@bb.utils.contains('DISTRO_FEATURES', 'enable_xmeminsight', 'true', 'false', d)}; then
         install -m 0644 ${WORKDIR}/conf/client-path.conf ${D}${systemd_unitdir}/system/meminsight-runner.path.d/
     else
-        install -m 0644 ${WORKDIR}/conf/client-rdm-path.conf ${D}${systemd_unitdir}/system/meminsight-runner.path.d/
+        install -m 0644 ${WORKDIR}/conf/broadband-rdm-path.conf ${D}${systemd_unitdir}/system/meminsight-runner.path.d/client-rdm-path.conf
         install -d ${D}/etc/rdm/post-services
         install -m 0755 ${WORKDIR}/start_meminsight.sh ${D}/etc/rdm/post-services/start_meminsight.sh
     fi
