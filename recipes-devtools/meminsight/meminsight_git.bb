@@ -1,4 +1,5 @@
 SUMMARY = "Memory insight utility and runner service"
+SECTION = "console/utils"
 DESCRIPTION = "meminsight: system/process memory statistics collection tool with systemd runner service."
 LICENSE = "Apache-2.0"
 
