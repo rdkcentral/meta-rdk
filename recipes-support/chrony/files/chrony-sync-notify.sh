@@ -61,9 +61,12 @@ if [ ! -d "$NTP_DIR" ]; then
 fi
 
 # Create flag files
-if [ ! -f "$NTP_FILE" ]; then
+
 touch "$NTP_FILE" && log "Created $NTP_FILE"
-fi
+log "Change the permission of $NTP_FILE"
+chmod 644 "$NTP_FILE"
+log "Permission changed for $NTP_FILE"
+
 
 if [ ! -d "$SYSTEMD_DIR" ]; then
     log "Creating $SYSTEMD_DIR"
