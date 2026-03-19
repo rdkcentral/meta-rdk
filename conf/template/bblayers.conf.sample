@@ -26,6 +26,7 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_EXT') if d.getVar('MANIFEST_PATH_OSS
 
 # Common layers: optional
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') if d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_IMAGE_SUPPORT') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_VENDOR_IMAGE_PACKAGER') if d.getVar('MANIFEST_PATH_VENDOR_IMAGE_PACKAGER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_VENDOR_IMAGE_PACKAGER') + '/conf/layer.conf') else ''}"
 
 # Release layers: generic
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_RELEASE') if d.getVar('MANIFEST_PATH_OSS_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OSS_RELEASE') + '/conf/layer.conf') else ''}"
@@ -73,3 +74,4 @@ BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_REGION_CONFIG') if d.getVar('MANIFEST_PATH_REGION_CONFIG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_REGION_CONFIG') + '/conf/layer.conf') else ''} \
     "
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_MIXIN') if d.getVar('MANIFEST_PATH_META_MIXIN') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_MIXIN') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_CLANG') if d.getVar('MANIFEST_PATH_META_CLANG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_CLANG') + '/conf/layer.conf') else ''}"
