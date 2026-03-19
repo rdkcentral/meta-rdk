@@ -51,7 +51,8 @@ do_install:append () {
     install -m 0644 ${S}/uploadstblogs/include/*.h ${D}${includedir}
     install -d ${D}${sysconfdir}/
     install -d ${D}${sysconfdir}/backup_logs
-    install -m 0600 special_files.conf ${D}${sysconfdir}/backup_logs/
+    install -m 0600 ${S}/special_files.conf ${D}${sysconfdir}/backup_logs/
+    #install -m 0600 special_files.conf ${D}${sysconfdir}/backup_logs/
 }
 
 inherit breakpad-wrapper
