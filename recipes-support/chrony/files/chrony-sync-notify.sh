@@ -29,7 +29,8 @@ SYSTEMD_DIR="/var/lib/systemd/"
 SYSTEMD_CLOCK="$SYSTEMD_DIR/clock"
 
 log() {
-    echo "$1" >> "$LOG_FILE"
+    ts=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
+    echo "$ts chronyd[$$]: $1" >> "$LOG_FILE"
 }
 
 is_synced() {
