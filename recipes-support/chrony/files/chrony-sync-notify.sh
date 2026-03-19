@@ -58,7 +58,7 @@ fi
 
 touch "/tmp/systimemgr/ntp" && log "Created $NTP_FILE"
 #log "Change the permission of $NTP_FILE"
-#chmod 644 "$NTP_FILE"
+chmod 644 "$NTP_FILE"
 log "Permission changed for $NTP_FILE"
 
 
