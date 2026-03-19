@@ -56,7 +56,7 @@ touch "$CLOCK_EVENT" && log "Created $CLOCK_EVENT"
 fi
 
 
-touch "/tmp/systimemgr/ntp" && log "Created $NTP_FILE"
+touch "$NTP_FILE" && log "Created $NTP_FILE"
 chmod 644 "$NTP_FILE"
 
 
