@@ -55,17 +55,10 @@ if [ ! -f "$CLOCK_EVENT" ]; then
 touch "$CLOCK_EVENT" && log "Created $CLOCK_EVENT"
 fi
 
-# Create required directory
-if [ ! -d "$NTP_DIR" ]; then
-    log "Creating $NTP_DIR"
-    mkdir -p "$NTP_DIR"
-fi
 
-# Create flag files
-
-touch "$NTP_FILE" && log "Created $NTP_FILE"
-log "Change the permission of $NTP_FILE"
-chmod 644 "$NTP_FILE"
+touch "/tmp/systimemgr/ntp" && log "Created $NTP_FILE"
+#log "Change the permission of $NTP_FILE"
+#chmod 644 "$NTP_FILE"
 log "Permission changed for $NTP_FILE"
 
 
