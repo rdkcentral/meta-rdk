@@ -4,7 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "8afabb76b3aad057282487f76729ef243fb85042"
+SRCREV = "d8bcf7f71dcd9c9c5f7e29c4b7162917105feb08"
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -14,7 +14,7 @@ DEPENDS += "rdk-logger"
 RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
 
 
-PV = "1.8.2"
+PV = "1.8.3"
 PR = "r0"
 
 S = "${WORKDIR}/git"
