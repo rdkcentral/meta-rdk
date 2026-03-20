@@ -29,8 +29,9 @@ SYSTEMD_DIR="/var/lib/systemd/"
 SYSTEMD_CLOCK="$SYSTEMD_DIR/clock"
 
 log() {
-    echo "$1" >> "$LOG_FILE"
+    echo "$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ") chronyd-sync-notify[$$]: $1" >> "$LOG_FILE"
 }
+
 
 is_synced() {
     chronyc tracking 2>/dev/null | grep -q "Leap status *: Normal"
@@ -54,17 +55,6 @@ if [ ! -f "$CLOCK_EVENT" ]; then
 touch "$CLOCK_EVENT" && log "Created $CLOCK_EVENT"
 fi
 
-# Create required directory
-if [ ! -d "$NTP_DIR" ]; then
-    log "Creating $NTP_DIR"
-    mkdir -p "$NTP_DIR"
-fi
-
-# Create flag files
-if [ ! -f "$NTP_FILE" ]; then
-touch "$NTP_FILE" && log "Created $NTP_FILE"
-fi
-
 if [ ! -d "$SYSTEMD_DIR" ]; then
     log "Creating $SYSTEMD_DIR"
     mkdir -p "$SYSTEMD_DIR"
@@ -75,5 +65,17 @@ touch "$SYSTEMD_CLOCK" && log "Created $SYSTEMD_CLOCK"
 fi
 
 echo "Synchronized" > /tmp/ntp_status
+
+if [  -d "$NTP_DIR" ]; then
+   if touch "$NTP_FILE" && chmod 644 "$NTP_FILE"; then
+      log "Created $NTP_FILE"
+   else
+      log "Failed to create or set permissions on $NTP_FILE"
+      exit 1
+   fi
+else
+   log "Directory $NTP_DIR does not exist; cannot create $NTP_FILE"
+   exit 1
+fi
 
 exit 0
