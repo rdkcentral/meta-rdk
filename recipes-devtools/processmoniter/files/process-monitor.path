@@ -18,11 +18,12 @@
 ##########################################################################
 
 [Unit]
-Description=MemInsight Enable Path Monitor
+Description=Process Moniter
 OnFailure=path-fail-notifier@%n.service
 
 [Path]
 Unit=process-monitor.service
+PathExists=/opt/.enable_processmon
 
 [Install]
 WantedBy=multi-user.target
