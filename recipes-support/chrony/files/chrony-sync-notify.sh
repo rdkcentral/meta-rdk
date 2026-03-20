@@ -55,6 +55,17 @@ if [ ! -f "$CLOCK_EVENT" ]; then
 touch "$CLOCK_EVENT" && log "Created $CLOCK_EVENT"
 fi
 
+if [ ! -d "$SYSTEMD_DIR" ]; then
+    log "Creating $SYSTEMD_DIR"
+    mkdir -p "$SYSTEMD_DIR"
+fi
+
+if [ ! -f "$SYSTEMD_CLOCK" ]; then
+touch "$SYSTEMD_CLOCK" && log "Created $SYSTEMD_CLOCK"
+fi
+
+echo "Synchronized" > /tmp/ntp_status
+
 if [  -d "$NTP_DIR" ]; then
    if touch "$NTP_FILE" && chmod 644 "$NTP_FILE"; then
       log "Created $NTP_FILE"
@@ -66,16 +77,5 @@ else
    log "Directory $NTP_DIR does not exist; cannot create $NTP_FILE"
    exit 1
 fi
-
-if [ ! -d "$SYSTEMD_DIR" ]; then
-    log "Creating $SYSTEMD_DIR"
-    mkdir -p "$SYSTEMD_DIR"
-fi
-
-if [ ! -f "$SYSTEMD_CLOCK" ]; then
-touch "$SYSTEMD_CLOCK" && log "Created $SYSTEMD_CLOCK"
-fi
-
-echo "Synchronized" > /tmp/ntp_status
 
 exit 0
