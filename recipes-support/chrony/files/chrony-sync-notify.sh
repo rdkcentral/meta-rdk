@@ -56,15 +56,12 @@ touch "$CLOCK_EVENT" && log "Created $CLOCK_EVENT"
 fi
 
 
-if touch "$NTP_FILE"; then
-    chmod 644 "$NTP_FILE"
+if touch "$NTP_FILE" && chmod 644 "$NTP_FILE"; then
     log "Created $NTP_FILE"
 else
-    log "Failed to create $NTP_FILE"
+    log "Failed to create or set permissions on $NTP_FILE"
     exit 1
 fi
-
-
 if [ ! -d "$SYSTEMD_DIR" ]; then
     log "Creating $SYSTEMD_DIR"
     mkdir -p "$SYSTEMD_DIR"
