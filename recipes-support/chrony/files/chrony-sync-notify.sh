@@ -62,6 +62,9 @@ if [  -d "$NTP_DIR" ]; then
       log "Failed to create or set permissions on $NTP_FILE"
       exit 1
    fi
+else
+   log "Directory $NTP_DIR does not exist; cannot create $NTP_FILE"
+   exit 1
 fi
 
 if [ ! -d "$SYSTEMD_DIR" ]; then
