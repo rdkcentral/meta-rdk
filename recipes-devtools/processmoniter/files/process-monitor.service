@@ -23,4 +23,4 @@ Description=Process Monitor
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/sh -c 'PATH="/run/meminsight/usr/bin:/media/apps/meminsight:$PATH"; meminsight $ARGS'
+ExecStart=/usr/bin/ProcessMonitor --duration 180 --output /opt/processMonitorResults.js
