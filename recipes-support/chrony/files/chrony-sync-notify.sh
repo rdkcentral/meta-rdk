@@ -29,9 +29,9 @@ SYSTEMD_DIR="/var/lib/systemd/"
 SYSTEMD_CLOCK="$SYSTEMD_DIR/clock"
 
 log() {
-    ts=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
-    echo "$ts chronyd[$$]: $1" >> "$LOG_FILE"
+    echo "$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ") chronyd[$$]: $1" >> "$LOG_FILE"
 }
+
 
 is_synced() {
     chronyc tracking 2>/dev/null | grep -q "Leap status *: Normal"
