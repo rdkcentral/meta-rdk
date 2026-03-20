@@ -29,7 +29,7 @@ SYSTEMD_DIR="/var/lib/systemd/"
 SYSTEMD_CLOCK="$SYSTEMD_DIR/clock"
 
 log() {
-    echo "$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ") chronyd[$$]: $1" >> "$LOG_FILE"
+    echo "$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ") chronyd-sync-notify[$$]: $1" >> "$LOG_FILE"
 }
 
 
