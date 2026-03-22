@@ -66,7 +66,7 @@ fi
 
 echo "Synchronized" > /tmp/ntp_status
 
-if [  -d "$NTP_DIR" ]; then
+if [ -d "$NTP_DIR" ]; then
    if touch "$NTP_FILE" && chmod 644 "$NTP_FILE"; then
       log "Created $NTP_FILE"
    else
