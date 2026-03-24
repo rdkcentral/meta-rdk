@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1b8525f92b462b86205ffaba15
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
 
-SRC_URI_append = " file://meminsight-runner.service \
+SRC_URI:append = " file://meminsight-runner.service \
                    file://meminsight-runner.path \
                    file://conf/client.conf \
                    file://conf/broadband.conf \
@@ -40,7 +40,7 @@ do_install() {
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.path.d
 }
 
-do_install_append_client() {
+do_install:append:client() {
     install -m 0644 ${WORKDIR}/conf/client.conf ${D}${systemd_unitdir}/system/meminsight-runner.service.d/
     if ${@bb.utils.contains('DISTRO_FEATURES', 'enable_xmeminsight', 'true', 'false', d)}; then
         install -m 0644 ${WORKDIR}/conf/client-path.conf ${D}${systemd_unitdir}/system/meminsight-runner.path.d/
@@ -51,7 +51,7 @@ do_install_append_client() {
     fi
 }
 
-do_install_append_broadband() {
+do_install:append:broadband() {
     install -m 0644 ${WORKDIR}/conf/broadband.conf ${D}${systemd_unitdir}/system/meminsight-runner.service.d/
     if ${@bb.utils.contains('DISTRO_FEATURES', 'enable_xmeminsight', 'true', 'false', d)}; then
         install -m 0644 ${WORKDIR}/conf/broadband-path.conf ${D}${systemd_unitdir}/system/meminsight-runner.path.d/

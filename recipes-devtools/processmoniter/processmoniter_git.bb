@@ -9,7 +9,7 @@ S = "${WORKDIR}/git"
 # SRC_URI = "git://github.com/TeknoVenus/ProcessMonitor.git;branch=main"
 SRC_URI = "git://github.com/gomathishankar37/ProcessMonitor.git;protocol=https;branch=exit-handler"
 
-SRC_URI_append = " file://process-monitor.path \
+SRC_URI:append = " file://process-monitor.path \
                    file://process-monitor.service \
                    "
 
@@ -24,7 +24,7 @@ PR = "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-do_install_append () {
+do_install:append () {
     install -d ${D}${systemd_unitdir}/system
     rm -rf ${S}/process-monitor.service
     install -m 0644 ${S}/process-monitor.service ${D}${systemd_unitdir}/system
