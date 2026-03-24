@@ -3,7 +3,7 @@ SECTION = "console/utils"
 DESCRIPTION = "meminsight: system/process memory statistics collection tool with systemd runner service."
 LICENSE = "Apache-2.0"
 
-LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1b8525f92b462b86205ffaba159b4481"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1c020dfe1abb4e684874a44de1244c28"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
 
@@ -64,10 +64,10 @@ do_install:append:broadband() {
 
 SYSTEMD_SERVICE_${PN} = "meminsight-runner.path"
 
-FILES_${PN} += "${bindir}/meminsight"
+FILES:${PN} += "${bindir}/meminsight"
 
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.service"
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
 
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
