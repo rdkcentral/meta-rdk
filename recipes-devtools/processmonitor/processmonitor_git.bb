@@ -27,8 +27,8 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 do_install:append () {
     install -d ${D}${systemd_unitdir}/system
     rm -rf ${S}/process-monitor.service
-    install -m 0644 ${S}/process-monitor.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/process-monitor.path ${D}${systemd_unitdir}/system
+    install -m 0644 ${WORKDIR}/process-monitor.service ${D}${systemd_unitdir}/system
+    install -m 0644 ${WORKDIR}/process-monitor.path ${D}${systemd_unitdir}/system
 }
 
 SYSTEMD_SERVICE_${PN} = "process-monitor.path"
