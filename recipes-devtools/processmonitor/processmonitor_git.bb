@@ -33,6 +33,6 @@ do_install:append () {
 
 SYSTEMD_SERVICE_${PN} = "process-monitor.path"
 
-FILES_${PN} += "${systemd_system_unitdir}/process-monitor.*"
-FILES_${PN} += "${bindir}/ProcessMonitor"
+FILES:${PN} += "${systemd_system_unitdir}/process-monitor.*"
+FILES:${PN} += "${bindir}/ProcessMonitor"
 FILES:${PN} += "${libdir}/libexithandler.so*"
