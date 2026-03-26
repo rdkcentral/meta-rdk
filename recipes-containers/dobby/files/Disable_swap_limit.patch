@@ -1,0 +1,30 @@
+diff --git a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
+index 6cbdabd..3810170 100644
+--- a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
++++ b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
+@@ -327,9 +327,7 @@ static const char* ociJsonTemplate = R"JSON(
+                 {{/DEV_WHITELIST_SECTION}}
+             ],
+             "memory": {
+-                "limit": {{MEM_LIMIT}},
+-                "swap": {{MEM_LIMIT}},
+-                "swappiness": 60
++                "limit": {{MEM_LIMIT}}
+             },
+             "cpu": {
+                 {{#CPU_SHARES_ENABLED}}
+diff --git a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
+index 21fe91d..ed1bc17 100644
+--- a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
++++ b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
+@@ -338,9 +338,7 @@ static const char* ociJsonTemplate = R"JSON(
+                 {{/DEV_WHITELIST_SECTION}}
+             ],
+             "memory": {
+-                "limit": {{MEM_LIMIT}},
+-                "swap": {{MEM_LIMIT}},
+-                "swappiness": 60
++                "limit": {{MEM_LIMIT}}
+             },
+             "cpu": {
+                 {{#CPU_SHARES_ENABLED}}
