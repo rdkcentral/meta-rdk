@@ -15,7 +15,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "e6adf3c0468299d92ee4f2d10546551980a3df83"
+SRCREV = "5a6152c0be4684b14961d6bae6e8bd9860cc0562"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
 SRCREV_FORMAT = "rdmagent"
 
