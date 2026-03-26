@@ -5,11 +5,11 @@ LICENSE = "Apache-2.0"
 
 LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1b8525f92b462b86205ffaba159b4481"
 
-PV = "1.0.0"
+PV = "2.0.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "19e569a6eb71cee22389275a328d8141fc21fea1"
+SRCREV = "7a35fcd0508f4d9d9e0e392c8ed9ce24759e2479"
 SRC_URI = "git://github.com/tabbas651/MemCapture.git;branch=main;name=src;destsuffix=git"
 
 S = "${WORKDIR}/git"
