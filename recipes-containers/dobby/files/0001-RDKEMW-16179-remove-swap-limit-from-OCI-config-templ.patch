@@ -1,0 +1,44 @@
+From 3932d20f22d8a653bc0cc1072a8d2f227ef8df4b Mon Sep 17 00:00:00 2001
+From: Gurdal Oruklu <gurdal_oruklu@comcast.com>
+Date: Thu, 26 Mar 2026 22:14:36 +0000
+Subject: [PATCH] RDKEMW-16179: remove swap limit from OCI config templates
+
+This reverts commit 5786edd4a21af75008a2a4e2afb1c23551d489bb.
+---
+ bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template | 4 +---
+ .../lib/source/templates/OciConfigJsonVM1.0.2-dobby.template  | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
+index 6cbdabd4..38101709 100644
+--- a/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
++++ b/bundle/lib/source/templates/OciConfigJson1.0.2-dobby.template
+@@ -327,9 +327,7 @@ static const char* ociJsonTemplate = R"JSON(
+                 {{/DEV_WHITELIST_SECTION}}
+             ],
+             "memory": {
+-                "limit": {{MEM_LIMIT}},
+-                "swap": {{MEM_LIMIT}},
+-                "swappiness": 60
++                "limit": {{MEM_LIMIT}}
+             },
+             "cpu": {
+                 {{#CPU_SHARES_ENABLED}}
+diff --git a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
+index 21fe91d3..ed1bc177 100644
+--- a/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
++++ b/bundle/lib/source/templates/OciConfigJsonVM1.0.2-dobby.template
+@@ -338,9 +338,7 @@ static const char* ociJsonTemplate = R"JSON(
+                 {{/DEV_WHITELIST_SECTION}}
+             ],
+             "memory": {
+-                "limit": {{MEM_LIMIT}},
+-                "swap": {{MEM_LIMIT}},
+-                "swappiness": 60
++                "limit": {{MEM_LIMIT}}
+             },
+             "cpu": {
+                 {{#CPU_SHARES_ENABLED}}
+-- 
+2.44.4
+
