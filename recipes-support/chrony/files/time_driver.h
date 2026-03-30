@@ -7,6 +7,7 @@ typedef struct {
     int (*step_time)(void);
     int (*get_offset)(double *offset_sec);
     int (*add_server)(const char *address);
+    int (*send_burst)(const char *address);
     void (*close)(void);
 } TimeDriver;
 
