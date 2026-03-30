@@ -182,6 +182,37 @@ static int chrony_socket_get_offset(double *offset_sec) {
     return 0;
 }
 
+static int chrony_send_burst(const IPAddr *addr, const IPAddr *mask, int n_good_samples, int n_total_samples) {
+    CMD_Request req;
+    CMD_Reply reply;
+
+    memset(&req, 0, sizeof(req));
+    req.command = htons(REQ_BURST);
+
+    // Set up the REQ_Burst payload
+    if (addr)
+        memcpy(&req.data.burst.address, addr, sizeof(IPAddr));
+    else
+        memset(&req.data.burst.address, 0, sizeof(IPAddr));
+
+    if (mask)
+        memcpy(&req.data.burst.mask, mask, sizeof(IPAddr));
+    else
+        memset(&req.data.burst.mask, 0, sizeof(IPAddr));
+
+    req.data.burst.n_good_samples = htonl(n_good_samples);
+    req.data.burst.n_total_samples = htonl(n_total_samples);
+    req.data.burst.EOR = htonl(0); // EOR, by convention zero (confirm if you see otherwise in codebase)
+
+    if (send_request_and_get_reply(&req, &reply) != 0) {
+        fprintf(stderr, "[ChronySocket] Burst command failed\n");
+        return -1;
+    }
+
+    printf("[ChronySocket] Burst command sent: good=%d, max=%d\n", n_good_samples, n_total_samples);
+    return 0;
+}
+
 static int chrony_socket_add_server(const char *address) {
     (void)address;
     // Implementing ADD_SOURCE is complex due to the large struct.
@@ -204,5 +235,6 @@ TimeDriver chrony_driver_socket = {
     .step_time = chrony_socket_step_time,
     .get_offset = chrony_socket_get_offset,
     .add_server = chrony_socket_add_server,
+    .send_burst = chrony_send_burst,
     .close = chrony_socket_close
 };
