@@ -57,7 +57,7 @@ FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.service"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.timer"
 FILES:${PN} += "${systemd_unitdir}/system/chronyd.service"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-sync-notify.service"
-FILES_${PN} += "${libdir}/driver_chrony_socket.so"
+FILES:${PN} += "${libdir}/driver_chrony_socket.so"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
 SYSTEMD_SERVICE:${PN} += "chrony-sync-notify.service"
