@@ -1,6 +1,8 @@
 #ifndef TIME_DRIVER_H
 #define TIME_DRIVER_H
 
+#include "addressing.h"
+
 typedef struct {
     const char *name;
     int (*init)(void);
