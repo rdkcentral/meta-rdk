@@ -16,6 +16,12 @@ void handle_step_req()
 void handle_offset_req()
 {
     printf("This is a handler for offset req\n");
+    driver->get_offset();
+}
+void handle_burst_req()
+{
+    printf("This is a handler for offset req\n");
+    driver->send_burst();
 }
 
 int main(int argc, char *argv[]) {
@@ -25,6 +31,7 @@ int main(int argc, char *argv[]) {
 
     signal(SIGUSR1, handle_offset_req);
     signal(SIGUSR2, handle_step_req);
+    signal(SIGUSR2, handle_burst_req);
     if (driver->init() != 0) {
         fprintf(stderr, "Failed to initialize driver %s\n", driver->name);
         return 1;
