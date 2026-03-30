@@ -20,7 +20,8 @@ SRC_URI += "file://chrony.conf \
 PACKAGECONFIG:remove = "editline"
 
 do_compile:append() {
-    ${CC} ${CFLAGS} -I${WORKDIR} -fPIC -shared -o driver_chrony_socket.so ${WORKDIR}/driver_chrony_socket.c
+      ${CC} ${CFLAGS} ${LDFLAGS} -I${WORKDIR} -fPIC -shared -o driver_chrony_socket.so ${WORKDIR}/driver_chrony_socket.c
+}
 }
 
 do_install:append() {
