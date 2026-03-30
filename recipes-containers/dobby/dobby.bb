@@ -50,8 +50,8 @@ EXTRA_OECMAKE =  " -DCMAKE_BUILD_TYPE=Debug -DBUILD_REFERENCE=${SRCREV}"
 SRC_URI += "file://secure_wrapper.patch"
 
 # Enable plugins
-# Logging, networking, ipc, storage, minidump, oomcrash enabled by default for all builds
-PACKAGECONFIG ?= "logging networking ipc storage minidump oomcrash"
+# networking, ipc, storage, minidump, oomcrash enabled by default for all builds
+PACKAGECONFIG ?= "networking ipc storage minidump oomcrash"
 
 # Options for plugins
 # -------------------------------------
