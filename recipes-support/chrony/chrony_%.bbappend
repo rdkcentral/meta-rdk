@@ -14,6 +14,8 @@ SRC_URI += "file://chrony.conf \
             file://driver_chrony_socket.c \
             file://time_driver.h \
             file://candm.h \
+            file://addressing.h \
+            file://sysincl.h \
            "
 PACKAGECONFIG:remove = "editline"
 
