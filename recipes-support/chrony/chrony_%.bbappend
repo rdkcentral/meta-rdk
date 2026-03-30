@@ -11,13 +11,22 @@ SRC_URI += "file://chrony.conf \
             file://chrony-tracking.timer \
             file://chrony-tracking.service \
             file://chrony_tracking.sh \
+            file://driver_chrony_socket.c \
+            file://driver.h \
+            file://candm.h \
            "
 PACKAGECONFIG:remove = "editline"
+
+do_compile_append() {
+    ${CC} ${CFLAGS} -I${WORKDIR} -fPIC -shared -o driver_chrony_socket.so ${WORKDIR}/driver_chrony_socket.c
+}
 
 do_install:append() {
     # Binaries
     install -m 0755 ${S}/chronyc ${D}${sbindir}
     install -d ${D}${base_libdir}/rdk
+    install -d ${D}${libdir}
+    install -m 0755 driver_chrony_socket.so ${D}${libdir}/
 
     #config File
     rm -rf ${D}${sysconfdir}/chrony.conf 
@@ -48,6 +57,7 @@ FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.service"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.timer"
 FILES:${PN} += "${systemd_unitdir}/system/chronyd.service"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-sync-notify.service"
+FILES_${PN} += "${libdir}/driver_chrony_socket.so"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
 SYSTEMD_SERVICE:${PN} += "chrony-sync-notify.service"
