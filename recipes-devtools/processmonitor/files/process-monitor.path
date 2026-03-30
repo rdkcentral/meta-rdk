@@ -23,7 +23,7 @@ OnFailure=path-fail-notifier@%n.service
 
 [Path]
 Unit=process-monitor.service
-PathExists=/opt/.enable_processmon
+PathExists=/tmp/.enable_processmon
 
 [Install]
 WantedBy=multi-user.target
