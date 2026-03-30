@@ -14,7 +14,7 @@
 
 // Bring in Chrony headers. 
 // We assume they are in the parent directory.
-#include "../candm.h"
+#include "candm.h"
 
 #define SOCK_PATH_SERVER "/var/run/chrony/chronyd.sock"
 #define SOCK_PATH_CLIENT_BASE "/var/run/chrony/time_daemon.sock"
