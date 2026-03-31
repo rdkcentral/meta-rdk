@@ -272,7 +272,7 @@ int chronyctl_makestep(void) {
 int chronyctl_burst(int n_good, int n_max, const char *mask) {
     CMD_Request request;
     CMD_Reply reply;
-    int ret;
+    
 
     if (n_good < 1 || n_max < 1 || n_good > n_max) {
         fprintf(stderr, "Invalid burst parameters: n_good=%d, n_max=%d\n", n_good, n_max);
