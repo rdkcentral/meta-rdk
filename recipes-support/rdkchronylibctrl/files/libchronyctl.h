@@ -62,7 +62,7 @@ int chronyctl_makestep(void);
  */
 int chronyctl_add_server(const char *address, int minpoll, int maxpoll);
 
-int chronyctl_burst(int n_good, int n_max, const char *mask);
+int chronyctl_burst(const IPAddr *addr, const IPAddr *mask, int n_good_samples, int n_total_samples);
 /**
  * @brief Delete an NTP server
  * @param address IP address of the server to delete
