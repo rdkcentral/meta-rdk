@@ -23,6 +23,7 @@ CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/rdk/iarmbus -I${PKG_CONF
 
 LDFLAGS:append = " \
 	-lWPEFrameworkPowerController\
+     -lchronyctl \
       "
 
 S = "${WORKDIR}/git/systimerfactory"
