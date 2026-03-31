@@ -6,6 +6,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
 
+SRCREV_systemtimemgrifc = "f7c52d3ebe5203134d7ecc242f86fbbd96d39c05"
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgrifc"
 
 
@@ -15,7 +16,8 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRCREV_FORMAT = "systemtimemgrifc"
 
-PV = "1.0"
+PV = "1.4.0"
+PR = "r0"
 
 inherit autotools pkgconfig 
 ALLOW_EMPTY:${PN} = "1"

@@ -2,18 +2,21 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+PV = "1.3.2"
+PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
+SRCREV = "8f793e69b6b2b91a27c6a8148014207788503efa"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
 
 SRCREV_FORMAT = "generic"
-# Release version - 1.3.1
+# Release version - 1.3.2
 S = "${WORKDIR}/git"
 
 CFLAGS += " -Wall -Werror"
 
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
 
-DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper"
+DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper dcmd"
 DEPENDS:append:client = " iarmbus iarmmgrs"
 RDEPENDS:${PN}:append = " bash"
 RDEPENDS:${PN}:remove_morty = "bash"
