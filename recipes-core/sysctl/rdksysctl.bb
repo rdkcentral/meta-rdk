@@ -15,8 +15,10 @@ S = "${WORKDIR}"
 do_install() {
     install -d ${D}${sysconfdir}/sysctl.d
     install -m 0644 ${S}/50-sysctl.conf ${D}${sysconfdir}/sysctl.d
- # Install sysctl file with substituted tunables
+ # Generate 98-sysctl-mw.conf with machine-configurable values
     sed -e "s/@RDK_VM_DIRTY_BACKGROUND_RATIO@/${RDK_VM_DIRTY_BACKGROUND_RATIO}/g" \
         -e "s/@RDK_VM_DIRTY_RATIO@/${RDK_VM_DIRTY_RATIO}/g" \
         ${S}/98-sysctl-mw.conf > ${D}${sysconfdir}/sysctl.d/98-sysctl-mw.conf
+
+    chmod 0644 ${D}${sysconfdir}/sysctl.d/98-sysctl-mw.conf
 }
