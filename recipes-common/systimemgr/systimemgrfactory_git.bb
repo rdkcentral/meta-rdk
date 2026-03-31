@@ -5,7 +5,7 @@ DESCRIPTION = "Timer , publishing and subscription interfaces."
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-DEPENDS = "systimemgrinetrface iarmbus jsonrpc virtual/mfrlib rdk-logger telemetry"
+DEPENDS = "systimemgrinetrface iarmbus jsonrpc virtual/mfrlib rdk-logger telemetry rdkchronylibctrl"
 
 
 SRCREV_systemtimemgrfactory = "6ea69cafb991f82774a72d4836c42e3e6b2b0d29"
@@ -23,14 +23,13 @@ CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/rdk/iarmbus -I${PKG_CONF
 
 LDFLAGS:append = " \
 	-lWPEFrameworkPowerController\
-     -lchronyctl \
       "
 
 S = "${WORKDIR}/git/systimerfactory"
 
 inherit autotools pkgconfig 
 
-RDEPENDS:${PN} += " jsonrpc curl jsoncpp "
+RDEPENDS:${PN} += " jsonrpc curl jsoncpp rdkchronylibctrl"
 DEPENDS += " iarmmgrs wpeframework wpeframework-clientlibraries"
 
 EXTRA_OECONF:append = " --enable-wpevgdrm --enable-dtt --enable-t2api=yes"
