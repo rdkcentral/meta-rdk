@@ -61,7 +61,17 @@ int main(int argc, char *argv[]) {
         printf("\nTesting delete_server (%s)...\n", host);
         ret = chronyctl_delete_server(host);
         check_err(ret, "Delete Server");
+    } else if (strcmp(cmd, "burst") == 0) {
+           printf("\nTesting chronyctl_burst...\n");
+    // Test burst with default parameters (4 good samples out of 8 total)
+    printf("Testing burst 4/8 (no mask)...\n");
+    ret = chronyctl_burst(4, 8, NULL);
+    if (ret == 0) {
+        printf("burst 4/8 command succeeded\n");
     } else {
+        printf("burst 4/8 command failed\n");
+    }
+    else {
         printf("Unknown command: %s\n", cmd);
         print_usage(argv[0]);
         chronyctl_cleanup();
