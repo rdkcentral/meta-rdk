@@ -13,5 +13,5 @@
 # This allows active development/debug recipes to retain their work directories while the rest of the build benefits from cleanup.
 INHERIT += "rm_work"
 
-# Excluding rm_work for middleware-test-image as some oem tasks might need the middleware-test-image's packages after do_rootfs.
-RM_WORK_EXCLUDE += "${MLPREFIX}middleware-test-image"
+# Excluding rm_work for middleware-test-image and rdk-fullstack-image as some oem tasks might need the full stack image's packages after do_rootfs.
+RM_WORK_EXCLUDE += "${MLPREFIX}middleware-test-image ${MLPREFIX}rdk-fullstack-image"
