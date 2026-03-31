@@ -269,7 +269,7 @@ int chronyctl_makestep(void) {
     return ret;
 }
 
-int chronyctl_burst(int n_good, int n_max, const char *mask) {
+int chronyctl_burst(const IPAddr *addr, const IPAddr *mask, int n_good_samples, int n_total_samples)  {
     CMD_Request request;
     CMD_Reply reply;
     
@@ -286,15 +286,19 @@ int chronyctl_burst(int n_good, int n_max, const char *mask) {
 
     memset(&request, 0, sizeof(request));
     request.command = htons(REQ_BURST);
+
+    if (addr)
+        memcpy(&req.data.burst.address, addr, sizeof(IPAddr));
+    else
+        memset(&req.data.burst.address, 0, sizeof(IPAddr));
+
+    if (mask)
+        memcpy(&req.data.burst.mask, mask, sizeof(IPAddr));
+    else
+        memset(&req.data.burst.mask, 0, sizeof(IPAddr));
     
     request.data.burst.n_good_samples = htonl(n_good);
     request.data.burst.n_total_samples = htonl(n_max);
-    
-    if (mask != NULL && strlen(mask) > 0) {
-        UTI_IPStringToNetwork(mask, &request.data.burst.mask);
-    } else {
-        memset(&request.data.burst.mask, 0, sizeof(request.data.burst.mask));
-    }
     
     int ret = send_request(sockfd, REQ_ADD_SOURCE, &request, sizeof(request));
     if (ret == 0) {
