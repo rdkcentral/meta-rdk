@@ -274,10 +274,6 @@ int chronyctl_burst(const IPAddr *addr, const IPAddr *mask, int n_good_samples, 
     CMD_Reply reply;
     
 
-    if (n_good < 1 || n_max < 1 || n_good > n_max) {
-        fprintf(stderr, "Invalid burst parameters: n_good=%d, n_max=%d\n", n_good, n_max);
-        return CHRONYCTL_ERROR_INVALID;
-    }
     pthread_mutex_lock(&chronyctl_mutex);
     if (!chronyctl_initialized) { pthread_mutex_unlock(&chronyctl_mutex); return CHRONYCTL_ERROR_NOT_INIT; }
     
@@ -288,14 +284,14 @@ int chronyctl_burst(const IPAddr *addr, const IPAddr *mask, int n_good_samples, 
     request.command = htons(REQ_BURST);
 
     if (addr)
-        memcpy(&req.data.burst.address, addr, sizeof(IPAddr));
+        memcpy(&request.data.burst.address, addr, sizeof(IPAddr));
     else
-        memset(&req.data.burst.address, 0, sizeof(IPAddr));
+        memset(&request.data.burst.address, 0, sizeof(IPAddr));
 
     if (mask)
-        memcpy(&req.data.burst.mask, mask, sizeof(IPAddr));
+        memcpy(&request.data.burst.mask, mask, sizeof(IPAddr));
     else
-        memset(&req.data.burst.mask, 0, sizeof(IPAddr));
+        memset(&request.data.burst.mask, 0, sizeof(IPAddr));
     
     request.data.burst.n_good_samples = htonl(n_good);
     request.data.burst.n_total_samples = htonl(n_max);
