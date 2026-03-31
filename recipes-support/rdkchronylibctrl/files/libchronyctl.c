@@ -269,6 +269,44 @@ int chronyctl_makestep(void) {
     return ret;
 }
 
+int chronyctl_burst(int n_good, int n_max, const char *mask) {
+    CMD_Request request;
+    CMD_Reply reply;
+    int ret;
+    
+    if (n_good < 1 || n_max < 1 || n_good > n_max) {
+        fprintf(stderr, "Invalid burst parameters: n_good=%d, n_max=%d\n", n_good, n_max);
+        return -1;
+    }
+    
+    memset(&request, 0, sizeof(request));
+    request.command = htons(REQ_BURST);
+    
+    request.data.burst.n_good_samples = htonl(n_good);
+    request.data.burst.n_total_samples = htonl(n_max);
+    
+    if (mask != NULL && strlen(mask) > 0) {
+        UTI_IPStringToNetwork(mask, &request.data.burst.mask);
+    } else {
+        memset(&request.data.burst.mask, 0, sizeof(request.data.burst.mask));
+    }
+    
+    ret = request_reply(&request, &reply, RPY_BURST, 0);
+    
+    if (!ret) {
+        fprintf(stderr, "Failed to send burst command to chronyd\n");
+        return -1;
+    }
+    
+    if (ntohs(reply.status) != STT_SUCCESS) {
+        fprintf(stderr, "Burst command failed with status: %d\n", ntohs(reply.status));
+        return -1;
+    }
+    
+    return 0;
+}
+
+
 int chronyctl_add_server(const char *address, int minpoll, int maxpoll) {
     if (!address) return CHRONYCTL_ERROR_INVALID;
     
