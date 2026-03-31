@@ -273,12 +273,17 @@ int chronyctl_burst(int n_good, int n_max, const char *mask) {
     CMD_Request request;
     CMD_Reply reply;
     int ret;
-    
+
     if (n_good < 1 || n_max < 1 || n_good > n_max) {
         fprintf(stderr, "Invalid burst parameters: n_good=%d, n_max=%d\n", n_good, n_max);
-        return -1;
+        return CHRONYCTL_ERROR_INVALID;
     }
+    pthread_mutex_lock(&chronyctl_mutex);
+    if (!chronyctl_initialized) { pthread_mutex_unlock(&chronyctl_mutex); return CHRONYCTL_ERROR_NOT_INIT; }
     
+    int sockfd = connect_to_chronyd();
+    if (sockfd < 0) { pthread_mutex_unlock(&chronyctl_mutex); return CHRONYCTL_ERROR_NO_DATA; }
+
     memset(&request, 0, sizeof(request));
     request.command = htons(REQ_BURST);
     
@@ -291,19 +296,17 @@ int chronyctl_burst(int n_good, int n_max, const char *mask) {
         memset(&request.data.burst.mask, 0, sizeof(request.data.burst.mask));
     }
     
-    ret = request_reply(&request, &reply, RPY_BURST, 0);
-    
-    if (!ret) {
-        fprintf(stderr, "Failed to send burst command to chronyd\n");
-        return -1;
+    int ret = send_request(sockfd, REQ_ADD_SOURCE, &request, sizeof(request));
+    if (ret == 0) {
+        ret = receive_reply(sockfd, RPY_NULL, NULL, 0);
+    } else {
+        ret = CHRONYCTL_ERROR_EXEC;
     }
     
-    if (ntohs(reply.status) != STT_SUCCESS) {
-        fprintf(stderr, "Burst command failed with status: %d\n", ntohs(reply.status));
-        return -1;
-    }
-    
-    return 0;
+    close(sockfd);
+    cleanup_local_socket();
+    pthread_mutex_unlock(&chronyctl_mutex);
+    return ret;
 }
 
 
