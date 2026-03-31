@@ -293,8 +293,8 @@ int chronyctl_burst(const IPAddr *addr, const IPAddr *mask, int n_good_samples, 
     else
         memset(&request.data.burst.mask, 0, sizeof(IPAddr));
     
-    request.data.burst.n_good_samples = htonl(n_good);
-    request.data.burst.n_total_samples = htonl(n_max);
+    request.data.burst.n_good_samples = htonl(n_good_samples);
+    request.data.burst.n_total_samples = htonl(n_total_samples);
     
     int ret = send_request(sockfd, REQ_ADD_SOURCE, &request, sizeof(request));
     if (ret == 0) {
