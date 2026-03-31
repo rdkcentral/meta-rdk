@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
     } else {
         printf("burst 4/8 command failed\n");
     }
+    }
     else {
         printf("Unknown command: %s\n", cmd);
         print_usage(argv[0]);
