@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "libchronyctl.h"
+#include "addressing.h"
 
 void check_err(int err, const char *msg) {
     if (err != CHRONYCTL_SUCCESS) {
