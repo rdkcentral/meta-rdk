@@ -19,5 +19,4 @@ do_install() {
     sed -e "s/@RDK_VM_DIRTY_BACKGROUND_RATIO@/${RDK_VM_DIRTY_BACKGROUND_RATIO}/g" \
         -e "s/@RDK_VM_DIRTY_RATIO@/${RDK_VM_DIRTY_RATIO}/g" \
         ${S}/98-sysctl-mw.conf > ${D}${sysconfdir}/sysctl.d/98-sysctl-mw.conf
-    install -m 0644 ${S}/98-sysctl-mw.conf ${D}${sysconfdir}/sysctl.d
 }
