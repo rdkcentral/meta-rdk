@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
            printf("\nTesting chronyctl_burst...\n");
     // Test burst with default parameters (4 good samples out of 8 total)
     printf("Testing burst 4/8 (no mask)...\n");
-    ret = chronyctl_burst(4, 8, NULL);
+    ret = chronyctl_burst(NULL,NULL, 4, 8);
     if (ret == 0) {
         printf("burst 4/8 command succeeded\n");
     } else {
