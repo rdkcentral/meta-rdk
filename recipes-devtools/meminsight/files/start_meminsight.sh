@@ -33,7 +33,7 @@ fi
 
 case "$DEVICE_TYPE" in
     mediaclient)
-        RDM_LOG_FILE="/opt/logs/rdm-status.log"
+        RDM_LOG_FILE="/opt/logs/rdm_status.log"
         ;;
     broadband)
         RDM_LOG_FILE="/rdklogs/logs/rdm-status.log.0"
