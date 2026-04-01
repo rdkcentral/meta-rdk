@@ -17,13 +17,13 @@ S = "${WORKDIR}"
 # Compilation directly in the recipe
 do_compile() {
     # Compile object with PIC
-    ${CC} ${CFLAGS} -fPIC -I${S}/include -c ${S}/libchronyctl.c -o ${B}/libchronyctl.o
+    ${CC} ${CFLAGS} -fPIC -I${S} -c ${S}/libchronyctl.c -o ${B}/libchronyctl.o
 
     # Create shared library
     ${CC} ${LDFLAGS} -shared -Wl,-soname,libchronyctl.so \
         ${B}/libchronyctl.o -o ${B}/libchronyctl.so -lpthread -lm
 
-   ${CC} ${CFLAGS} ${LDFLAGS} -I${S}/include ${S}/test_chronyctl.c \
+   ${CC} ${CFLAGS} ${LDFLAGS} -I${S} ${S}/test_chronyctl.c \
         -L${B} -lchronyctl -o ${B}/test_chronyctl -lpthread -lm
 }
 
@@ -40,15 +40,9 @@ do_install() {
     install -m 0755 ${B}/test_chronyctl ${D}${bindir}
 }
 
-FILES:${PN} = "${libdir}/libchronyctl.so"
-FILES:${PN}-dev = "${includedir}/libchronyctl.h"
-FILES:${PN}-dev = "${includedir}/addresing.h"
-FILES:${PN}-dev = "${includedir}/candm.h"
 FILES:${PN} = "${libdir}/libchronyctl.so ${bindir}/test_chronyctl"
-
+FILES:${PN}-dev = "${includedir}/libchronyctl.h ${includedir}/addressing.h ${includedir}/candm.h"
 
 # This is a library, so we might need some rdepends if it were calling other bins
 # but here it is self-contained.
-RDEPENDS:${PN} = "chrony"
-
 RDEPENDS:${PN} = "chrony"

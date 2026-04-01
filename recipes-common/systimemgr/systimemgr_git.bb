@@ -12,7 +12,6 @@ SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=sy
 
 SRC_URI:append = " file://systimemgr.conf "
 SRC_URI:append = " file://secure.conf "
-SRC_URI:append = " file://addressing.h "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRCREV_FORMAT = "systemtimemgr"
