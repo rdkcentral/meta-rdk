@@ -33,6 +33,8 @@ do_install() {
     
     install -d ${D}${includedir}
     install -m 0644 ${S}/libchronyctl.h ${D}${includedir}
+    install -m 0644 ${S}/addressing.h ${D}${includedir}
+    install -m 0644 ${S}/candm.h ${D}${includedir}
 
     install -d ${D}${bindir}
     install -m 0755 ${B}/test_chronyctl ${D}${bindir}
@@ -40,6 +42,8 @@ do_install() {
 
 FILES:${PN} = "${libdir}/libchronyctl.so"
 FILES:${PN}-dev = "${includedir}/libchronyctl.h"
+FILES:${PN}-dev = "${includedir}/addresing.h"
+FILES:${PN}-dev = "${includedir}/candm.h"
 FILES:${PN} = "${libdir}/libchronyctl.so ${bindir}/test_chronyctl"
 
 
