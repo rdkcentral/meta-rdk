@@ -62,7 +62,7 @@ do_install:append:broadband() {
     fi
 }
 
-SYSTEMD_SERVICE_${PN} = "meminsight-runner.path"
+SYSTEMD_SERVICE:${PN} = "meminsight-runner.path"
 
 FILES:${PN} += "${bindir}/meminsight"
 
