@@ -31,7 +31,7 @@ do_install:append () {
     install -m 0644 ${WORKDIR}/process-monitor.path ${D}${systemd_unitdir}/system
 }
 
-SYSTEMD_SERVICE_${PN} = "process-monitor.path"
+SYSTEMD_SERVICE:${PN} = "process-monitor.path"
 
 FILES:${PN} += "${systemd_system_unitdir}/process-monitor.*"
 FILES:${PN} += "${bindir}/ProcessMonitor"
