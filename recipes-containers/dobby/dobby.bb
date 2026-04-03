@@ -8,6 +8,7 @@ SRC_URI:append = " file://Fix_compile_gcc11.patch  \
                    file://Add_config_header_kirkstone.patch \
                    file://dobby.generic.json \
                    file://dobby_start_after_apparmor.patch \
+                   file://0001-RDKEMW-15176-increased-swap-limit-for-the-container.patch \
                  "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
@@ -104,5 +105,3 @@ FILES:${PN} += "${libexecdir}/DobbyInit"
 FILES:${PN} += "${libdir}/plugins/dobby/*.so*"
 FILES:${PN} += "${libdir}/libethanlog.so*"
 FILES:${PN} += "${libdir}/libocispec.so*"
-PV = "3.16.0"
-PR = "r0"

@@ -4,11 +4,11 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-PV = "1.0.8"
+PV = "1.0.9"
 PR = "r2"
 
 SRCREV_FORMAT = "bluetooth-mgr"
-SRCREV = "a3dc2dd172884a0606355c0c6b65a31edc13a816"
+SRCREV = "45d87db9bbebacd5cfb6faf3c8a805fb6cbf6134"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
@@ -26,6 +26,9 @@ EXTRA_OECONF = " ${ENABLE_GST1}"
 
 ENABLE_SAFEC = "--enable-safec=${@bb.utils.contains('DISTRO_FEATURES', 'safec','yes', 'no', d)}"
 EXTRA_OECONF += " ${ENABLE_SAFEC}"
+
+ENABLE_BRCM_BUILD = "--enable-brcm-build=${@bb.utils.contains('DISTRO_FEATURES', 'btr_bcm_pcm_sink','yes', 'no', d)}"
+EXTRA_OECONF += " ${ENABLE_BRCM_BUILD}"
 
 # RPC-IARM Must be Enabled for Video Platforms only; Also iarmbus is dependency for Video Platforms
 DEPENDS:append:client = " iarmbus ${@bb.utils.contains('DISTRO_FEATURES', 'ENABLE_NETWORKMANAGER', '', 'netsrvmgr', d)}"
