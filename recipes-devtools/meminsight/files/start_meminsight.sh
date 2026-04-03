@@ -18,7 +18,7 @@
 # limitations under the License.
 ##########################################################################
 
-SRC_BIN="/media/apps/usr/bin/meminsight"
+SRC_BIN="/media/apps/meminsight/usr/bin/meminsight"
 DST_BIN="/run/meminsight/usr/bin/meminsight"
 RFC_PARAM="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.meminsight.Trigger"
 
@@ -75,14 +75,13 @@ if [ "$DEVICE_TYPE" = "broadband" ];then
         log_error "Failed to copy binary"
         exit 1
     fi
+    log_info "Setting executable permission on $DST_BIN"
+    if ! chmod +x "$DST_BIN"; then
+        log_error "Failed to set executable permission on $DST_BIN"
+        exit 1
+    fi
+    log_info "Binary copy and permission update completed"
 fi
-#end
-log_info "Setting executable permission on $DST_BIN"
-if ! chmod +x "$DST_BIN"; then
-    log_error "Failed to set executable permission on $DST_BIN"
-    exit 1
-fi
-log_info "Binary copy and permission update completed"
 
 # Below are for brodband
 if [ "$DEVICE_TYPE" = "broadband" ];then
@@ -98,8 +97,8 @@ else
     RFC_TRIGGER_VALUE=""
     if command -v tr181 >/dev/null 2>&1; then
         log_info "Reading RFC trigger value via tr181"
-        RFC_TRIGGER_VALUE="$(tr181 get "$RFC_PARAM" 2>/dev/null | awk -F'value: ' '/value:/ {print $2; exit}' | tr -d '\r' | xargs)"
-        log_info "RFC trigger value: ${RFC_TRIGGER_VALUE:-<empty>}"
+        RFC_TRIGGER_VALUE=`/usr/bin/tr181 get Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.meminsight.Trigger 2>&1`
+        log_info "RFC trigger value: ${RFC_PARAM}= $RFC_TRIGGER_VALUE "
     else
         log_info "tr181 not available; RFC trigger value remains empty"
     fi
