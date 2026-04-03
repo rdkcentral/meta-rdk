@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
 
 SRCREV_time-utils = "1a93da34f6a723e5744480ef46eb0eedd4327938"
-SRC_URI = "${CMF_GITHUB_ROOT}/time-utils;${CMF_GITHUB_SRC_URI_SUFFIX};name=chronycontrollib"
+SRC_URI = "${CMF_GITHUB_ROOT}/time-utils;${CMF_GITHUB_SRC_URI_SUFFIX};name=time-utils"
 
 
 
