@@ -16,7 +16,7 @@ SRCREV_FORMAT = "time-uilts"
 
 
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}"
 # Compilation directly in the recipe
 do_compile() {
     # Compile object with PIC
