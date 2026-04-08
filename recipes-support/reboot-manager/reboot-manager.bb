@@ -42,15 +42,13 @@ CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 EXTRA_OECONF:append = " --enable-t2api=yes"
 
 do_install() {
-        install -m 0644 ${S}/services/reboot-reason-logger.service ${D}${systemd_unitdir}/system
-        install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
-        install -m 0644 ${S}/services/update-reboot-info.service ${D}${systemd_unitdir}/system
+        install -d ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/reboot-reason-logger.service ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/update-reboot-info.service ${D}${systemd_unitdir}/system
 
         if [ "${ENABLE_SYSLOGNG}" = "true" ]; then
-            install -D -m 0644 ${D}${systemd_unitdir}/system/reboot-reason-logger.service.d/reboot-reason-logger.conf
+            install -d ${D}${systemd_unitdir}/system/reboot-reason-logger.service.d
         fi
 
         ln -sf /scripts/rebootNow.sh ${D}/
