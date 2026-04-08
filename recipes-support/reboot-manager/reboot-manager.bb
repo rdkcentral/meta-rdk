@@ -22,7 +22,7 @@ S = "${WORKDIR}/git"
 
 inherit autotools coverity systemd syslog-ng-config-gen logrotate_config
 
-SYSLOG-NG_FILTER = reboot-reason
+SYSLOG-NG_FILTER = "reboot-reason"
 SYSLOG-NG_SERVICE_reboot-reason = "reboot-reason-logger.service update-reboot-info.service"
 SYSLOG-NG_DESTINATION_reboot-reason = "rebootreason.log"
 
