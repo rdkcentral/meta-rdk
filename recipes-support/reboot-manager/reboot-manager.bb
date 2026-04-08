@@ -51,9 +51,9 @@ do_install() {
             install -d ${D}${systemd_unitdir}/system/reboot-reason-logger.service.d
         fi
 
-        install -d ${D}/scripts
-        install -m 0755 ${S}/scripts/rebootNow.sh ${D}/scripts/rebootNow.sh
-        ln -sf /scripts/rebootNow.sh ${D}/rebootNow.sh
+        install -d ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/scripts/rebootNow.sh ${D}${base_libdir}/rdk
+        ln -sf /lib/rdk/rebootNow.sh ${D}/
 }
 
 # generating minidumps symbols
