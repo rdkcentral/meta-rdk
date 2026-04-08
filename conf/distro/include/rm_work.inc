@@ -15,3 +15,6 @@ INHERIT += "rm_work"
 
 # Excluding rm_work for middleware-test-image and rdk-fullstack-image as some oem tasks might need the full stack image's packages after do_rootfs.
 RM_WORK_EXCLUDE += "${MLPREFIX}middleware-test-image ${MLPREFIX}rdk-fullstack-image"
+
+# Excluding rm_work for opkg-utils-native as build scripts use "opkg-make-index" to upload the packages.
+RM_WORK_EXCLUDE += " opkg-utils-native"
