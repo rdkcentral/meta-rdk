@@ -21,6 +21,11 @@ SRCREV_reboot-manager = "f2a9156357672dee4e57773ed934ce9a83ab22e0"
 S = "${WORKDIR}/git"
 
 inherit autotools coverity systemd syslog-ng-config-gen logrotate_config
+
+SYSLOG-NG_FILTER = reboot-reason
+SYSLOG-NG_SERVICE_reboot-reason = "reboot-reason-logger.service update-reboot-info.service"
+SYSLOG-NG_DESTINATION_reboot-reason = "rebootreason.log"
+
 LOGROTATE_NAME="reboot_reason"
 LOGROTATE_LOGNAME_reboot_reason="rebootreason.log"
 #HDD_ENABLE
@@ -36,6 +41,21 @@ RDEPENDS:${PN}:append = " bash"
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 EXTRA_OECONF:append = " --enable-t2api=yes"
 
+do_install() {
+        install -m 0644 ${S}/services/reboot-reason-logger.service ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/services/update-reboot-info.service ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/services/reboot-reason-logger.service ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/services/update-reboot-info.service ${D}${systemd_unitdir}/system
+
+        if [ "${ENABLE_SYSLOGNG}" = "true" ]; then
+            install -D -m 0644 ${D}${systemd_unitdir}/system/reboot-reason-logger.service.d/reboot-reason-logger.conf
+        fi
+
+        ln -sf /scripts/rebootNow.sh ${D}/
+}
+
 # generating minidumps symbols
 inherit breakpad-wrapper
 BREAKPAD_BIN:append = " rebootnow"
@@ -45,4 +65,9 @@ PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
+SYSTEMD_SERVICE:${PN} += "reboot-reason-logger.service"
+SYSTEMD_SERVICE:${PN} += "update-reboot-info.path"
+SYSTEMD_SERVICE:${PN} += "update-reboot-info.service"
+
+FILES:${PN} += "/rebootNow.sh"
 FILES:${PN} += "${bindir}/rebootnow"
