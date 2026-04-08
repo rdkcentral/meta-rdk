@@ -69,5 +69,6 @@ SYSTEMD_SERVICE:${PN} += "reboot-reason-logger.service"
 SYSTEMD_SERVICE:${PN} += "update-reboot-info.path"
 SYSTEMD_SERVICE:${PN} += "update-reboot-info.service"
 
+FILES:${PN} += "${base_libdir}/rdk/*"
 FILES:${PN} += "/rebootNow.sh"
 FILES:${PN} += "${bindir}/rebootnow"
