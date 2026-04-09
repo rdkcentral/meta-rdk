@@ -1,7 +1,7 @@
 #!/bin/sh
 LOGFILE="/opt/logs/chrony.log"
 
-timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
 
 {
 echo "$timestamp chrony telemetry:"
