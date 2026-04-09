@@ -25,6 +25,7 @@ inherit autotools coverity systemd syslog-ng-config-gen logrotate_config
 SYSLOG-NG_FILTER = "reboot_reason"
 SYSLOG-NG_SERVICE_reboot_reason = "reboot-reason-logger.service update-reboot-info.service"
 SYSLOG-NG_DESTINATION_reboot_reason = "rebootreason.log"
+SYSLOG-NG_LOGRATE_reboot_reason = "low"
 
 LOGROTATE_NAME="reboot_reason"
 LOGROTATE_LOGNAME_reboot_reason="rebootreason.log"
@@ -50,7 +51,7 @@ RDEPENDS:${PN}:append = " bash"
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 EXTRA_OECONF:append = " --enable-t2api=yes"
 
-do_install() {
+do_install:append() {
         install -d ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/reboot-reason-logger.service ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
