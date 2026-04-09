@@ -27,7 +27,7 @@ SYSLOG-NG_SERVICE_reboot_reason = "reboot-reason-logger.service update-reboot-in
 SYSLOG-NG_DESTINATION_reboot_reason = "rebootreason.log"
 SYSLOG-NG_LOGRATE_reboot_reason = "low"
 
-LOGROTATE_NAME="reboot_reason"
+LOGROTATE_NAME="reboot_reason rebootInfo"
 LOGROTATE_LOGNAME_reboot_reason="rebootreason.log"
 #HDD_ENABLE
 LOGROTATE_SIZE_reboot_reason="1572864"
@@ -36,7 +36,6 @@ LOGROTATE_ROTATION_reboot_reason="3"
 LOGROTATE_SIZE_MEM_reboot_reason="1572864"
 LOGROTATE_ROTATION_MEM_reboot_reason="3"
 
-LOGROTATE_NAME = "rebootInfo"
 LOGROTATE_LOGNAME_rebootInfo = "rebootInfo.log"
 #HDD_ENABLE
 LOGROTATE_SIZE_rebootInfo = "64000"
@@ -52,6 +51,7 @@ CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 EXTRA_OECONF:append = " --enable-t2api=yes"
 
 do_install:append() {
+        install -d ${D}${bindir}
         install -d ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/reboot-reason-logger.service ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
