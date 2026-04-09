@@ -75,63 +75,17 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
 fi
 }
 
-# Fallback: Fetch NTP hosts from bootstrap.ini if property script returns nothing
-get_ntp_hosts_from_bootstrap() {
-    BOOTSTRAP="/opt/secure/RFC/bootstrap.ini"
 
-    if [ ! -f "$BOOTSTRAP" ]; then
-        ntpLog "bootstrap.ini not found at $BOOTSTRAP"
-        return 1
-    fi
-
-    # Helper to fetch key=value from bootstrap.ini (first match)
-    get_bs_val() {
-        key="$1"
-        # Escape regex metacharacters in key so it is matched literally
-        escaped_key=$(printf '%s\n' "$key" | sed 's/[][\\.^$*]/\\&/g')
-        # Extract RHS after '=' and trim whitespace
-        grep -m1 -E "^[[:space:]]*$escaped_key=" "$BOOTSTRAP" 2>/dev/null | \
-            cut -d'=' -f2- | sed 's/^[[:space:]]*//; s/[[:space:]]*$//'
-    }
-
-    bs1="$(get_bs_val 'Device.Time.NTPServer1')"
-    bs2="$(get_bs_val 'Device.Time.NTPServer2')"
-    bs3="$(get_bs_val 'Device.Time.NTPServer3')"
-    bs4="$(get_bs_val 'Device.Time.NTPServer4')"
-    bs5="$(get_bs_val 'Device.Time.NTPServer5')"
-
-    # Only fill missing values (don’t override TR-181 values if present)
-    [ -z "$hostName" ]  && hostName="$bs1"
-    [ -z "$hostName2" ] && hostName2="$bs2"
-    [ -z "$hostName3" ] && hostName3="$bs3"
-    [ -z "$hostName4" ] && hostName4="$bs4"
-    [ -z "$hostName5" ] && hostName5="$bs5"
-
-    return 0
-}
 
 
 ntpLog "Retrieve NTP Server URL from /lib/rdk/getPartnerProperty.sh..."
-while [ "$attempts" -le "$max_attempts" ]; do
-
-    ntpLog "Attempt $attempts/$max_attempts to retrieve NTP server URL(s)..."
+if [ -f /opt/bs_complete.ini ]; then
     get_ntp_hosts
+fi
 
-    if [ "$hostName" ] || [ "$hostName2" ] || [ "$hostName3" ] || [ "$hostName4" ] || [ "$hostName5" ]; then
-        break
-    fi
-
-     # If this is the last attempt, try bootstrap as fallback and then break
-    if [ $attempts -eq $max_attempts ]; then
-        ntpLog "TR-181 returned empty NTP server list; falling back to /opt/secure/RFC/bootstrap.ini..."
-        get_ntp_hosts_from_bootstrap
-        break
-    fi
-
-    sleep 3
-    attempts=$((attempts + 1))
-
-done
+hosts=("$hostName" "$hostName2" "$hostName3" "$hostName4" "$hostName5")
+directives=("$directive1" "$directive2" "$directive3" "$directive4" "$directive5")
+ntpLog "NTP Server URL for the partner:${hosts[*]}"
 
 # Use default polling intervals if not configured
 # Validate that minPoll is not greater than maxPoll
@@ -145,9 +99,6 @@ if [ "$minPoll" -gt "$maxPoll" ]; then
 fi
 ntpLog "Minpoll:$minPoll MaxPoll:$maxPoll"
 
-hosts=("$hostName" "$hostName2" "$hostName3" "$hostName4" "$hostName5")
-directives=("$directive1" "$directive2" "$directive3" "$directive4" "$directive5")
-ntpLog "NTP Server URL for the partner:${hosts[*]}"
 
 conf_written=0
 > "$CHRONY_CONF"
@@ -173,7 +124,9 @@ fi
 for i in $(seq 0 4); do
     host="${hosts[$i]}"
     directive="${directives[$i]}"
-    if [ -n "$host" ]; then
+    if [ -n "$host" && i==0 ]; then
+    sed -i '/global-bootstrap-time1.xfinity.com/d' "$CHRONY_CONF"
+    sed -i '/global-bootstrap-time2.xfinity.com/d' "$CHRONY_CONF"
         # use directive if set, else default to server
         [ -z "$directive" ] && directive="server"
 
@@ -203,12 +156,6 @@ awk '
 ' "$CHRONY_CONF" > "$TMP_FILE"
 cat "$TMP_FILE" > "$CHRONY_CONF"
 rm -f "$TMP_FILE"
-
-# Fallback: If no valid NTP hosts found, use Google's public time server
-if [ "$conf_written" -eq 0 ]; then
-    printf "server time.google.com iburst minpoll %s maxpoll %s\n" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
-    ntpLog "No valid NTP servers found, using fallback: time.google.com"
-fi
 
 ntpLog "Successfully updated $CHRONY_CONF"
 
