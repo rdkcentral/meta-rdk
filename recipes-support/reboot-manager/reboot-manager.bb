@@ -16,7 +16,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "d076f3056eb4baf90abef690ab1c5e7ea8fdcdfd"
+SRCREV_reboot-manager = "7fbd69f63f5029887a7aa98528d64da36ee400fa"
 
 S = "${WORKDIR}/git"
 
@@ -33,6 +33,15 @@ LOGROTATE_ROTATION_reboot_reason="3"
 #HDD_DISABLE
 LOGROTATE_SIZE_MEM_reboot_reason="1572864"
 LOGROTATE_ROTATION_MEM_reboot_reason="3"
+
+LOGROTATE_NAME = "rebootInfo"
+LOGROTATE_LOGNAME_rebootInfo = "rebootInfo.log"
+#HDD_ENABLE
+LOGROTATE_SIZE_rebootInfo = "64000"
+LOGROTATE_ROTATION_rebootInfo = "3"
+#HDD_DISABLE
+LOGROTATE_SIZE_MEM_rebootInfo = "64000"
+LOGROTATE_ROTATION_MEM_rebootInfo = "3"
 
 DEPENDS += "commonutilities telemetry rbus"
 RDEPENDS:${PN}:append = " bash"
@@ -52,7 +61,7 @@ do_install() {
 
         install -d ${D}${base_libdir}/rdk
         install -m 0755 ${S}/scripts/rebootNow.sh ${D}${base_libdir}/rdk
-        ln -sf /lib/rdk/rebootNow.sh ${D}/
+        ln -sf ${base_libdir}/rdk/rebootNow.sh ${D}/
 }
 
 # generating minidumps symbols
