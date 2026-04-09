@@ -26,7 +26,8 @@ do_install:append() {
     install -m 0755 ${WORKDIR}/chrony-sync-notify.sh ${D}${base_libdir}/rdk
     install -m 0755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
     install -m 0755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
-    
+    echo "server global-bootstrap-time1.xfinity.com minpoll 10 maxpoll 12" >> ${D}${sysconfdir}/chrony/rdk_chrony.conf
+    echo "server global-bootstrap-time2.xfinity.com minpoll 10 maxpoll 12" >> ${D}${sysconfdir}/chrony/rdk_chrony.conf
 
     # service to start chrony
     rm -rf ${D}${systemd_unitdir}/system/chronyd.service
