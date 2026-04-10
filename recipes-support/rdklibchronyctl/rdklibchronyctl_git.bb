@@ -15,7 +15,7 @@ inherit autotools pkgconfig
 DEPENDS = "chrony"
 
 FILES:${PN} += "${libdir}/libchronyctl.so.*"
-FILES:${PN} += "
+FILES:${PN} += "${bindir}/test_timectl"
 FILES:${PN}-dev += "${libdir}/libchronyctl.la ${libdir}/libchronyctl.so \
                     ${includedir}/libchronyctl.h \
                     ${includedir}/addressing.h \
