@@ -30,6 +30,6 @@ S = "${WORKDIR}/git/systimerfactory"
 inherit autotools pkgconfig 
 
 RDEPENDS:${PN} += " jsonrpc curl jsoncpp "
-DEPENDS += " iarmmgrs wpeframework wpeframework-clientlibraries"
+DEPENDS += " iarmmgrs wpeframework wpeframework-clientlibraries rdklibchronyctl"
 
 EXTRA_OECONF:append = " --enable-wpevgdrm --enable-dtt --enable-t2api=yes"
