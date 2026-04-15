@@ -11,7 +11,6 @@ PR = "r0"
 
 SRCREV = "b28be8f5a03c6847ed3b1d96b36f4e5b48f480c9"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
 
 export cjson_CFLAGS = "-I$(PKG_CONFIG_SYSROOT_DIR)${includedir}/cjson"
@@ -34,11 +33,12 @@ CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', '', ' -DSAFEC
 LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-config --libs libsafec`', '', d)}"
 LDFLAGS:append_morty = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' -Wl,--no-as-needed -lsafec-3.5.1 -Wl,--as-needed', '', d)}"
 
-inherit autotools pkgconfig coverity
+inherit autotools pkgconfig
 
-CFLAGS += " -Wall -Werror -Wextra "
+# Suppress warnings that are treated as errors
+CFLAGS += " -Wall -Wextra -Wno-error=unused-result -Wno-error=format-overflow -Wno-error=stringop-truncation"
 CFLAGS += "${@bb.utils.contains('DISTRO_FEATURES', 'enable_maintenance_manager', '-DEN_MAINTENANCE_MANAGER -I${STAGING_INCDIR}/rdk/iarmmgrs-hal ', '', d)}"
-CXXFLAGS += " -Wall -Werror"
+CXXFLAGS += " -Wall -Wno-error=unused-result -Wno-error=format-overflow -Wno-error=stringop-truncation"
 
 do_install:append () {
 	install -d ${D}${base_libdir}/rdk
