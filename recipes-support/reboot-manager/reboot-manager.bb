@@ -84,6 +84,4 @@ SYSTEMD_SERVICE:${PN} += "update-reboot-info.service"
 
 FILES:${PN} += "${base_libdir}/rdk/*"
 FILES:${PN} += "/rebootNow.sh"
-FILES:${PN} += "/reboot-checker.sh"
-FILES:${PN} += "/update_previous_reboot_info.sh"
 FILES:${PN} += "${bindir}/rebootnow"
