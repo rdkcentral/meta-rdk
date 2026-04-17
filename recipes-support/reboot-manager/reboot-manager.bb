@@ -58,7 +58,8 @@ do_install:append() {
         install -m 0644 ${S}/services/update-reboot-info.service ${D}${systemd_unitdir}/system
 
         if [ "${ENABLE_SYSLOGNG}" = "true" ]; then
-            install -d ${D}${systemd_unitdir}/system/reboot-reason-logger.service.d
+           echo "SYSLOG_NG_ENABLED=true" >> ${D}${sysconfdir}/device-middleware.properties
+           install -D -m 0644 ${S}/systemd_units/after_syslog-ng.conf ${D}${systemd_unitdir}/system/reboot-reason-logger.service.d/reboot-reason-logger.conf
         fi
 
         install -d ${D}${base_libdir}/rdk
