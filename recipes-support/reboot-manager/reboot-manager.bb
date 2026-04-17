@@ -63,7 +63,9 @@ do_install:append() {
         fi
 
         install -d ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/scripts/reboot-checker.sh ${D}${base_libdir}/rdk
         install -m 0755 ${S}/scripts/rebootNow.sh ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/scripts/update_previous_reboot_info.sh ${D}${base_libdir}/rdk
         ln -sf ${base_libdir}/rdk/rebootNow.sh ${D}/
 }
 
@@ -82,4 +84,6 @@ SYSTEMD_SERVICE:${PN} += "update-reboot-info.service"
 
 FILES:${PN} += "${base_libdir}/rdk/*"
 FILES:${PN} += "/rebootNow.sh"
+FILES:${PN} += "/reboot-checker.sh"
+FILES:${PN} += "/update_previous_reboot_info.sh"
 FILES:${PN} += "${bindir}/rebootnow"
