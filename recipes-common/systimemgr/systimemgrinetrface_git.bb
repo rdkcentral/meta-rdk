@@ -6,7 +6,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
 
-SRCREV_systemtimemgrifc = "0f7fe3ee7dde31eacbebe2b025487a39bf6c77f7"
+SRCREV_systemtimemgrifc = "b4dadfd4fd59f867e5dae0783d9297564582a12b"
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgrifc"
 
 
