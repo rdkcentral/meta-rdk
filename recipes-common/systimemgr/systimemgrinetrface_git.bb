@@ -16,7 +16,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRCREV_FORMAT = "systemtimemgrifc"
 
-PV = "1.4.0"
+PV = "1.5.1"
 PR = "r0"
 
 inherit autotools pkgconfig 
