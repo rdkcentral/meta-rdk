@@ -5,7 +5,7 @@ DESCRIPTION = "Timer , publishing and subscription interfaces."
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-DEPENDS = "systimemgrinetrface iarmbus jsonrpc virtual/mfrlib rdk-logger telemetry wpeframework-clientlibraries WPEFrameworkCore"
+DEPENDS = "systimemgrinetrface iarmbus jsonrpc virtual/mfrlib rdk-logger telemetry"
 
 
 SRCREV_systemtimemgrfactory = "bd4a5aeb9efba86d51c36a020837118bd3a775f1"
