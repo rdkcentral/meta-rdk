@@ -33,7 +33,6 @@ SYSLOG-NG_LOGRATE_systimemgr = "low"
 RDEPENDS:${PN} += "systimemgrfactory"
 
 EXTRA_OECONF = "--enable-t2api=yes"
-EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'chrony', "--enable-chrony=yes", "", d)}" 
 
 do_install:append() {
    install -d ${D}${systemd_unitdir}/system
