@@ -33,3 +33,4 @@ RDEPENDS:${PN} += " jsonrpc curl jsoncpp "
 DEPENDS += " iarmmgrs wpeframework wpeframework-clientlibraries"
 
 EXTRA_OECONF:append = " --enable-wpevgdrm --enable-dtt --enable-t2api=yes"
+EXTRA_OECONF += "${@bb.utils.contains('DISTRO_FEATURES', 'chrony', "--enable-chrony=yes", "", d)}" 
