@@ -61,6 +61,7 @@ do_install:append() {
         fi
 
         install -d ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/scripts/update_previous_reboot_info.sh ${D}${base_libdir}/rdk
         install -m 0755 ${S}/scripts/rebootNow.sh ${D}${base_libdir}/rdk
         ln -sf ${base_libdir}/rdk/rebootNow.sh ${D}/
 }
