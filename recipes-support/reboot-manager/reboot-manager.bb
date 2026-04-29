@@ -11,19 +11,19 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=86d3f3a95c324c9479bd8986968f4327"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-PV = "2.1.1"
+PV = "2.2.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "5de4df3576381199cede30bcd0bc2ecab37ff6db"
+SRCREV_reboot-manager = "b4cd16f1844161bb6a3c58167208123a0a413339"
 
 S = "${WORKDIR}/git"
 
 inherit autotools coverity systemd syslog-ng-config-gen logrotate_config
 
 SYSLOG-NG_FILTER = "reboot_reason"
-SYSLOG-NG_SERVICE_reboot_reason = "reboot-reason-logger.service update-reboot-info.service"
+SYSLOG-NG_SERVICE_reboot_reason = "update-reboot-info.service"
 SYSLOG-NG_DESTINATION_reboot_reason = "rebootreason.log"
 SYSLOG-NG_LOGRATE_reboot_reason = "low"
 
@@ -53,17 +53,15 @@ EXTRA_OECONF:append = " --enable-t2api=yes"
 do_install:append() {
         install -d ${D}${bindir}
         install -d ${D}${systemd_unitdir}/system
-        install -m 0644 ${S}/services/reboot-reason-logger.service ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
         install -m 0644 ${S}/services/update-reboot-info.service ${D}${systemd_unitdir}/system
 
         if [ "${ENABLE_SYSLOGNG}" = "true" ]; then
            echo "SYSLOG_NG_ENABLED=true" >> ${D}${sysconfdir}/device-middleware.properties
-           install -D -m 0644 ${S}/systemd_units/after_syslog-ng.conf ${D}${systemd_unitdir}/system/reboot-reason-logger.service.d/reboot-reason-logger.conf
         fi
 
         install -d ${D}${base_libdir}/rdk
-        install -m 0755 ${S}/scripts/reboot-checker.sh ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/scripts/update_previous_reboot_info.sh ${D}${base_libdir}/rdk
         install -m 0755 ${S}/scripts/rebootNow.sh ${D}${base_libdir}/rdk
         ln -sf ${base_libdir}/rdk/rebootNow.sh ${D}/
 }
@@ -77,7 +75,6 @@ PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
-SYSTEMD_SERVICE:${PN} += "reboot-reason-logger.service"
 SYSTEMD_SERVICE:${PN} += "update-reboot-info.path"
 SYSTEMD_SERVICE:${PN} += "update-reboot-info.service"
 
