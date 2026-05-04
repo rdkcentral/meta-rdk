@@ -10,6 +10,8 @@ IMAGE_INSTALL += "packagegroup-rdk-oss-mediaclient"
 #Add a uuid generator for generating random receiver id
 IMAGE_INSTALL += "util-linux-uuidgen"
 
+IMAGE_INSTALL:append = " bluetoothsdk"
+
 python __anonymous () {
     if "client" not in d.getVar('MACHINEOVERRIDES', True):
         raise bb.parse.SkipPackage("Image is meant for video client class of devices")
