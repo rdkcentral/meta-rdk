@@ -23,7 +23,7 @@ do_install () {
 
     install -m 0755 ${B}/src/librdk_bluetooth.so ${D}${libdir}/bluetoothsdk/librdk_bluetooth.so
     # currently no requirement for sdk cli
-    # install -m 0755 ${B}/client/btSdkCli ${D}${bindir}/bluetoothsdk/btSdkCli
+    install -m 0755 ${B}/client/btSdkCli ${D}${bindir}/bluetoothsdk/btSdkCli
     install -m 0755 ${S}/include/*.h ${D}${includedir}/bluetoothsdk/
     install -m 0755 ${S}/include/bluetooth/*.h ${D}${includedir}/bluetoothsdk/bluetooth/
     install -m 0755 ${S}/include/bluetooth/sdbus/*.h ${D}${includedir}/bluetoothsdk/bluetooth/sdbus/
