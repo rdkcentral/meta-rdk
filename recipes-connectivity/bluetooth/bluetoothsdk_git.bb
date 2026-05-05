@@ -13,6 +13,7 @@ CFLAGS:append = " -I${STAGING_INCDIR} "
 
 
 EXTRA_OECMAKE_BUILD = ""
+EXTRA_OECMAKE += "-DWITH_CLI=ON"
 
 inherit cmake externalsrc breakpad-wrapper
 
