@@ -17,7 +17,6 @@ SRCREV = "9c7a05a78aefd1d5da1afe3cf050499888b93fb7"
 PV = "1.0.0"
 PR = "r0"
 
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 S = "${WORKDIR}/git"
 
@@ -36,6 +35,12 @@ CFLAGS += " -Wall -Werror -Wextra "
 CFLAGS:append = " -Wno-restrict -Wno-format-truncation -Wno-format-overflow -Wno-cast-function-type -Wno-unused-function -Wno-implicit-fallthrough "
 
 CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'webconfig_bin', '-DWEBCONFIG_BIN_SUPPORT', '', d)}"
+
+CFLAGS:append = " -Wno-stringop-truncation -Wno-error=stringop-truncation"
+CXXFLAGS:append = " -Wno-stringop-truncation -Wno-error=stringop-truncation"
+
+CFLAGS:remove = "-Werror"
+CXXFLAGS:remove = "-Werror"
 
 LDFLAGS += " \
     -lrbuscore \
