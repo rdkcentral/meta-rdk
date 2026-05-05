@@ -25,6 +25,7 @@ RDEPENDS:packagegroup-rdk-media-common = "\
     crashupload-conf \
     key-simulator \
     tcpdump \
+    perf \
     iptables \
     ${@bb.utils.contains("DISTRO_FEATURES", "bluetooth", "${BLUEZ} bluetooth-core bluetooth-mgr virtual/vendor-media-utils", "", d)} \
     systemd-usb-support \
