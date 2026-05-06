@@ -23,8 +23,6 @@
 
 
 LOG_FILE="/opt/logs/chrony.log"
-attempts=1
-max_attempts=5
 CHRONY_CONF=/etc/rdk_chrony.conf
 DEFAULT_MINPOLL="10"
 DEFAULT_MAXPOLL="12"
@@ -48,6 +46,26 @@ ntpLog()
 CLOCK_FILE="/opt/secure/clock.txt"
 VERSION_FILE="/version.txt"
 
+if [ -f "$CLOCK_FILE" ]; then
+    TIME_VAL=$(cat "$CLOCK_FILE")
+    if [[ "$TIME_VAL" =~ ^[0-9]+$ ]]; then
+        HUMAN_DATE=$(date -d "@$TIME_VAL")
+        ntpLog "Setting system time to LKG: $HUMAN_DATE (epoch $TIME_VAL)"
+        date -s "@$TIME_VAL"
+    else
+        ntpLog "Invalid time value in $CLOCK_FILE"
+    fi
+elif [ -f "$VERSION_FILE" ]; then
+    BUILD_TIME=$(grep '^BUILD_TIME=' "$VERSION_FILE" | cut -d= -f2- | tr -d '"')
+    if [ -n "$BUILD_TIME" ]; then
+        ntpLog "Setting system time to build time: $BUILD_TIME"
+        date -s "$BUILD_TIME"
+    else
+        ntpLog "BUILD_TIME not found in $VERSION_FILE"
+    fi
+else
+    ntpLog "Neither $CLOCK_FILE nor $VERSION_FILE found"
+fi
 
 # -----------------------------------------------------------------------------
 # Fetch NTP server hostnames and poll intervals using property scripts
@@ -59,19 +77,14 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      hostName3=`/lib/rdk/getPartnerProperty.sh ntpHost3`
      hostName4=`/lib/rdk/getPartnerProperty.sh ntpHost4`
      hostName5=`/lib/rdk/getPartnerProperty.sh ntpHost5`
-     
-     minPoll=`/lib/rdk/getPartnerProperty.sh NTPMinpoll`
-     maxPoll=`/lib/rdk/getPartnerProperty.sh NTPMaxpoll`
 
-   # Fetch directives for each NTP server (optional, fallback to server)
-     directive1=$( /lib/rdk/getPartnerProperty.sh NTPServer1Directive )
-     directive2=$( /lib/rdk/getPartnerProperty.sh NTPServer2Directive )
-     directive3=$( /lib/rdk/getPartnerProperty.sh NTPServer3Directive )
-     directive4=$( /lib/rdk/getPartnerProperty.sh NTPServer4Directive )
-     directive5=$( /lib/rdk/getPartnerProperty.sh NTPServer5Directive )
+     settings1=`/lib/rdk/getPartnerProperty.sh ntpHost1settings`
+     settings2=`/lib/rdk/getPartnerProperty.sh ntpHost2settings`
+     settings3=`/lib/rdk/getPartnerProperty.sh ntpHost3settings`
+     settings4=`/lib/rdk/getPartnerProperty.sh ntpHost4settings`
+     settings5=`/lib/rdk/getPartnerProperty.sh ntpHost5settings`
 
-     maxstep=`/lib/rdk/getPartnerProperty.sh NTPMaxstep`
-  
+     maxStep=`/lib/rdk/getPartnerProperty.sh ntpMakestep`
 fi
 }
 
@@ -112,45 +125,28 @@ get_ntp_hosts_from_bootstrap() {
 
 
 ntpLog "Retrieve NTP Server URL from /lib/rdk/getPartnerProperty.sh..."
-while [ "$attempts" -le "$max_attempts" ]; do
+get_ntp_hosts
 
-    ntpLog "Attempt $attempts/$max_attempts to retrieve NTP server URL(s)..."
-    get_ntp_hosts
-
-    if [ "$hostName" ] || [ "$hostName2" ] || [ "$hostName3" ] || [ "$hostName4" ] || [ "$hostName5" ]; then
-        break
-    fi
-
-     # If this is the last attempt, try bootstrap as fallback and then break
-    if [ $attempts -eq $max_attempts ]; then
-        ntpLog "TR-181 returned empty NTP server list; falling back to /opt/secure/RFC/bootstrap.ini..."
-        get_ntp_hosts_from_bootstrap
-        break
-    fi
-
-    sleep 3
-    attempts=$((attempts + 1))
-
-done
-
-# Use default polling intervals if not configured
-# Validate that minPoll is not greater than maxPoll
-[ -z "$minPoll" ] && minPoll="$DEFAULT_MINPOLL"
-[ -z "$maxPoll" ] && maxPoll="$DEFAULT_MAXPOLL"
-
-if [ "$minPoll" -gt "$maxPoll" ]; then
-    ntpLog "ERROR: minPoll ($minPoll) is greater than maxPoll ($maxPoll), resetting both to defaults ($DEFAULT_MINPOLL/$DEFAULT_MAXPOLL)"
-    minPoll="$DEFAULT_MINPOLL"
-    maxPoll="$DEFAULT_MAXPOLL"
+if ! ( [ "$hostName" ] || [ "$hostName2" ] || [ "$hostName3" ] || [ "$hostName4" ] || [ "$hostName5" ] ); then
+    ntpLog "TR-181 returned empty NTP server list; falling back to /opt/secure/RFC/bootstrap.ini..."
+    get_ntp_hosts_from_bootstrap
 fi
-ntpLog "Minpoll:$minPoll MaxPoll:$maxPoll"
 
 hosts=("$hostName" "$hostName2" "$hostName3" "$hostName4" "$hostName5")
-directives=("$directive1" "$directive2" "$directive3" "$directive4" "$directive5")
+all_settings=("$settings1" "$settings2" "$settings3" "$settings4" "$settings5")
 ntpLog "NTP Server URL for the partner:${hosts[*]}"
 
+# If no partner URLs are available (even after bootstrap), keep the build-time default configuration as-is
+if ! ( [ "$hostName" ] || [ "$hostName2" ] || [ "$hostName3" ] || [ "$hostName4" ] || [ "$hostName5" ] ); then
+    ntpLog "No partner NTP URLs found; retaining build-time default configuration in $CHRONY_CONF"
+    exit 0
+fi
+
+# Partner URLs are available — strip build-time default server entries before writing partner config
+ntpLog "Partner NTP URLs found; removing build-time defaults from $CHRONY_CONF"
+sed -i '/^[[:space:]]*server[[:space:]]\+global-bootstrap-time[12]\.xfinity\.com/d' "$CHRONY_CONF"
+
 conf_written=0
-> "$CHRONY_CONF"
 
 # Add makestep directive to chrony config to control threshold/step correction
 if [ -n "$maxstep" ]; then
@@ -160,7 +156,8 @@ if [ -n "$maxstep" ]; then
         echo "makestep $stepval $stepcount" >> "$CHRONY_CONF"
         ntpLog "Added makestep $stepval $stepcount to $CHRONY_CONF"
     else
-        echo "makestep 1.0 3" >> "$CHRONY_CONF"
+        echo "makestep 
+        1.0 3" >> "$CHRONY_CONF"
         ntpLog "NTPMaxstep value '$maxstep' is invalid, using default makestep 1.0 3 in $CHRONY_CONF"
     fi
 else
@@ -168,24 +165,52 @@ else
     ntpLog "NTPMaxstep is not set, using default makestep 1.0 3 in $CHRONY_CONF"
 fi
 
+# Parse a settings string "Type,MaxSources,Iburst,MinPoll,MaxPoll" into
+# s_type, s_maxsources, s_iburst, s_minpoll, s_maxpoll.
+# Falls back to defaults for any missing or invalid field.
+parse_settings() {
+    local raw="$1"
+    s_type=$(echo "$raw"      | cut -d',' -f1)
+    s_maxsources=$(echo "$raw" | cut -d',' -f2)
+    s_iburst=$(echo "$raw"    | cut -d',' -f3)
+    s_minpoll=$(echo "$raw"   | cut -d',' -f4)
+    s_maxpoll=$(echo "$raw"   | cut -d',' -f5)
+
+    # Normalise type: only "pool" is special, everything else is "server"
+    [ "$s_type" = "pool" ] || s_type="server"
+
+    # Validate poll values; fall back to defaults if non-numeric or inverted
+    [[ "$s_minpoll" =~ ^[0-9]+$ ]] || s_minpoll="$DEFAULT_MINPOLL"
+    [[ "$s_maxpoll" =~ ^[0-9]+$ ]] || s_maxpoll="$DEFAULT_MAXPOLL"
+    if [ "$s_minpoll" -gt "$s_maxpoll" ]; then
+        ntpLog "WARNING: minpoll ($s_minpoll) > maxpoll ($s_maxpoll) in settings '$raw', using defaults"
+        s_minpoll="$DEFAULT_MINPOLL"
+        s_maxpoll="$DEFAULT_MAXPOLL"
+    fi
+
+    # Normalise iburst: only literal "true" enables it
+    [ "$s_iburst" = "true" ] || s_iburst="false"
+}
+
 # Add NTP servers ("server" or "pool" directive) to the configuration file
 
 for i in $(seq 0 4); do
     host="${hosts[$i]}"
-    directive="${directives[$i]}"
+    raw="${all_settings[$i]}"
     if [ -n "$host" ]; then
-        # use directive if set, else default to server
-        [ -z "$directive" ] && directive="server"
+        parse_settings "$raw"
 
-         # Only allow server or pool, default to server otherwise
-        if [ "$directive" != "server" ] && [ "$directive" != "pool" ]; then
-            directive="server"
-        fi
+        iburst_opt=""
+        [ "$s_iburst" = "true" ] && iburst_opt=" iburst"
 
-        if [ "$directive" = "pool" ]; then
-           printf "%s %s iburst minpoll %s maxpoll %s maxsources 4\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
+        if [ "$s_type" = "pool" ]; then
+            maxsources_opt=""
+            [[ "$s_maxsources" =~ ^[1-9][0-9]*$ ]] && maxsources_opt=" maxsources $s_maxsources"
+            printf "pool %s%s%s minpoll %s maxpoll %s\n" \
+                "$host" "$maxsources_opt" "$iburst_opt" "$s_minpoll" "$s_maxpoll" >> "$CHRONY_CONF"
         else
-           printf "%s %s iburst minpoll %s maxpoll %s\n" "$directive" "$host" "$minPoll" "$maxPoll" >> "$CHRONY_CONF" 
+            printf "server %s%s minpoll %s maxpoll %s\n" \
+                "$host" "$iburst_opt" "$s_minpoll" "$s_maxpoll" >> "$CHRONY_CONF"
         fi
         conf_written=1
     fi
@@ -204,11 +229,8 @@ awk '
 cat "$TMP_FILE" > "$CHRONY_CONF"
 rm -f "$TMP_FILE"
 
-# Fallback: If no valid NTP hosts found, use Google's public time server
-if [ "$conf_written" -eq 0 ]; then
-    printf "server time.google.com iburst minpoll %s maxpoll %s\n" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
-    ntpLog "No valid NTP servers found, using fallback: time.google.com"
-fi
+# Fallback block removed: if no partner URLs were found the script exits early
+# above, preserving the build-time default configuration unchanged.
 
 ntpLog "Successfully updated $CHRONY_CONF"
 
