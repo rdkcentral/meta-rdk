@@ -57,11 +57,11 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      hostName4=`/lib/rdk/getPartnerProperty.sh ntpHost4`
      hostName5=`/lib/rdk/getPartnerProperty.sh ntpHost5`
 
-     settings1=`/lib/rdk/getPartnerProperty.sh ntpHost1settings`
-     settings2=`/lib/rdk/getPartnerProperty.sh ntpHost2settings`
-     settings3=`/lib/rdk/getPartnerProperty.sh ntpHost3settings`
-     settings4=`/lib/rdk/getPartnerProperty.sh ntpHost4settings`
-     settings5=`/lib/rdk/getPartnerProperty.sh ntpHost5settings`
+     settings1=`/lib/rdk/getPartnerProperty.sh ntpHost1Settings`
+     settings2=`/lib/rdk/getPartnerProperty.sh ntpHost2Settings`
+     settings3=`/lib/rdk/getPartnerProperty.sh ntpHost3Settings`
+     settings4=`/lib/rdk/getPartnerProperty.sh ntpHost4Settings`
+     settings5=`/lib/rdk/getPartnerProperty.sh ntpHost5Settings`
 
      maxStep=`/lib/rdk/getPartnerProperty.sh ntpMakestep`
 fi
