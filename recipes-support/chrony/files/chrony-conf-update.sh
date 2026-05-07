@@ -120,7 +120,6 @@ ntpLog "Partner NTP URLs found; removing build-time defaults from $CHRONY_CONF"
 sed -i '/^[[:space:]]*server[[:space:]]\+global-bootstrap-time[12]\.xfinity\.com/d' "$CHRONY_CONF"
 
 conf_written=0
-> "$CHRONY_CONF"
 
 # Add makestep directive to chrony config to control threshold/step correction
 if [ -n "$maxstep" ]; then
@@ -130,8 +129,7 @@ if [ -n "$maxstep" ]; then
         echo "makestep $stepval $stepcount" >> "$CHRONY_CONF"
         ntpLog "Added makestep $stepval $stepcount to $CHRONY_CONF"
     else
-        echo "makestep 
-        1.0 3" >> "$CHRONY_CONF"
+        echo "makestep 1.0 3" >> "$CHRONY_CONF"
         ntpLog "NTPMaxstep value '$maxstep' is invalid, using default makestep 1.0 3 in $CHRONY_CONF"
     fi
 else
@@ -189,6 +187,24 @@ for i in $(seq 0 4); do
         conf_written=1
     fi
 done
+
+# Remove duplicate NTP server entries, preserving only unique definitions
+TMP_FILE="/tmp/rdk_chrony.deduped"
+awk '
+/^(server|pool|makestep)[ \t]+/ {
+    if (!seen[$0]++) print
+    next
+}
+{ print }
+' "$CHRONY_CONF" > "$TMP_FILE"
+cat "$TMP_FILE" > "$CHRONY_CONF"
+rm -f "$TMP_FILE"
+
+# Fallback: If no valid NTP hosts found, use Google's public time server
+if [ "$conf_written" -eq 0 ]; then
+    printf "server time.google.com iburst minpoll %s maxpoll %s\n" "$minPoll" "$maxPoll" >> "$CHRONY_CONF"
+    ntpLog "No valid NTP servers found, using fallback: time.google.com"
+fi
 
 ntpLog "Successfully updated $CHRONY_CONF"
 
