@@ -57,7 +57,7 @@ if [ -f /lib/rdk/getPartnerProperty.sh ]; then
      settings4=`/lib/rdk/getPartnerProperty.sh ntpHost4Settings`
      settings5=`/lib/rdk/getPartnerProperty.sh ntpHost5Settings`
 
-     maxStep=`/lib/rdk/getPartnerProperty.sh ntpMakestep`
+     maxstep=`/lib/rdk/getPartnerProperty.sh ntpMakestep`
 fi
 }
 
