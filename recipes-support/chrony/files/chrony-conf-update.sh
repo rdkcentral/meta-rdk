@@ -126,6 +126,7 @@ ntpLog "Partner NTP URLs found; removing build-time defaults from $CHRONY_CONF"
 sed -i '/^[[:space:]]*server[[:space:]]\+global-bootstrap-time[12]\.xfinity\.com/d' "$CHRONY_CONF"
 
 conf_written=0
+> "$CHRONY_CONF"
 
 # Add makestep directive to chrony config to control threshold/step correction
 if [ -n "$maxstep" ]; then
@@ -194,22 +195,6 @@ for i in $(seq 0 4); do
         conf_written=1
     fi
 done
-
-# Remove duplicate NTP server entries, preserving only unique definitions
-
-TMP_FILE="/tmp/rdk_chrony.deduped"
-awk '
-/^(server|pool)[ \t]+/ {
-    if (!seen[$0]++) print
-    next
-}
-{ print }
-' "$CHRONY_CONF" > "$TMP_FILE"
-cat "$TMP_FILE" > "$CHRONY_CONF"
-rm -f "$TMP_FILE"
-
-# Fallback block removed: if no partner URLs were found the script exits early
-# above, preserving the build-time default configuration unchanged.
 
 ntpLog "Successfully updated $CHRONY_CONF"
 
