@@ -41,12 +41,6 @@ ntpLog()
 }
 
 # -----------------------------------------------------------------------------
-# Set system time based on LKG value or build time, if neither is available, log error
-# -----------------------------------------------------------------------------
-CLOCK_FILE="/opt/secure/clock.txt"
-VERSION_FILE="/version.txt"
-
-# -----------------------------------------------------------------------------
 # Fetch NTP server hostnames and poll intervals using property scripts
 # -----------------------------------------------------------------------------
 get_ntp_hosts() {
