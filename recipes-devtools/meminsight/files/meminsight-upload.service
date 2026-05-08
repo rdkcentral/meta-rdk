@@ -23,7 +23,7 @@ Description=MemInsight report upload sidecar
 [Service]
 Type=oneshot
 
-ExecStart=/bin/sh /lib/rdk/upload_MemReports.sh
+ExecStart=/bin/sh /usr/local/bin/upload_MemReports.sh
 
 [Install]
 WantedBy=multi-user.target

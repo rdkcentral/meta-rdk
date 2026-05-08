@@ -15,7 +15,9 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://conf/broadband-path.conf \
                    file://conf/broadband-rdm-path.conf \
                    file://start_meminsight.sh \
-                   file://meminsight-upload-script.sh \
+                   file://meminsight-upload.service \
+                   file://meminsight-upload.path \
+                   file://upload_MemReports.sh \
                    "
 
 # Mar 2, 2026
@@ -35,7 +37,7 @@ PACKAGECONFIG ??= "cjson"
 PACKAGECONFIG[cjson] = "--enable-cjson,--disable-cjson"
 
 EXTRA_OECONF += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', '--enable-cjson', '--disable-cjson', d)}"
-RDEPENDS_${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', 'cjson', '', d)}"
+RDEPENDS:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', 'cjson', '', d)}"
 
 do_install() {
     install -d ${D}${bindir}
@@ -46,7 +48,7 @@ do_install() {
     install -m 0644 ${WORKDIR}/meminsight-upload.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/meminsight-upload.path ${D}${systemd_unitdir}/system/
     install -d ${D}/usr/local/bin
-    install -m 0755 ${WORKDIR}/meminsight-upload-script.sh ${D}/usr/local/bin/meminsight-upload-script.sh
+    install -m 0755 ${WORKDIR}/upload_MemReports.sh ${D}/usr/local/bin/upload_MemReports.sh
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.service.d
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.path.d
 
@@ -81,9 +83,9 @@ FILES:${PN} += "${bindir}/meminsight"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
 
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-upload.service"
-FILES_${PN} += "${systemd_unitdir}/system/meminsight-upload.path"
-FILES:${PN} += "/usr/local/bin/meminsight-upload-script.sh
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-upload.service"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-upload.path"
+FILES:${PN} += "/usr/local/bin/upload_MemReports.sh"
 
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
