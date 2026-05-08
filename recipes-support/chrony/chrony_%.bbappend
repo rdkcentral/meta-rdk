@@ -26,7 +26,7 @@ do_install:append() {
     install -m 0755 ${WORKDIR}/chrony-sync-notify.sh ${D}${base_libdir}/rdk
     install -m 0755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
     install -m 0755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
-
+    
 
     # service to start chrony
     rm -rf ${D}${systemd_unitdir}/system/chronyd.service
