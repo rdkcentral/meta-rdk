@@ -230,7 +230,6 @@ END {
 }
 ' "$CHRONY_CONF" > "$TMP_FILE"
 mv "$TMP_FILE" "$CHRONY_CONF"
-rm -f "$TMP_FILE"
 
 ntpLog "Successfully updated $CHRONY_CONF"
 
