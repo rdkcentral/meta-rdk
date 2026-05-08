@@ -110,6 +110,36 @@ strip_dynamic_entries() {
     rm -f "$tmp_conf"
 }
 
+strip_makestep_only() {
+    local conf_file="$1"
+    local tmp_conf="/tmp/rdk_chrony.conf.$$"
+
+    awk '!/^[[:space:]]*makestep[[:space:]]/' \
+        "$conf_file" > "$tmp_conf"
+    cat "$tmp_conf" > "$conf_file"
+
+    rm -f "$tmp_conf"
+}
+
+# Write the makestep directive using $maxstep if valid ("float,int"),
+# otherwise fall back to the default "1.0 3".
+write_makestep() {
+    if [ -n "$maxstep" ]; then
+        if echo "$maxstep" | grep -Eq '^[0-9]+(\.[0-9]+)?,[0-9]+$'; then
+            stepval="${maxstep%%,*}"
+            stepcount="${maxstep##*,}"
+            echo "makestep $stepval $stepcount" >> "$CHRONY_CONF"
+            ntpLog "Added makestep $stepval $stepcount to $CHRONY_CONF"
+        else
+            echo "makestep 1.0 3" >> "$CHRONY_CONF"
+            ntpLog "Makestep value '$maxstep' is invalid, using default makestep 1.0 3 in $CHRONY_CONF"
+        fi
+    else
+        echo "makestep 1.0 3" >> "$CHRONY_CONF"
+        ntpLog "Makestep is not set, using default makestep 1.0 3 in $CHRONY_CONF"
+    fi
+}
+
 ntpLog "Retrieve NTP Server URL from /lib/rdk/getPartnerProperty.sh..."
 get_ntp_hosts
 
@@ -122,9 +152,17 @@ hosts=("$hostName" "$hostName2" "$hostName3" "$hostName4" "$hostName5")
 all_settings=("$settings1" "$settings2" "$settings3" "$settings4" "$settings5")
 ntpLog "NTP Server URL for the partner:${hosts[*]}"
 
-# If no partner URLs are available (even after bootstrap), keep the build-time default configuration as-is
+# If no partner URLs are available (even after bootstrap), update only the
+# makestep directive if configured via TR-181, keeping the build-time default
+# server lines untouched.
 if ! ( [ "$hostName" ] || [ "$hostName2" ] || [ "$hostName3" ] || [ "$hostName4" ] || [ "$hostName5" ] ); then
-    ntpLog "No partner NTP URLs found; retaining build-time default configuration in $CHRONY_CONF"
+    if [ -n "$maxstep" ]; then
+        ntpLog "No partner NTP URLs found; updating makestep from TR-181 and retaining build-time server config"
+        strip_makestep_only "$CHRONY_CONF"
+        write_makestep
+    else
+        ntpLog "No partner NTP URLs found; retaining build-time default configuration in $CHRONY_CONF"
+    fi
     exit 0
 fi
 
@@ -133,21 +171,7 @@ fi
 ntpLog "Partner NTP URLs found; updating $CHRONY_CONF"
 strip_dynamic_entries "$CHRONY_CONF"
 
-# Add makestep directive to chrony config to control threshold/step correction
-if [ -n "$maxstep" ]; then
-    if echo "$maxstep" | grep -Eq '^[0-9]+(\.[0-9]+)?,[0-9]+$'; then
-        stepval="${maxstep%%,*}"
-        stepcount="${maxstep##*,}"
-        echo "makestep $stepval $stepcount" >> "$CHRONY_CONF"
-        ntpLog "Added makestep $stepval $stepcount to $CHRONY_CONF"
-    else
-        echo "makestep 1.0 3" >> "$CHRONY_CONF"
-        ntpLog "Makestep value '$maxstep' is invalid, using default makestep 1.0 3 in $CHRONY_CONF"
-    fi
-else
-    echo "makestep 1.0 3" >> "$CHRONY_CONF"
-    ntpLog "Makestep is not set, using default makestep 1.0 3 in $CHRONY_CONF"
-fi
+write_makestep
 
 # Parse a settings string "Type,MaxSources,Iburst,MinPoll,MaxPoll" into
 # s_type, s_maxsources, s_iburst, s_minpoll, s_maxpoll.
