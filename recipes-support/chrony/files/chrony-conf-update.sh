@@ -229,7 +229,9 @@ END {
     }
 }
 ' "$CHRONY_CONF" > "$TMP_FILE"
-if ! mv "$TMP_FILE" "$CHRONY_CONF"; then
+if cat "$TMP_FILE" > "$CHRONY_CONF"; then
+    rm -f "$TMP_FILE"
+else
     ntpLog "Failed to replace $CHRONY_CONF with updated configuration"
     rm -f "$TMP_FILE"
     exit 1
