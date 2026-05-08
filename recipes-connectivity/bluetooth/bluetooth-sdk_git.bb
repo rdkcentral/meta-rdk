@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 DEPENDS = "cmake-native breakpad rdk-logger breakpad-wrapper bluez5 glib-2.0 sdbus-c++"
 RDEPENDS:${PN} = "rdk-logger bluez5 sdbus-c++"
 SRC_URI = "git://github.com/rdkcentral/bluetooth-sdk.git;branch=feature/RDK-61473"
-SRCREV = "aed4554bbb5418b7dc2b02fa5bd38107eadbd25e"
+SRCREV = "afadce4c117fbe7b286b078322310da97256aa9d"
 S = "${WORKDIR}/git"
 
 CFLAGS:append = " -I${STAGING_INCDIR} "
@@ -27,6 +27,10 @@ do_install () {
     install -m 0755 ${S}/include/bluetooth/*.h ${D}${includedir}/bluetoothsdk/bluetooth/
     install -m 0755 ${S}/include/bluetooth/sdbus/*.h ${D}${includedir}/bluetoothsdk/bluetooth/sdbus/
 
+}
+
+do_install:append() {
+    patchelf --set-rpath '$ORIGIN/../../lib/bluetoothsdk' ${D}${bindir}/bluetoothsdk/btSdkCli
 }
 
 FILES:${PN} = " ${bindir}/* ${libdir}/* "
