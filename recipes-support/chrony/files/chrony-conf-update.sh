@@ -96,6 +96,20 @@ get_ntp_hosts_from_bootstrap() {
     return 0
 }
 
+remove_build_time_chrony_config() {
+    local conf_file="$1"
+    local tmp_conf="/tmp/rdk_chrony.conf.$$"
+
+    ntpLog "Partner NTP URLs found; removing build-time default chrony configuration from $conf_file"
+
+    awk '
+    !/^[[:space:]]*makestep[[:space:]]+1\.0[[:space:]]+3([[:space:]]|$)/ &&
+    !/^[[:space:]]*server[[:space:]]+global-bootstrap-time1\.xfinity\.com([[:space:]]|$)/ &&
+    !/^[[:space:]]*server[[:space:]]+global-bootstrap-time2\.xfinity\.com([[:space:]]|$)/
+    ' "$conf_file" > "$tmp_conf" && mv "$tmp_conf" "$conf_file"
+
+    rm -f "$tmp_conf"
+}
 
 ntpLog "Retrieve NTP Server URL from /lib/rdk/getPartnerProperty.sh..."
 get_ntp_hosts
@@ -116,12 +130,7 @@ if ! ( [ "$hostName" ] || [ "$hostName2" ] || [ "$hostName3" ] || [ "$hostName4"
 fi
 
 # Partner URLs are available — strip build-time default server entries before writing partner config
-ntpLog "Partner NTP URLs found; removing build-time defaults from $CHRONY_CONF"
-TMP_CONF="/tmp/rdk_chrony.conf.$$"
-awk '!/^[[:space:]]*server[[:space:]]+global-bootstrap-time[12]\.xfinity\.com([[:space:]]|$)/' "$CHRONY_CONF" > "$TMP_CONF" && cat "$TMP_CONF" > "$CHRONY_CONF"
-rm -f "$TMP_CONF"
-
-conf_written=0
+remove_build_time_chrony_config "$CHRONY_CONF"
 
 # Add makestep directive to chrony config to control threshold/step correction
 if [ -n "$maxstep" ]; then
