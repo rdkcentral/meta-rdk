@@ -15,6 +15,7 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://conf/broadband-path.conf \
                    file://conf/broadband-rdm-path.conf \
                    file://start_meminsight.sh \
+                   file://meminsight-upload-script.sh \
                    "
 
 # Mar 2, 2026
@@ -30,14 +31,25 @@ inherit autotools systemd
 
 # CFLAGS_append_broadband = ' -DDEVICE_IDENTIFIER=\\"erouter0\\" -DDEFAULT_OUT_DIR=\\"/nvram/meminsight\\"'
 
+PACKAGECONFIG ??= "cjson"
+PACKAGECONFIG[cjson] = "--enable-cjson,--disable-cjson"
+
+EXTRA_OECONF += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', '--enable-cjson', '--disable-cjson', d)}"
+RDEPENDS_${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', 'cjson', '', d)}"
+
 do_install() {
     install -d ${D}${bindir}
     install -m 0755 ${B}/meminsight ${D}${bindir}/meminsight
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${WORKDIR}/meminsight-runner.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/meminsight-runner.path ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/meminsight-upload.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/meminsight-upload.path ${D}${systemd_unitdir}/system/
+    install -d ${D}/usr/local/bin
+    install -m 0755 ${WORKDIR}/meminsight-upload-script.sh ${D}/usr/local/bin/meminsight-upload-script.sh
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.service.d
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.path.d
+
 }
 
 do_install:append:client() {
@@ -62,12 +74,16 @@ do_install:append:broadband() {
     fi
 }
 
-SYSTEMD_SERVICE:${PN} = "meminsight-runner.path"
+SYSTEMD_SERVICE:${PN} = "meminsight-runner.path meminsight-upload.path"
 
 FILES:${PN} += "${bindir}/meminsight"
 
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
+
+FILES_${PN} += "${systemd_unitdir}/system/meminsight-upload.service"
+FILES_${PN} += "${systemd_unitdir}/system/meminsight-upload.path"
+FILES:${PN} += "/usr/local/bin/meminsight-upload-script.sh
 
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
