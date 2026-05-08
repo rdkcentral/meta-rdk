@@ -15,6 +15,8 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://conf/broadband-path.conf \
                    file://conf/broadband-rdm-path.conf \
                    file://start_meminsight.sh \
+                   file://meminsight-upload.service \
+                   file://meminsight-upload.path \
                    file://upload_MemReports.sh \
                    "
 
