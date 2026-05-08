@@ -13,7 +13,7 @@ CFLAGS:append = " -I${STAGING_INCDIR} "
 
 
 EXTRA_OECMAKE_BUILD = ""
-EXTRA_OECMAKE += "-DWITH_CLI=ON"
+EXTRA_OECMAKE += "-DWITH_CLI=ON -DCMAKE_INSTALL_RPATH=\$ORIGIN/../../lib/bluetoothsdk"
 
 inherit cmake externalsrc breakpad-wrapper
 
@@ -27,10 +27,6 @@ do_install () {
     install -m 0755 ${S}/include/bluetooth/*.h ${D}${includedir}/bluetoothsdk/bluetooth/
     install -m 0755 ${S}/include/bluetooth/sdbus/*.h ${D}${includedir}/bluetoothsdk/bluetooth/sdbus/
 
-}
-
-do_install:append() {
-    patchelf --set-rpath '$ORIGIN/../../lib/bluetoothsdk' ${D}${bindir}/bluetoothsdk/btSdkCli
 }
 
 FILES:${PN} = " ${bindir}/* ${libdir}/* "
