@@ -96,17 +96,15 @@ get_ntp_hosts_from_bootstrap() {
     return 0
 }
 
-remove_build_time_chrony_config() {
+strip_dynamic_entries() {
     local conf_file="$1"
     local tmp_conf="/tmp/rdk_chrony.conf.$$"
 
-    ntpLog "Partner NTP URLs found; removing build-time default chrony configuration from $conf_file"
-
-    awk '
-    !/^[[:space:]]*makestep[[:space:]]+1\.0[[:space:]]+3([[:space:]]|$)/ &&
-    !/^[[:space:]]*server[[:space:]]+global-bootstrap-time1\.xfinity\.com([[:space:]]|$)/ &&
-    !/^[[:space:]]*server[[:space:]]+global-bootstrap-time2\.xfinity\.com([[:space:]]|$)/
-    ' "$conf_file" > "$tmp_conf"
+    # Remove all server, pool, and makestep lines so every run starts from a
+    # clean slate — partner entries from a previous run are cleared along with
+    # build-time defaults, making a separate deduplication step unnecessary.
+    awk '!/^[[:space:]]*(server|pool|makestep)[[:space:]]/' \
+        "$conf_file" > "$tmp_conf"
     cat "$tmp_conf" > "$conf_file"
 
     rm -f "$tmp_conf"
@@ -130,8 +128,10 @@ if ! ( [ "$hostName" ] || [ "$hostName2" ] || [ "$hostName3" ] || [ "$hostName4"
     exit 0
 fi
 
-# Partner URLs are available — strip build-time default server entries before writing partner config
-remove_build_time_chrony_config "$CHRONY_CONF"
+# Partner URLs are available — strip all server/pool/makestep entries so the
+# update starts from a clean slate (idempotent across repeated runs).
+ntpLog "Partner NTP URLs found; updating $CHRONY_CONF"
+strip_dynamic_entries "$CHRONY_CONF"
 
 # Add makestep directive to chrony config to control threshold/step correction
 if [ -n "$maxstep" ]; then
@@ -198,44 +198,6 @@ for i in $(seq 0 4); do
         fi
     fi
 done
-
-# Remove stale NTP directives, preserving only the latest entry per host and makestep
-TMP_FILE="/tmp/rdk_chrony.deduped"
-awk '
-{
-    line[NR] = $0
-    directive[NR] = $1
-    host[NR] = $2
-
-    if ($1 == "makestep") {
-        last_makestep = NR
-    } else if ($1 == "server" || $1 == "pool") {
-        last_host[$2] = NR
-    }
-}
-END {
-    for (i = 1; i <= NR; i++) {
-        if (directive[i] == "makestep") {
-            if (i == last_makestep) {
-                print line[i]
-            }
-        } else if (directive[i] == "server" || directive[i] == "pool") {
-            if (i == last_host[host[i]]) {
-                print line[i]
-            }
-        } else {
-            print line[i]
-        }
-    }
-}
-' "$CHRONY_CONF" > "$TMP_FILE"
-if cat "$TMP_FILE" > "$CHRONY_CONF"; then
-    rm -f "$TMP_FILE"
-else
-    ntpLog "Failed to replace $CHRONY_CONF with updated configuration"
-    rm -f "$TMP_FILE"
-    exit 1
-fi
 
 ntpLog "Successfully updated $CHRONY_CONF"
 
