@@ -196,20 +196,40 @@ for i in $(seq 0 4); do
             printf "server %s%s minpoll %s maxpoll %s\n" \
                 "$host" "$iburst_opt" "$s_minpoll" "$s_maxpoll" >> "$CHRONY_CONF"
         fi
-        conf_written=1
     fi
 done
 
-# Remove duplicate NTP server entries, preserving only unique definitions
+# Remove stale NTP directives, preserving only the latest entry per host and makestep
 TMP_FILE="/tmp/rdk_chrony.deduped"
 awk '
-/^(server|pool|makestep)[ \t]+/ {
-    if (!seen[$0]++) print
-    next
+{
+    line[NR] = $0
+    directive[NR] = $1
+    host[NR] = $2
+
+    if ($1 == "makestep") {
+        last_makestep = NR
+    } else if ($1 == "server" || $1 == "pool") {
+        last_host[$2] = NR
+    }
 }
-{ print }
+END {
+    for (i = 1; i <= NR; i++) {
+        if (directive[i] == "makestep") {
+            if (i == last_makestep) {
+                print line[i]
+            }
+        } else if (directive[i] == "server" || directive[i] == "pool") {
+            if (i == last_host[host[i]]) {
+                print line[i]
+            }
+        } else {
+            print line[i]
+        }
+    }
+}
 ' "$CHRONY_CONF" > "$TMP_FILE"
-cat "$TMP_FILE" > "$CHRONY_CONF"
+mv "$TMP_FILE" "$CHRONY_CONF"
 rm -f "$TMP_FILE"
 
 ntpLog "Successfully updated $CHRONY_CONF"
