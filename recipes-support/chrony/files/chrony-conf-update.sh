@@ -106,7 +106,8 @@ remove_build_time_chrony_config() {
     !/^[[:space:]]*makestep[[:space:]]+1\.0[[:space:]]+3([[:space:]]|$)/ &&
     !/^[[:space:]]*server[[:space:]]+global-bootstrap-time1\.xfinity\.com([[:space:]]|$)/ &&
     !/^[[:space:]]*server[[:space:]]+global-bootstrap-time2\.xfinity\.com([[:space:]]|$)/
-    ' "$conf_file" > "$tmp_conf" && mv "$tmp_conf" "$conf_file"
+    ' "$conf_file" > "$tmp_conf"
+    cat "$tmp_conf" > "$conf_file"
 
     rm -f "$tmp_conf"
 }
