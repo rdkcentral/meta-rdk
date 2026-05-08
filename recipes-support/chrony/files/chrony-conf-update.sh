@@ -132,11 +132,11 @@ if [ -n "$maxstep" ]; then
         ntpLog "Added makestep $stepval $stepcount to $CHRONY_CONF"
     else
         echo "makestep 1.0 3" >> "$CHRONY_CONF"
-        ntpLog "NTPMaxstep value '$maxstep' is invalid, using default makestep 1.0 3 in $CHRONY_CONF"
+        ntpLog "Makestep value '$maxstep' is invalid, using default makestep 1.0 3 in $CHRONY_CONF"
     fi
 else
     echo "makestep 1.0 3" >> "$CHRONY_CONF"
-    ntpLog "NTPMaxstep is not set, using default makestep 1.0 3 in $CHRONY_CONF"
+    ntpLog "Makestep is not set, using default makestep 1.0 3 in $CHRONY_CONF"
 fi
 
 # Parse a settings string "Type,MaxSources,Iburst,MinPoll,MaxPoll" into
