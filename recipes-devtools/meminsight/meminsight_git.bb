@@ -47,8 +47,8 @@ do_install() {
     install -m 0644 ${WORKDIR}/meminsight-runner.path ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/meminsight-upload.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/meminsight-upload.path ${D}${systemd_unitdir}/system/
-    install -d ${D}/usr/local/bin
-    install -m 0755 ${WORKDIR}/upload_MemReports.sh ${D}/usr/local/bin/upload_MemReports.sh
+    install -d ${D}/lib/rdk
+    install -m 0755 ${WORKDIR}/upload_MemReports.sh ${D}/lib/rdk/upload_MemReports.sh
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.service.d
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.path.d
 
