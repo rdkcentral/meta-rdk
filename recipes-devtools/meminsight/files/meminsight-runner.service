@@ -21,7 +21,7 @@
 Description=MemInsight Memory Stats Runner
 
 [Service]
-Type=oneshot
+Type=simple
 RemainAfterExit=yes
 EnvironmentFile=-/tmp/meminsight.env
 ExecStart=/bin/sh -c 'PATH="/run/meminsight/usr/bin:/media/apps/meminsight:/media/apps/meminsight/usr/bin:$PATH"; meminsight $ARGS'

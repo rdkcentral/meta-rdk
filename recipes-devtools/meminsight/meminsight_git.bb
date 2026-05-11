@@ -85,7 +85,7 @@ FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
 
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-upload.service"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-upload.path"
-FILES:${PN} += "/usr/local/bin/upload_MemReports.sh"
+FILES:${PN} += "/lib/rdk/upload_MemReports.sh"
 
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
