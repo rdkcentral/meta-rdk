@@ -13,7 +13,7 @@ CFLAGS:append = " -I${STAGING_INCDIR} "
 
 
 EXTRA_OECMAKE_BUILD = ""
-EXTRA_OECMAKE += "-DWITH_CLI=ON -DCMAKE_INSTALL_RPATH=\$ORIGIN/../../lib/bluetoothsdk"
+EXTRA_OECMAKE += "-DWITH_CLI=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DCMAKE_INSTALL_RPATH=\$ORIGIN/../../lib/bluetoothsdk"
 
 inherit cmake externalsrc breakpad-wrapper
 
