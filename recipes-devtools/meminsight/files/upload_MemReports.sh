@@ -229,119 +229,96 @@ build_upload_set() {
 }
 
 ##############################################################################
+# Upload configuration
+##############################################################################
+
+# Resolve MemInsight upload endpoint using the same precedence as memcapture:
+#   1. TR-181 LogServerUrl
+#   2. UploadRepository URL from OUTFILE
+#   3. TR-181 SsrUrl + /cgi-bin/S3.cgi
+#   4. dcm.properties fallback for LOG_SERVER / HTTP_UPLOAD_LINK
+# Sets globals: LOG_SERVER, HTTP_UPLOAD_LINK, UPLOAD_PROTOCOL
+resolve_upload_config() {
+    LOG_SERVER=""
+    HTTP_UPLOAD_LINK=""
+    UPLOAD_PROTOCOL="HTTP"
+    OUTFILE="/tmp/DCMSettings.conf"
+
+    if [ "$BUILD_TYPE" != "prod" ] && [ -f /opt/dcm.properties ]; then
+        log "Configurable service end-points will not be used for $BUILD_TYPE builds due to overridden /opt/dcm.properties."
+    else
+        if command -v tr181 >/dev/null 2>&1; then
+            LOG_SERVER="$(tr181 -g Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.LogUpload.LogServerUrl 2>/dev/null)"
+
+            if [ -f "$OUTFILE" ]; then
+                HTTP_UPLOAD_LINK="$(grep 'LogUploadSettings:UploadRepository:URL' "$OUTFILE" | cut -d '=' -f2 | sed 's/^"//' | sed 's/"$//')"
+                UPLOAD_PROTOCOL="$(grep 'LogUploadSettings:UploadRepository:uploadProtocol' "$OUTFILE" | cut -d '=' -f2 | sed 's/^"//' | sed 's/"$//')"
+            fi
+
+            if [ -z "$HTTP_UPLOAD_LINK" ]; then
+                UPLOAD_HTTPLINK_URL="$(tr181 -g Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.LogUpload.SsrUrl 2>/dev/null)"
+                if [ -n "$UPLOAD_HTTPLINK_URL" ]; then
+                    HTTP_UPLOAD_LINK="${UPLOAD_HTTPLINK_URL}/cgi-bin/S3.cgi"
+                fi
+            fi
+        fi
+    fi
+
+    [ -n "$UPLOAD_PROTOCOL" ] || UPLOAD_PROTOCOL="HTTP"
+
+    if [ -z "$LOG_SERVER" ] || [ -z "$HTTP_UPLOAD_LINK" ]; then
+        if [ "$BUILD_TYPE" != "prod" ] && [ -f /opt/dcm.properties ]; then
+            # shellcheck disable=SC1091
+            . /opt/dcm.properties
+        elif [ -f /etc/dcm.properties ]; then
+            # shellcheck disable=SC1091
+            . /etc/dcm.properties
+        fi
+
+        [ -z "$LOG_SERVER" ] && LOG_SERVER="${LOG_SERVER_URL:-$LOG_SERVER}"
+        [ -z "$HTTP_UPLOAD_LINK" ] && HTTP_UPLOAD_LINK="${HTTP_UPLOAD_LINK:-${UPLOAD_HTTPLINK_URL:+${UPLOAD_HTTPLINK_URL}/cgi-bin/S3.cgi}}"
+    fi
+
+    log "Resolved upload config: LOG_SERVER=${LOG_SERVER:-<empty>} HTTP_UPLOAD_LINK=${HTTP_UPLOAD_LINK:-<empty>} UPLOAD_PROTOCOL=${UPLOAD_PROTOCOL:-HTTP}"
+}
+
+##############################################################################
 # Upload
 ##############################################################################
 
-# Perform a two-step mTLS upload matching the RDK log upload mechanism:
-#   Step 1: POST filename= via exec_curl_mtls() (device P12 cert auth) → presigned S3 URL.
-#   Step 2: PUT the archive directly to that presigned URL.
-# exec_curl_mtls() is sourced at startup; it injects the device cert via GetConfigFile.
-# Parameters: $1 - archive path, $2 - upload URL (S3.cgi endpoint)
-# Returns: 0 on successful PUT (HTTP 200/302), 1 on any failure
-perform_upload() {
-    file="$1"
-    url="$2"
+# Upload archive using logupload, similar to memcapture flow.
+# Parameters:
+#   $1 - archive path
+# Returns:
+#   0 on success, 1 on failure
+perform_logupload() {
+    archive_file="$1"
 
-    if [ -z "$url" ]; then
-        log "Upload URL not configured; archive kept locally."
+    resolve_upload_config
+
+    if [ -z "$LOG_SERVER" ] || [ -z "$HTTP_UPLOAD_LINK" ]; then
+        log "Upload configuration incomplete: LOG_SERVER=${LOG_SERVER:-<empty>} HTTP_UPLOAD_LINK=${HTTP_UPLOAD_LINK:-<empty>}"
         return 1
     fi
 
-    filename="$(basename "$file")"
-    log "Uploading $filename → $url"
-
-    # Bind to WAN interface — getWanInterfaceName sourced from /lib/rdk/utils.sh.
-    # Refreshed per upload in case interface changes, same as uploadRDKBLogs.sh.
-    WAN_INTERFACE="$(getWanInterfaceName 2>/dev/null)"
-    wan_opt=""
-    [ -n "$WAN_INTERFACE" ] && wan_opt="--interface $WAN_INTERFACE"
-
-    # Force IPv4 if no global IPv6 address on WAN interface.
-    # Mirrors the addr_type logic in uploadRDKBLogs.sh HttpLogUpload().
-    addr_type=""
-    if [ "x$BOX_TYPE" = "xHUB4" ] || [ "x$BOX_TYPE" = "xSR300" ] || \
-       [ "x$BOX_TYPE" = "xSR213" ] || [ "x$BOX_TYPE" = "xSE501" ] || \
-       [ "x$BOX_TYPE" = "xWNXL11BWL" ] || [ "$UseLANIFIPV6" = "true" ]; then
-        CURRENT_WAN_IPV6_STATUS="$(sysevent get ipv6_connection_state 2>/dev/null)"
-        if [ "xup" = "x$CURRENT_WAN_IPV6_STATUS" ]; then
-            [ "x$(ifconfig "$HUB4_IPV6_INTERFACE" 2>/dev/null | grep Global | awk '/inet6/{print $3}' | cut -d'/' -f1)" != "x" ] || addr_type="-4"
-        else
-            [ "x$(ifconfig "$WAN_INTERFACE" 2>/dev/null | grep inet6 | grep -i Global)" != "x" ] || addr_type="-4"
-        fi
-    else
-        [ "x$(ifconfig "$WAN_INTERFACE" 2>/dev/null | grep inet6 | grep -i Global)" != "x" ] || addr_type="-4"
-    fi
-
-    FQDN="$(echo "$url" | awk -F/ '{print $3}')"
-
-    # HTTP_CODE: global file path written by exec_curl_mtls() via "> $HTTP_CODE" redirect.
-    # Must be set before calling exec_curl_mtls() — the function references it as a global.
-    # OutputFile: receives the response body (presigned S3 URL) via -o in CURL_ARGS.
-    # Matches the HTTP_CODE + OutputFile='/tmp/httpresult.txt' pattern in uploadRDKBLogs.sh.
-    HTTP_CODE="/tmp/.meminsight_curlcode_$$.txt"
-    OutputFile="/tmp/.meminsight_curlresp_$$.txt"
-
-    log "Step 1: POST filename=$filename to $url (WAN=$WAN_INTERFACE addr=$addr_type)"
-    log "Step 1: mTLS cert details → /rdklogs/logs/Curlmtlslog.txt.0"
-
-    # ── Step 1: POST via exec_curl_mtls() with device P12 cert ───────────────
-    # CURL_ARGS matches useDirectRequest() in uploadRDKBLogs.sh:
-    #   -w '%{http_code}\n'  → http_code written to stdout, redirected to HTTP_CODE
-    #   -o "$OutputFile"     → response body (presigned S3 URL) written to OutputFile
-    CURL_ARGS="--tlsv1.2 -w '%{http_code}\n' -d \"filename=$filename\" -o \"$OutputFile\" $wan_opt $addr_type $CERT_STATUS --connect-timeout 30 -m 30 \"$url\""
-
-    ret=$(exec_curl_mtls "$CURL_ARGS" "MemInsightUL" "$FQDN")
-
-    http_code=0
-    [ -f "$HTTP_CODE" ] && http_code="$(awk '{print $1}' "$HTTP_CODE")"
-    log "Step 1: exec_curl_mtls TLSRet=$ret http_code=$http_code"
-
-    if [ "$http_code" != "200" ] && [ "$http_code" != "302" ]; then
-        log "Step 1 FAILED (HTTP $http_code); could not obtain presigned URL."
-        rm -f "$HTTP_CODE" "$OutputFile"
+    if [ ! -f "$archive_file" ]; then
+        log "Archive file not found: $archive_file"
         return 1
     fi
 
-    log "Step 1 succeeded (HTTP $http_code); reading presigned URL from server response."
+    log "Invoking /usr/bin/logupload for $(basename "$archive_file")"
+    log "/usr/bin/logupload \"$LOG_SERVER\" 1 1 false \"$UPLOAD_PROTOCOL\" \"$HTTP_UPLOAD_LINK\" \"MEMINSIGHT\" true \"$archive_file\""
 
-    # Read presigned URL — matches Key=$(awk -F\" '{print $0}' $OutputFile) in uploadRDKBLogs.sh.
-    presigned_url="$(awk '{print $0}' "$OutputFile" 2>/dev/null)"
-    rm -f "$OutputFile"
+    /usr/bin/logupload "$LOG_SERVER" 1 1 false "$UPLOAD_PROTOCOL" "$HTTP_UPLOAD_LINK" "MEMINSIGHT" true "$archive_file"
+    retval=$?
 
-    if [ -z "$presigned_url" ]; then
-        log "Step 1: server returned empty presigned URL."
-        rm -f "$HTTP_CODE"
+    if [ "$retval" -ne 0 ]; then
+        log "MemInsight report upload failed with code $retval"
         return 1
     fi
 
-    # Force https if http — RDKB-13142, same fix as uploadRDKBLogs.sh.
-    if echo "$presigned_url" | tr '[:upper:]' '[:lower:]' | grep -q 'http://'; then
-        log "Step 2: presigned URL uses http; forcing https (RDKB-13142)"
-        presigned_url="$(echo "$presigned_url" | sed -e 's#http://#https://#g' -e 's#:80/#:443/#')"
-    fi
-
-    presigned_url_log="$(echo "$presigned_url" | sed 's/\.tgz?.*/\.tgz?<Hidden_Credentials>/g')"
-    log "Step 1: presigned URL = $presigned_url_log"
-
-    # ── Step 2: PUT archive to presigned S3 URL ───────────────────────────────
-    # Direct eval — no device cert needed; AWS credentials are embedded in the URL.
-    # Matches the 200-case CURL_CMD + "eval $CURL_CMD > $HTTP_CODE" in uploadRDKBLogs.sh.
-    log "Step 2: PUT $filename → $presigned_url_log"
-
-    CURL_CMD="nice -n 20 curl --tlsv1.2 -w '%{http_code}\n' -T \"$file\" -o /dev/null $wan_opt $addr_type $CERT_STATUS --connect-timeout 30 -m 30 \"$presigned_url\""
-    eval $CURL_CMD > "$HTTP_CODE" 2>>"$LOG_FILE"
-    curl_ret=$?
-
-    http_code=0
-    [ -f "$HTTP_CODE" ] && http_code="$(awk '{print $0}' "$HTTP_CODE")"
-    rm -f "$HTTP_CODE"
-
-    log "Step 2: curl exit=$curl_ret http_code=$http_code"
-
-    case "$http_code" in
-        200|302) log "Step 2 succeeded (HTTP $http_code); upload complete."; return 0 ;;
-        *)       log "Step 2 FAILED (HTTP $http_code); PUT to presigned URL failed."; return 1 ;;
-    esac
+    log "MemInsight report upload succeeded"
+    return 0
 }
 
 ##############################################################################
@@ -433,14 +410,8 @@ upload_cycle() {
 
     log "Archive created: $(basename "$archive_path") ($(du -sh "$archive_path" 2>/dev/null | awk '{print $1}'))"
 
-    # ── Resolve upload URL ────────────────────────────────────────────────────
-    URL=""
-    if [ -f "$RDK_LOGGER_PATH/logUpload_default_params.sh" ]; then
-        . "$RDK_LOGGER_PATH/logUpload_default_params.sh" 2>/dev/null
-    fi
-
     # ── Upload ────────────────────────────────────────────────────────────────
-    if perform_upload "$archive_path" "${URL:-}"; then
+    if perform_logupload "$archive_path"; then
         rm -f "$archive_path"
         for f in $selected_files; do rm -f "$f"; done
         log "Upload successful; archive and source reports removed from $OUTPUT_DIR."
@@ -526,14 +497,13 @@ main() {
         upload_cycle || break
     done
 
-    # ── Exit phase ─────────────────────────────────────────────────────────────
+    # ── Exit phase ────────────────────────────────────────────────────────────
     log "Upload service exiting."
-    rm -f "$STAGING_DIR"/*.tgz 2>/dev/null           # remove any stale archives
-    rmdir "$STAGING_DIR" >/dev/null 2>&1 || true  # remove dir only if now empty
-    cleanup_upload_trigger                         # rm /tmp/.meminsight_upload
+    rm -f "$STAGING_DIR"/*.tgz 2>/dev/null
+    rmdir "$STAGING_DIR" >/dev/null 2>&1 || true
+    cleanup_upload_trigger
 
     exit 0
 }
 
 main "$@"
-
