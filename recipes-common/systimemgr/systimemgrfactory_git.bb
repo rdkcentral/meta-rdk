@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://../LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 DEPENDS = "systimemgrinetrface iarmbus jsonrpc virtual/mfrlib rdk-logger telemetry"
 
 
-SRCREV_systemtimemgrfactory = "6a2ab6bc0ad223396a51d9d0d1f56599809b7d65"
+SRCREV_systemtimemgrfactory = "205fcf9f5dc742cb4fe8f455600a1db7bcb11ddb"
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgrfactory"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
