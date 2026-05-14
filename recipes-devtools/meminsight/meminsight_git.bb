@@ -29,7 +29,7 @@ S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-inherit autotools systemd
+inherit autotools syslog-ng-config-gen systemd
 
 # CFLAGS_append_broadband = ' -DDEVICE_IDENTIFIER=\\"erouter0\\" -DDEFAULT_OUT_DIR=\\"/nvram/meminsight\\"'
 
@@ -38,6 +38,14 @@ PACKAGECONFIG[cjson] = "--enable-cjson,--disable-cjson"
 
 EXTRA_OECONF += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', '--enable-cjson', '--disable-cjson', d)}"
 RDEPENDS:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', 'cjson', '', d)}"
+
+SYSLOG-NG_FILTER = "meminsight"
+ 
+SYSLOG-NG_SERVICE_meminsight = "meminsight-runner.service"
+SYSLOG-NG_SERVICE_meminsight += " meminsight-upload.service"
+ 
+SYSLOG-NG_DESTINATION_meminsight = "meminsight.log"
+SYSLOG-NG_LOGRATE_meminsight = "high"
 
 do_install() {
     install -d ${D}${bindir}
