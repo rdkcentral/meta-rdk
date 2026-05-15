@@ -25,6 +25,7 @@ SYSLOG-NG_FILTER = "memcapture"
 SYSLOG-NG_SERVICE_memcapture = "memcapture.service"
 SYSLOG-NG_DESTINATION_memcapture = "memcapture.log"
 SYSLOG-NG_LOGRATE_memcapture = "high"
+SYSTEMD_AUTO_ENABLE = "enable"
 
 do_install () {
     install -d ${D}${bindir}
