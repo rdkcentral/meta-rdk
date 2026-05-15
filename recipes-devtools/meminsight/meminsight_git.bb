@@ -61,7 +61,7 @@ do_install:append:broadband() {
         install -m 0755 ${WORKDIR}/start_meminsight.sh ${D}/etc/rdm/post-services/start_meminsight.sh
     fi
 }
-
+SYSTEMD_AUTO_ENABLE = "enable"
 SYSTEMD_SERVICE:${PN} = "meminsight-runner.path"
 
 FILES:${PN} += "${bindir}/meminsight"
