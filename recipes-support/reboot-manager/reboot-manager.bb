@@ -11,17 +11,23 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=86d3f3a95c324c9479bd8986968f4327"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-PV = "2.0.0"
+PV = "2.2.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "0e031b47126ec4a122be5901d50c085b1e7bca6b"
+SRCREV_reboot-manager = "b4cd16f1844161bb6a3c58167208123a0a413339"
 
 S = "${WORKDIR}/git"
 
 inherit autotools coverity systemd syslog-ng-config-gen logrotate_config
-LOGROTATE_NAME="reboot_reason"
+
+SYSLOG-NG_FILTER = "reboot_reason"
+SYSLOG-NG_SERVICE_reboot_reason = "update-reboot-info.service"
+SYSLOG-NG_DESTINATION_reboot_reason = "rebootreason.log"
+SYSLOG-NG_LOGRATE_reboot_reason = "low"
+
+LOGROTATE_NAME="reboot_reason rebootInfo"
 LOGROTATE_LOGNAME_reboot_reason="rebootreason.log"
 #HDD_ENABLE
 LOGROTATE_SIZE_reboot_reason="1572864"
@@ -30,11 +36,35 @@ LOGROTATE_ROTATION_reboot_reason="3"
 LOGROTATE_SIZE_MEM_reboot_reason="1572864"
 LOGROTATE_ROTATION_MEM_reboot_reason="3"
 
+LOGROTATE_LOGNAME_rebootInfo = "rebootInfo.log"
+#HDD_ENABLE
+LOGROTATE_SIZE_rebootInfo = "64000"
+LOGROTATE_ROTATION_rebootInfo = "3"
+#HDD_DISABLE
+LOGROTATE_SIZE_MEM_rebootInfo = "64000"
+LOGROTATE_ROTATION_MEM_rebootInfo = "3"
+
 DEPENDS += "commonutilities telemetry rbus"
 RDEPENDS:${PN}:append = " bash"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
 EXTRA_OECONF:append = " --enable-t2api=yes"
+
+do_install:append() {
+        install -d ${D}${bindir}
+        install -d ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/services/update-reboot-info.path ${D}${systemd_unitdir}/system
+        install -m 0644 ${S}/services/update-reboot-info.service ${D}${systemd_unitdir}/system
+
+        if [ "${ENABLE_SYSLOGNG}" = "true" ]; then
+           echo "SYSLOG_NG_ENABLED=true" >> ${D}${sysconfdir}/device-middleware.properties
+        fi
+
+        install -d ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/scripts/update_previous_reboot_info.sh ${D}${base_libdir}/rdk
+        install -m 0755 ${S}/scripts/rebootNow.sh ${D}${base_libdir}/rdk
+        ln -sf ${base_libdir}/rdk/rebootNow.sh ${D}/
+}
 
 # generating minidumps symbols
 inherit breakpad-wrapper
@@ -45,4 +75,9 @@ PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
+SYSTEMD_SERVICE:${PN} += "update-reboot-info.path"
+SYSTEMD_SERVICE:${PN} += "update-reboot-info.service"
+
+FILES:${PN} += "${base_libdir}/rdk/*"
+FILES:${PN} += "/rebootNow.sh"
 FILES:${PN} += "${bindir}/rebootnow"
