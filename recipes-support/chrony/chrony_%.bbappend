@@ -22,7 +22,7 @@ do_compile() {
 do_install:append() {
     # Binaries
     install -m 0755 ${S}/chronyc ${D}${sbindir}
-    install -m 0755 ${S}/adjtimex-sync-notify  ${D}${sbindir}/
+    install -m 0755 ${S}/adjtimex-sync-notify  ${D}${sbindir}
 
     install -d ${D}${base_libdir}/rdk
 
