@@ -6,7 +6,9 @@ ConditionPathExists=/opt/secure/RFC/chrony/chronyd_enabled
 
 [Service]
 Type=simple
-ExecStart=/lib/rdk/chrony-sync-notify.sh
+ExecStart=/usr/sbin/adjtimex-sync-notify
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=chronyd.service
