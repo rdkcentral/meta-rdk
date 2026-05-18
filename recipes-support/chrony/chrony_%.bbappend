@@ -11,12 +11,19 @@ SRC_URI += "file://chrony.conf \
             file://chrony-tracking.timer \
             file://chrony-tracking.service \
             file://chrony_tracking.sh \
+            file://adjtimex-sync-notify.c \
            "
 PACKAGECONFIG:remove = "editline"
+
+do_compile() {
+    ${CC} ${CFLAGS} ${LDFLAGS} adjtimex-sync-notify.c  -o adjtimex-sync-notify
+}
 
 do_install:append() {
     # Binaries
     install -m 0755 ${S}/chronyc ${D}${sbindir}
+    install -m 0755 ${S}/adjtimex-sync-notify  ${D}${sbindir}/
+
     install -d ${D}${base_libdir}/rdk
 
     #config File
