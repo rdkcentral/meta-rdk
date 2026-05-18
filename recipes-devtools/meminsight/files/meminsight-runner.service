@@ -23,7 +23,7 @@ ConditionPathExists=/media/apps/.enable_meminsight
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-EnvironmentFile=-/tmp/meminsight.env
+EnvironmentFile=-/media/apps/meminsight.env
 ExecStart=/bin/sh -c 'PATH="/run/meminsight/usr/bin:/media/apps/meminsight:/media/apps/meminsight/usr/bin:$PATH"; meminsight $ARGS'
 ExecStop=-/bin/rm /tmp/meminsight.env
 
