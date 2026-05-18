@@ -62,7 +62,8 @@ do_install:append:broadband() {
     fi
 }
 
-SYSTEMD_SERVICE:${PN} = "meminsight-runner.path"
+SYSTEMD_SERVICE:${PN} = "meminsight-runner.service meminsight-runner.path"
+SYSTEMD_AUTO_ENABLE = "enable"
 
 FILES:${PN} += "${bindir}/meminsight"
 
