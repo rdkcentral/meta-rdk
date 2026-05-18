@@ -39,12 +39,9 @@ int main(void)
              * NTP synchronization successful.
              */
             printf("chrony-sync-notify: NTP synchronized\n");
-
-            FILE *fp = fopen(SYNC_FILE, "w");
-            if (fp != NULL) {
-                fclose(fp);
-            }
-
+            touch("/tmp/systimemgr/ntp");
+            touch("/tmp/clock-event");
+            echo "ntp synchronised" > /tmp/ntp_status
             return 0;
         }
 
