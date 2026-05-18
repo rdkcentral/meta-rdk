@@ -4,7 +4,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
 SRC_URI = "git://github.com/rdkcentral/time-utils.git;branch=topic/chronyctl;protocol=https"
-SRCREV = "e9ab25fc287aa027207ed28c3def9692285f7a83"
+SRCREV = "65f26b9f89cc3a88563b4db40639fe403d73b374"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
