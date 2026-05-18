@@ -1,26 +1,48 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SUMMARY = "Chrony Control Shared Library"
-DESCRIPTION = "Builds and installs libchronyctl and headers"
-LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
+DESCRIPTION = "A thread-safe library to control chronyd via its binary protocol"
+LICENSE = "CLOSED"
+#LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = "git://github.com/rdkcentral/time-utils.git;branch=topic/chronyctl;protocol=https"
-SRCREV = "91c816d922a1100365f3980073510f631a3b8efa"
+SRC_URI = " \
+    file://libchronyctl.c \
+    file://libchronyctl.h \
+    file://candm.h \
+    file://addressing.h \
+    file://test_chronyctl.c \
+"
 
-PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
+S = "${WORKDIR}"
 
-S = "${WORKDIR}/git/rdkchronylibctl"
+# Compilation directly in the recipe
+do_compile() {
+    # Compile object with PIC
+    ${CC} ${CFLAGS} -fPIC -I${S} -c ${S}/libchronyctl.c -o ${B}/libchronyctl.o
 
-inherit autotools pkgconfig
+    # Create shared library
+    ${CC} ${LDFLAGS} -shared -Wl,-soname,libchronyctl.so \
+        ${B}/libchronyctl.o -o ${B}/libchronyctl.so -lpthread -lm
 
-DEPENDS = "chrony"
+   ${CC} ${CFLAGS} ${LDFLAGS} -I${S} ${S}/test_chronyctl.c \
+        -L${B} -lchronyctl -o ${B}/test_chronyctl -lpthread -lm
+}
 
-FILES:${PN} += "${libdir}/libchronyctl.so.*"
-FILES:${PN}-dev += "${libdir}/libchronyctl.la ${libdir}/libchronyctl.so \
-                    ${includedir}/libchronyctl.h \
-                    ${includedir}/addressing.h \
-                    ${includedir}/candm.h"
+do_install() {
+    install -d ${D}${libdir}
+    install -m 0755 ${B}/libchronyctl.so ${D}${libdir}
 
-EXTRA_OECONF = ""
-EXTRA_OEMAKE = ""
+    install -d ${D}${includedir}
+    install -m 0644 ${S}/libchronyctl.h ${D}${includedir}
+    install -m 0644 ${S}/addressing.h ${D}${includedir}
+    install -m 0644 ${S}/candm.h ${D}${includedir}
 
+    install -d ${D}${bindir}
+    install -m 0755 ${B}/test_chronyctl ${D}${bindir}
+}
+
+FILES:${PN} = "${libdir}/libchronyctl.so ${bindir}/test_chronyctl"
+FILES:${PN}-dev = "${includedir}/libchronyctl.h ${includedir}/addressing.h ${includedir}/candm.h"
+
+# This is a library, so we might need some rdepends if it were calling other bins
+# but here it is self-contained.
 RDEPENDS:${PN} = "chrony"
