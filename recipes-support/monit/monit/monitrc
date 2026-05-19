@@ -23,7 +23,7 @@ set daemon  1              # check services at 30 seconds intervals
 #
 
 # set monit files in temporary locations
-set pidfile /var/run/.monit.pid
+set pidfile /var/run/monit.pid
 set statefile /var/run/.monit.state
 set idfile /var/run/.monit.id
 
