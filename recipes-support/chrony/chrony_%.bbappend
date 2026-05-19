@@ -12,6 +12,7 @@ SRC_URI += "file://chrony.conf \
             file://chrony-tracking.service \
             file://chrony_tracking.sh \
             file://adjtimex-sync-notify.c \
+            file://sync-notification.sh \
            "
 PACKAGECONFIG:remove = "editline"
 
@@ -33,7 +34,7 @@ do_install:append() {
     install -m 0755 ${WORKDIR}/chrony-sync-notify.sh ${D}${base_libdir}/rdk
     install -m 0755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
     install -m 0755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
-    
+    install -m 0755 ${WORKDIR}/sync-notification.sh ${D}${base_libdir}/rdk
 
     # service to start chrony
     rm -rf ${D}${systemd_unitdir}/system/chronyd.service
@@ -51,6 +52,7 @@ CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 FILES:${PN} += "${base_libdir}/rdk/chrony-conf-update.sh"
 FILES:${PN} += "${base_libdir}/rdk/chrony_tracking.sh"
+FILES:${PN} += "${base_libdir}/rdk/sync-notification.sh"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.service"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.timer"
 FILES:${PN} += "${systemd_unitdir}/system/chronyd.service"
