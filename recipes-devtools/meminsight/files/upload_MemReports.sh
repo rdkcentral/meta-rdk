@@ -25,7 +25,6 @@ CONFIGSTORE_PATH="/tmp/.meminsight_configstore"
 UPLOAD_TRIGGER_PATH="/tmp/.meminsight_upload"
 LOCK_DIR="/tmp/.meminsight_upload.lock"
 LOG_TAG="[MemInsight-Upload]"
-LOG_FILE="/opt/logs/meminsight.log"
 RDK_LOGGER_PATH="/rdklogger"
 MEMINSIGHT_INPROGRESS_FILE="/tmp/.meminsight_inprogress"
 
@@ -66,7 +65,7 @@ STAGING_DIR=""
 # Parameters: $* - message text
 log() {
     timestamp="$(date '+%Y-%m-%d %H:%M:%S')"	
-    echo "$timestamp $LOG_TAG $*" >> "$LOG_FILE"
+    echo "$timestamp $LOG_TAG $*"
 }
 
 # Execute a command at lowest I/O and CPU priority.
