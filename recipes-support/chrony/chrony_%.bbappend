@@ -16,7 +16,7 @@ SRC_URI += "file://chrony.conf \
            "
 PACKAGECONFIG:remove = "editline"
 
-do_compile() {
+do_compile:append() {
     ${CC} ${CFLAGS} ${LDFLAGS} ${WORKDIR}/adjtimex-sync-notify.c  -o ${S}/adjtimex-sync-notify
 }
 
