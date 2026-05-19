@@ -20,8 +20,7 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://upload_MemReports.sh \
                    "
 
-# Mar 2, 2026
-# v1.0.0
+# May 19, 2026
 SRCREV = "545cc6fdd954a2f659dccf5c9f09358e54efd00e"
 PV = "1.1.0"
 PR = "r0"
@@ -40,10 +39,8 @@ EXTRA_OECONF += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', '--enable-cjson'
 RDEPENDS:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', 'cjson', '', d)}"
 
 SYSLOG-NG_FILTER = "meminsight"
- 
 SYSLOG-NG_SERVICE_meminsight = "meminsight-runner.service"
 SYSLOG-NG_SERVICE_meminsight += " meminsight-upload.service"
- 
 SYSLOG-NG_DESTINATION_meminsight = "meminsight.log"
 SYSLOG-NG_LOGRATE_meminsight = "high"
 

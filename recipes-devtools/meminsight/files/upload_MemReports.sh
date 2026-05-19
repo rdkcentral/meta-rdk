@@ -499,8 +499,10 @@ main() {
 
     # ── Exit phase ────────────────────────────────────────────────────────────
     log "Upload service exiting."
-    rm -f "$STAGING_DIR"/*.tgz 2>/dev/null
-    rmdir "$STAGING_DIR" >/dev/null 2>&1 || true
+    if [ -n "$STAGING_DIR" ] && [ -d "$STAGING_DIR" ]; then
+        rm -f "$STAGING_DIR"/*.tgz 2>/dev/null
+        rmdir "$STAGING_DIR" >/dev/null 2>&1 || true
+    fi
     cleanup_upload_trigger
 
     exit 0
