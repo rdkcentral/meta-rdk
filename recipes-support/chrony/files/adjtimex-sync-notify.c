@@ -40,8 +40,17 @@ int main(void)
              * NTP synchronization successful.
              */
             printf("chrony-sync-notify: NTP synchronized\n");
-            touch("/tmp/systimemgr/ntp");
-            touch("/tmp/clock-event");
+            int fd;
+
+fd = open("/tmp/systimemgr/ntp", O_CREAT | O_WRONLY, 0644);
+if (fd >= 0)
+    close(fd);
+
+fd = open("/tmp/clock-event", O_CREAT | O_WRONLY, 0644);
+if (fd >= 0)
+    close(fd);
+
+return 0;
             return 0;
         }
 
