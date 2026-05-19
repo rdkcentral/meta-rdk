@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/timex.h>
+#include <fcntl.h>
 
 #define POLL_INTERVAL_SEC 1
 #define SYNC_FILE "/tmp/clock-event"
