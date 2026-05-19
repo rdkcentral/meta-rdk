@@ -16,7 +16,7 @@
 ##
 ## Start Monit in the background (run as a daemon):
 #
-set daemon  30              # check services at 30 seconds intervals
+set daemon  1              # check services at 30 seconds intervals
 #   with start delay 240    # optional: delay the first check by 4-minutes (by
 #                           # default Monit check immediately after Monit start)
 #
@@ -30,14 +30,7 @@ set idfile /var/run/.monit.id
 ## Set syslog logging. If you want to log to a standalone log file instead,
 ## specify the full path to the log file
 #
-set log syslog
-
-set httpd port 2812
-    allow 0.0.0.0/0        # allow localhost to connect to the server and
-    allow admin:monit      # require user 'admin' with password 'monit'
-    #with ssl {            # enable SSL/TLS and set path to server certificate
-    #    pemfile: /etc/ssl/certs/monit.pem
-    #}
+set log /opt/logs/monit.log
 
 ###############################################################################
 ## Includes
