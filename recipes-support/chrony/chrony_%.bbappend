@@ -47,6 +47,7 @@ do_install:append() {
 
 
 FILES:${PN} += "${sbindir}/chronyc"
+FILES:${PN} += "${sbindir}/adjtimex-sync-notify"
 FILES:${PN} += "${base_libdir}/rdk/chrony-sync-notify.sh"
 CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
