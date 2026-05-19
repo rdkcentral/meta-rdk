@@ -42,7 +42,6 @@ int main(void)
             printf("chrony-sync-notify: NTP synchronized\n");
             touch("/tmp/systimemgr/ntp");
             touch("/tmp/clock-event");
-            echo "ntp synchronised" > /tmp/ntp_status
             return 0;
         }
 
