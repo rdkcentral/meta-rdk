@@ -8,7 +8,7 @@ SRC_URI = "git://github.com/gomathishankar37/neo-maintenancemanager.git;branch=m
 
 # May 19, 2026
 SRCREV = "9366e5c91649505f26d4c43dc4b58df5188c9eac"
-PV = "1.0.0"
+PV = "1.1.0"
 PR = "r0"
 
 S = "${WORKDIR}/git"
