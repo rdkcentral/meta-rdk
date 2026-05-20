@@ -17,3 +17,7 @@ do_install:append() {
     # Keep @prefix@ handling aligned with upstream recipe behavior.
     sed -i -e 's,@prefix@,${exec_prefix},g' ${D}${systemd_system_unitdir}/monit.service
 }
+
+FILES:${PN} += " \
+    ${systemd_system_unitdir}/monit.path \
+"
