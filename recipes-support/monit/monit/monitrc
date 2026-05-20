@@ -16,7 +16,7 @@
 ##
 ## Start Monit in the background (run as a daemon):
 #
-set daemon  1              # check services at 30 seconds intervals
+set daemon  1              # check services at 1 second interval
 #   with start delay 240    # optional: delay the first check by 4-minutes (by
 #                           # default Monit check immediately after Monit start)
 #
@@ -31,6 +31,12 @@ set idfile /var/run/.monit.id
 ## specify the full path to the log file
 #
 set log /opt/logs/monit.log
+
+###############################################################################
+# System monitoring
+###############################################################################
+
+check system localhost
 
 ###############################################################################
 ## Includes
