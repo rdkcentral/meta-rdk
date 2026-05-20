@@ -10,11 +10,11 @@ do_install:append() {
     rm -f ${D}${systemd_system_unitdir}/monit.service
     rm -f ${D}${sysconfdir}/monitrc
 
-    install -Dm 0644 ${UNPACKDIR}/monit.service ${D}${systemd_system_unitdir}/monit.service
-    install -Dm 0644 ${UNPACKDIR}/monit.path ${D}${systemd_system_unitdir}/monit.path
+    install -Dm 0644 ${WORKDIR}/monit.service ${D}${systemd_system_unitdir}/monit.service
+    install -Dm 0644 ${WORKDIR}/monit.path ${D}${systemd_system_unitdir}/monit.path
 
     # Ensure monitrc from meta-rdk is installed.
-    install -Dm 0600 ${UNPACKDIR}/monitrc ${D}${sysconfdir}/monitrc
+    install -Dm 0600 ${WORKDIR}/monitrc ${D}${sysconfdir}/monitrc
 
     # Keep @prefix@ handling aligned with upstream recipe behavior.
     sed -i -e 's,@prefix@,${exec_prefix},g' ${D}${systemd_system_unitdir}/monit.service
@@ -22,4 +22,5 @@ do_install:append() {
 
 FILES:${PN} += " \
     ${systemd_system_unitdir}/monit.path \
+    ${systemd_system_unitdir}/monit.service \
 "
