@@ -26,7 +26,7 @@ KillMode=process
 ExecStart=@prefix@/bin/monit -I
 ExecStop=@prefix@/bin/monit quit
 ExecReload=@prefix@/bin/monit reload
-Restart=on-abnormal
+Restart=on-failure
 StandardOutput=null
 
 [Install]
