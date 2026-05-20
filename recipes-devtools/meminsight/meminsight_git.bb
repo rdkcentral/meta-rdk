@@ -15,20 +15,34 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://conf/broadband-path.conf \
                    file://conf/broadband-rdm-path.conf \
                    file://start_meminsight.sh \
+                   file://meminsight-upload.service \
+                   file://meminsight-upload.path \
+                   file://upload_MemReports.sh \
                    "
 
-# Mar 2, 2026
-# v1.0.0
-SRCREV = "a7e1e7375b5eaaa4cffd26fc2a40dbd359bc0b1f"
-PV = "1.0.0"
+# May 19, 2026
+SRCREV = "545cc6fdd954a2f659dccf5c9f09358e54efd00e"
+PV = "1.1.0"
 PR = "r0"
 S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-inherit autotools systemd
+inherit autotools syslog-ng-config-gen systemd
 
 # CFLAGS_append_broadband = ' -DDEVICE_IDENTIFIER=\\"erouter0\\" -DDEFAULT_OUT_DIR=\\"/nvram/meminsight\\"'
+
+PACKAGECONFIG ??= "cjson"
+PACKAGECONFIG[cjson] = "--enable-cjson,--disable-cjson"
+
+EXTRA_OECONF += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', '--enable-cjson', '--disable-cjson', d)}"
+RDEPENDS:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'cjson', 'cjson', '', d)}"
+
+SYSLOG-NG_FILTER = "meminsight"
+SYSLOG-NG_SERVICE_meminsight = "meminsight-runner.service"
+SYSLOG-NG_SERVICE_meminsight += " meminsight-upload.service"
+SYSLOG-NG_DESTINATION_meminsight = "meminsight.log"
+SYSLOG-NG_LOGRATE_meminsight = "medium"
 
 do_install() {
     install -d ${D}${bindir}
@@ -36,8 +50,13 @@ do_install() {
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${WORKDIR}/meminsight-runner.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/meminsight-runner.path ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/meminsight-upload.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/meminsight-upload.path ${D}${systemd_unitdir}/system/
+    install -d ${D}/lib/rdk
+    install -m 0755 ${WORKDIR}/upload_MemReports.sh ${D}/lib/rdk/upload_MemReports.sh
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.service.d
     install -d ${D}${systemd_unitdir}/system/meminsight-runner.path.d
+
 }
 
 do_install:append:client() {
@@ -62,12 +81,16 @@ do_install:append:broadband() {
     fi
 }
 
-SYSTEMD_SERVICE:${PN} = "meminsight-runner.path"
+SYSTEMD_SERVICE:${PN} = "meminsight-runner.path meminsight-upload.path"
 
 FILES:${PN} += "${bindir}/meminsight"
 
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path"
+
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-upload.service"
+FILES:${PN} += "${systemd_unitdir}/system/meminsight-upload.path"
+FILES:${PN} += "/lib/rdk/upload_MemReports.sh"
 
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.service.d/*.conf"
 FILES:${PN} += "${systemd_unitdir}/system/meminsight-runner.path.d/*.conf"
