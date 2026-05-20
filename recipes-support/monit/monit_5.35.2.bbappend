@@ -6,8 +6,10 @@ SRC_URI:append = " file://monit.service file://monit.path"
 SYSTEMD_SERVICE:${PN} = "monit.path"
 
 do_install:append() {
-    # Replace the service installed by the base recipe with the layer-local one.
+    # Replace the service and rc installed by the base recipe with the layer-local one.
     rm -f ${D}${systemd_system_unitdir}/monit.service
+    rm -f ${D}${sysconfdir}/monitrc
+
     install -Dm 0644 ${UNPACKDIR}/monit.service ${D}${systemd_system_unitdir}/monit.service
     install -Dm 0644 ${UNPACKDIR}/monit.path ${D}${systemd_system_unitdir}/monit.path
 
