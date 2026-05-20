@@ -42,7 +42,7 @@ SYSLOG-NG_FILTER = "meminsight"
 SYSLOG-NG_SERVICE_meminsight = "meminsight-runner.service"
 SYSLOG-NG_SERVICE_meminsight += " meminsight-upload.service"
 SYSLOG-NG_DESTINATION_meminsight = "meminsight.log"
-SYSLOG-NG_LOGRATE_meminsight = "high"
+SYSLOG-NG_LOGRATE_meminsight = "medium"
 
 do_install() {
     install -d ${D}${bindir}
