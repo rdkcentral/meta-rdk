@@ -3,7 +3,7 @@
 ###############################################################################
 ##
 ## Comments begin with a '#' and extend through the end of the line. Keywords
-## are case insensitive. All path's MUST BE FULLY QUALIFIED, starting with '/'.
+## are case insensitive. All paths MUST BE FULLY QUALIFIED, starting with '/'.
 ##
 ## Below you will find examples of some frequently used statements. For
 ## information about the control file and a complete list of statements and
