@@ -1,0 +1,10 @@
+[Unit]
+Description=Monitor CPU usage of logging and middleware processes
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c 'pidstat -u -C "syslog-ng|systemd-journald|logrotate|systemd-cat|epg-ui|WPEFramework|audiocapturemgr" 5 120 > /tmp/log/pidstat_cpu.log'
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
