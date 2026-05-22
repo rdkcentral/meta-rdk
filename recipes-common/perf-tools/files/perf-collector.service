@@ -1,0 +1,10 @@
+[Unit]
+Description=Performance Collection Script
+
+[Service]
+Type=simple
+ExecStart=/bin/sh /media/apps/perf.sh
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
