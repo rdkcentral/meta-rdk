@@ -17,6 +17,6 @@ do_install() {
 
 SYSTEMD_SERVICE:${PN} = "perf-collector.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
-FILES:${PN} += "/media/apps/perf.sh
-FILES:${PN} += "/media/apps/perf.conf
+FILES:${PN} += "/media/apps/perf.sh"
+FILES:${PN} += "/media/apps/perf.conf"
 FILES:${PN} += "${systemd_system_unitdir}/perf-collector.service"
