@@ -110,7 +110,7 @@ do_install:append() {
     install -D -m 0644 ${WORKDIR}/btmgr.conf ${D}${systemd_unitdir}/system/btmgr.service.d/btmgr.conf
 }
 
-SYSTEMD_SERVICE:${PN}  = "btmgr.service"
+#SYSTEMD_SERVICE:${PN}  = "btmgr.service"
 
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr.conf"
