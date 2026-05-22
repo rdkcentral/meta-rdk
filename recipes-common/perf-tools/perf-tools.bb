@@ -14,7 +14,7 @@ do_install() {
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/perf-collector.service ${D}${systemd_system_unitdir}/perf-collector.service
 }
-
+INSANE_SKIP_${PN} = "empty-dirs"
 SYSTEMD_SERVICE:${PN} = "perf-collector.service"
 SYSTEMD_AUTO_ENABLE:${PN} = "enable"
 FILES:${PN} += "/media/apps/perf.sh"
