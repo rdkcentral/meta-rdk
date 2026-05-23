@@ -16,8 +16,12 @@ inherit autotools pkgconfig
 
 DEPENDS = "chrony"
 
+do_install:append() {
+    rm -f ${D}${libdir}/libchronyctl.la
+}
+
 FILES:${PN} += "${libdir}/libchronyctl.so.*"
-FILES:${PN}-dev += "${libdir}/libchronyctl.la ${libdir}/libchronyctl.so \
+FILES:${PN}-dev += "${libdir}/libchronyctl.so \
                     ${includedir}/libchronyctl.h \
                     ${includedir}/addressing.h \
                     ${includedir}/candm.h"
