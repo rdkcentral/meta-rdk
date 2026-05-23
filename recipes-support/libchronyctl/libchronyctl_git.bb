@@ -3,7 +3,7 @@ DESCRIPTION = "Builds and installs libchronyctl and headers"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
-SRC_URI = "${CMF_GITHUB_ROOT}/time-utils.git;branch=develop;protocol=https"
+SRC_URI = "${CMF_GITHUB_ROOT}/time-utils.git;;${CMF_GITHUB_SRC_URI_SUFFIX};name=time-utils"
 SRCREV = "74abc42ea4b0aac92e954247935a7fe6ec4b86ed"
 PV = "1.0.0"
 PR = "r0"
