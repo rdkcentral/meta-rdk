@@ -22,7 +22,7 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/
     install -m 0644 ${WORKDIR}/rdk_chrony.conf ${D}${sysconfdir}/
     install -m 0755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
-    install -m 0755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
+    #install -m 0755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
     
 
     # service to start chrony
