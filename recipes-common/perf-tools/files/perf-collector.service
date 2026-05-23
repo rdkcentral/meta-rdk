@@ -1,5 +1,6 @@
 [Unit]
 Description=Performance Collection Script
+ConditionPathExists=/media/apps/.enable_perftools
 
 [Service]
 Type=simple
