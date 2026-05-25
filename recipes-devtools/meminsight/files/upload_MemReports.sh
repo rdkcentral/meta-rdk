@@ -65,7 +65,7 @@ STAGING_DIR=""
 # Parameters: $* - message text
 log() {
     timestamp="$(date '+%Y-%m-%d %H:%M:%S')"	
-    echo "$timestamp $LOG_TAG $*"
+    echo "$timestamp $LOG_TAG $*" >&2
 }
 
 # Execute a command at lowest I/O and CPU priority.
