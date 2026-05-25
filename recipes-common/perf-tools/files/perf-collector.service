@@ -1,5 +1,7 @@
 [Unit]
 Description=Performance Collection Script
+After=tr69hostif.service
+Requires=tr69hostif.service
 ConditionPathExists=/media/apps/.enable_perftools
 
 [Service]
