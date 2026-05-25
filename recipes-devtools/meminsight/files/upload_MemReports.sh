@@ -64,8 +64,7 @@ STAGING_DIR=""
 # Log a message with the standard tag prefix.
 # Parameters: $* - message text
 log() {
-    timestamp="$(date '+%Y-%m-%d %H:%M:%S')"	
-    echo "$timestamp $LOG_TAG $*" >&2
+    echo "$LOG_TAG $*" >> "$LOG_FILE"	
 }
 
 # Execute a command at lowest I/O and CPU priority.
