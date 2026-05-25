@@ -14,7 +14,7 @@ PACKAGECONFIG:remove = "editline"
 
 do_install:append() {
     # Binaries
-    install -m 0755 ${S}/chronyc ${D}${sbindir}
+    #install -m 0755 ${S}/chronyc ${D}${sbindir}
     install -d ${D}${base_libdir}/rdk
 
     #config File
@@ -34,7 +34,7 @@ do_install:append() {
 }
 
 
-FILES:${PN} += "${sbindir}/chronyc"
+#FILES:${PN} += "${sbindir}/chronyc"
 CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 FILES:${PN} += "${base_libdir}/rdk/chrony-conf-update.sh"
