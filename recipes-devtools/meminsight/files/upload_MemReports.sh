@@ -25,6 +25,7 @@ CONFIGSTORE_PATH="/tmp/.meminsight_configstore"
 UPLOAD_TRIGGER_PATH="/tmp/.meminsight_upload"
 LOCK_DIR="/tmp/.meminsight_upload.lock"
 LOG_TAG="[MemInsight-Upload]"
+LOG_FILE="/opt/logs/meminsight_upload.log"
 RDK_LOGGER_PATH="/rdklogger"
 MEMINSIGHT_INPROGRESS_FILE="/tmp/.meminsight_inprogress"
 
