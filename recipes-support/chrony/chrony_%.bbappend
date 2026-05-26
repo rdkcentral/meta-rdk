@@ -6,9 +6,6 @@ SRC_URI += "file://chrony.conf \
             file://chronyd.service \
             file://rdk_chrony.conf \
             file://chrony-conf-update.sh \
-            file://chrony-tracking.timer \
-            file://chrony-tracking.service \
-            file://chrony_tracking.sh \
            "
 PACKAGECONFIG:remove = "editline"
 
@@ -22,15 +19,11 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/chrony.conf ${D}${sysconfdir}/
     install -m 0644 ${WORKDIR}/rdk_chrony.conf ${D}${sysconfdir}/
     install -m 0755 ${WORKDIR}/chrony-conf-update.sh ${D}${base_libdir}/rdk
-    #install -m 0755 ${WORKDIR}/chrony_tracking.sh ${D}${base_libdir}/rdk
     
 
     # service to start chrony
     rm -rf ${D}${systemd_unitdir}/system/chronyd.service
     install -m 0644 ${WORKDIR}/chronyd.service ${D}${systemd_unitdir}/system/
-   # install -m 0644 ${WORKDIR}/chrony-tracking.service ${D}${systemd_unitdir}/system/
-   # install -m 0644 ${WORKDIR}/chrony-tracking.timer ${D}${systemd_unitdir}/system/
-
 }
 
 
@@ -38,13 +31,7 @@ do_install:append() {
 CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 FILES:${PN} += "${base_libdir}/rdk/chrony-conf-update.sh"
-#FILES:${PN} += "${base_libdir}/rdk/chrony_tracking.sh"
-#FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.service"
-#FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.timer"
 FILES:${PN} += "${systemd_unitdir}/system/chronyd.service"
-
-#SYSTEMD_SERVICE:${PN} += "chronyd.service"
-#SYSTEMD_SERVICE:${PN} += "chrony-tracking.timer"
 
 
 inherit syslog-ng-config-gen
