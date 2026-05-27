@@ -2,7 +2,6 @@ SUMMARY = "Systemd service for iostat monitoring"
 DESCRIPTION = "Installs and enables a systemd service to monitor CPU usage with pidstat."
 
 LICENSE= "CLOSED"
-PACKAGE_ARCH = "all"
 
 SRC_URI += "file://iostat-monitor.service"
 
