@@ -25,6 +25,7 @@ CONFIGSTORE_PATH="/tmp/.meminsight_configstore"
 UPLOAD_TRIGGER_PATH="/tmp/.meminsight_upload"
 LOCK_DIR="/tmp/.meminsight_upload.lock"
 LOG_TAG="[MemInsight-Upload]"
+#LOG_FILE="/opt/logs/meminsight.log"
 RDK_LOGGER_PATH="/rdklogger"
 MEMINSIGHT_INPROGRESS_FILE="/tmp/.meminsight_inprogress"
 
@@ -64,8 +65,7 @@ STAGING_DIR=""
 # Log a message with the standard tag prefix.
 # Parameters: $* - message text
 log() {
-    timestamp="$(date '+%Y-%m-%d %H:%M:%S')"	
-    echo "$timestamp $LOG_TAG $*"
+    echo "$LOG_TAG $*" 
 }
 
 # Execute a command at lowest I/O and CPU priority.
@@ -218,7 +218,7 @@ build_upload_set() {
             iter="$(echo "$bname" | sed -n 's/.*_iter\([0-9][0-9]*\)_.*/\1/p')"
             [ -z "$iter" ] && iter="$(echo "$bname" | sed -n 's/.*_iter\([0-9][0-9]*\)\..*/\1/p')"
             if [ -n "$iter" ] && [ "$iter" -eq "$max_iter" ]; then
-                log "Skipping active iter${max_iter}: $(basename "$f")"
+                #log "Skipping active iter${max_iter}: $(basename "$f")"
                 continue
             fi
             echo "$f"
