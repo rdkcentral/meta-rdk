@@ -1,0 +1,61 @@
+From: Sky UK
+Date: Fri, 31 May 2026 00:00:00 +0000
+Subject: [PATCH] Add /opt/appmapping.json to extraMounts in Dobby settings
+
+Bind-mount /opt/appmapping.json read-write into every Dobby-managed
+container so that the appId-to-appInstanceId mapping file maintained
+by AppsStatus is visible to processes running inside containers (e.g.
+rdk-window-manager-extensions).
+
+Source: Sky UK
+Upstream-Status: Inappropriate [Sky UK specific]
+
+Signed-off-by: Sky UK
+---
+ daemon/process/settings/dobby.dev_vm.json | 9 +++++++++
+ daemon/process/settings/dobby.json        | 11 +++++++++--
+ 2 files changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/daemon/process/settings/dobby.dev_vm.json b/daemon/process/settings/dobby.dev_vm.json
+index 8ab3cb1f..11419e6e 100644
+--- a/daemon/process/settings/dobby.dev_vm.json
++++ b/daemon/process/settings/dobby.dev_vm.json
+@@ -18,6 +18,15 @@
+       "addressRange": "100.64.11.0"
+     },
+ 
++    "extraMounts": [
++      {
++        "source": "/opt/appmapping.json",
++        "destination": "/opt/appmapping.json",
++        "type": "bind",
++        "options": [ "rbind", "rw" ]
++      }
++    ],
++
+     "logRelay": {
+       "syslog": {
+         "enable": true,
+diff --git a/daemon/process/settings/dobby.json b/daemon/process/settings/dobby.json
+index 65e1ed51..6f54a655 100644
+--- a/daemon/process/settings/dobby.json
++++ b/daemon/process/settings/dobby.json
+@@ -11,5 +11,14 @@
+   "network": {
+     "externalInterfaces": [ "eth0", "wlan0" ],
+     "addressRange": "100.64.11.0"
+-  }
++  },
++
++  "extraMounts": [
++    {
++      "source": "/opt/appmapping.json",
++      "destination": "/opt/appmapping.json",
++      "type": "bind",
++      "options": [ "rbind", "rw" ]
++    }
++  ]
+ }
+\ No newline at end of file
+-- 
+2.39.0
