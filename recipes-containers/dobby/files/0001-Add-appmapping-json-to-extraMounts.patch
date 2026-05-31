@@ -1,0 +1,39 @@
+From: Sky UK
+Date: Fri, 31 May 2026 00:00:00 +0000
+Subject: [PATCH] Add /opt/appmapping.json to extraMounts in dobby.generic.json
+
+Bind-mount /opt/appmapping.json read-write into every Dobby-managed
+container via meta-rdk dobby.generic.json so that the appId-to-
+appInstanceId mapping file maintained by AppsStatus is visible to
+processes running inside containers.
+
+Source: Sky UK
+Upstream-Status: Inappropriate [Sky UK specific]
+
+Signed-off-by: Sky UK
+---
+ meta-rdk/recipes-containers/dobby/files/dobby.generic.json | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/meta-rdk/recipes-containers/dobby/files/dobby.generic.json b/meta-rdk/recipes-containers/dobby/files/dobby.generic.json
+index 4a25c83a..XXXXXXXXXXXXXXXX 100644
+--- a/meta-rdk/recipes-containers/dobby/files/dobby.generic.json
++++ b/meta-rdk/recipes-containers/dobby/files/dobby.generic.json
+@@ -11,6 +11,15 @@
+     "network": {
+       "externalInterfaces": [ "eth0", "wlan0" ],
+       "addressRange": "100.64.11.0"
+     },
++    "extraMounts": [
++      {
++        "source": "/opt/appmapping.json",
++        "destination": "/opt/appmapping.json",
++        "type": "bind",
++        "options": [ "rbind", "rw" ]
++      }
++    ],
+     "logRelay": {
+         "syslog": {
+           "enable": true,
+-- 
+2.39.0
