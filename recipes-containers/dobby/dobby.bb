@@ -91,10 +91,13 @@ FILES_SOLIBSDEV = ""
 do_install:append(){
     install -d ${D}${sysconfdir}
 
-    #Copy the dobby generic config file to /etc/
+    # Install the generic config under its source name and the runtime name
+    # consumed by DobbyDaemon and plugins.
     install -m 0644 ${S}/../dobby.generic.json ${D}${sysconfdir}/dobby.generic.json
+    install -m 0644 ${S}/../dobby.generic.json ${D}${sysconfdir}/dobby.json
 }
 
+FILES:${PN} += "${sysconfdir}/dobby.json"
 FILES:${PN} += "${sysconfdir}/dobby.generic.json"
 FILES:${PN} += "${systemd_system_unitdir}/dobby.service"
 FILES:${PN} += "${sysconfdir}/systemd/system/multi-user.target.wants/dobby.service"
