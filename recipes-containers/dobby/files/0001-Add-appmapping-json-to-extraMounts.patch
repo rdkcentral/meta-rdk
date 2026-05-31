@@ -16,7 +16,7 @@ Signed-off-by: Sky UK
  1 file changed, 9 insertions(+)
 
 diff --git a/meta-rdk/recipes-containers/dobby/files/dobby.generic.json b/meta-rdk/recipes-containers/dobby/files/dobby.generic.json
-index 4a25c83a..XXXXXXXXXXXXXXXX 100644
+index 4a25c83a..d84c61e8 100644
 --- a/meta-rdk/recipes-containers/dobby/files/dobby.generic.json
 +++ b/meta-rdk/recipes-containers/dobby/files/dobby.generic.json
 @@ -11,6 +11,15 @@
