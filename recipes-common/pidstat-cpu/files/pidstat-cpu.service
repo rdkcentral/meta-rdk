@@ -3,7 +3,7 @@ Description=Monitor CPU usage of logging and middleware processes
 
 [Service]
 Type=simple
-ExecStart=/bin/sh -c 'pidstat -u -C "syslog-ng|systemd-journal|logrotate|systemd-cat|WPEFramework|telemetry2_0" 5 120 > /tmp/pidstat_cpu.log'
+ExecStart=/bin/sh -c 'pidstat -u -p ALL 5 120 > /tmp/pidstat_cpu.log'
 Restart=no
 
 [Install]
