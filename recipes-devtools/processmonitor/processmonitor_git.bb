@@ -17,8 +17,7 @@ inherit cmake systemd
 
 EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=Release"
 
-# SRCREV = "63c19611d52cec3331bc9ea1bc82175f5d8a9c96"
-SRCREV = "${AUTOREV}"
+SRCREV = "4aed1fe80a30523be71ffe7a0c835c87502c0014"
 PV = "1.0.0"
 PR = "r0"
 
