@@ -6,8 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=894d9b830cb1f38db58741000f9c2c7f"
 
 S = "${WORKDIR}/git"
 # TODO: B = "${WORKDIR}/git/build"
-# SRC_URI = "git://github.com/TeknoVenus/ProcessMonitor.git;branch=main"
-SRC_URI = "git://github.com/gomathishankar37/ProcessMonitor.git;protocol=https;branch=exit-handler"
+SRC_URI = "${CMF_GITHUB_ROOT}/process-monitor.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
 
 SRC_URI:append = " file://process-monitor.path \
                    file://process-monitor.service \
