@@ -18,6 +18,7 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://meminsight-upload.service \
                    file://meminsight-upload.path \
                    file://upload_MemReports.sh \
+                   file://package.json \
                    "
 
 # May 25, 2026
