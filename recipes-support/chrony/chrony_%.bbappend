@@ -11,6 +11,7 @@ SRC_URI += "file://chrony.conf \
             file://chrony-tracking.timer \
             file://chrony-tracking.service \
             file://chrony_tracking.sh \
+            file://ntp-pcap-collector.service \
            "
 PACKAGECONFIG:remove = "editline"
 
@@ -34,6 +35,7 @@ do_install:append() {
     install -m 0644 ${WORKDIR}/chrony-sync-notify.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/chrony-tracking.service ${D}${systemd_unitdir}/system/
     install -m 0644 ${WORKDIR}/chrony-tracking.timer ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/ntp-pcap-collector.service ${D}${systemd_unitdir}/system/
 
 }
 
@@ -48,10 +50,12 @@ FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.service"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-tracking.timer"
 FILES:${PN} += "${systemd_unitdir}/system/chronyd.service"
 FILES:${PN} += "${systemd_unitdir}/system/chrony-sync-notify.service"
+FILES:${PN} += "${systemd_unitdir}/system/ntp-pcap-collector.service"
 
 SYSTEMD_SERVICE:${PN} += "chronyd.service"
 SYSTEMD_SERVICE:${PN} += "chrony-sync-notify.service"
 SYSTEMD_SERVICE:${PN} += "chrony-tracking.timer"
+SYSTEMD_SERVICE:${PN} += "ntp-pcap-collector.service"
 
 
 inherit syslog-ng-config-gen
