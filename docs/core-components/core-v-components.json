@@ -1,0 +1,590 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-06-05T11:22:16.226909+00:00",
+  "components": [
+    {
+      "name": "Android Binder",
+      "category": "RPC",
+      "layer": "oss",
+      "url": [
+        "https://github.com/rdkcentral/linux_binder_idl"
+      ]
+    },
+    {
+      "name": "AppGateway",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-appgateway"
+      ]
+    },
+    {
+      "name": "AudioDecoder",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "AudioSink",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "AVBuffer",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "AVClock",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "AvOutput",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-avoutput"
+      ]
+    },
+    {
+      "name": "Bluetooth Manager",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/bluetooth_mgr"
+      ]
+    },
+    {
+      "name": "bluetooth-core",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/bluetooth"
+      ]
+    },
+    {
+      "name": "Boot",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Casting",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-casting"
+      ]
+    },
+    {
+      "name": "CEC",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Common Utilities",
+      "category": "Core Utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/common_utilities"
+      ]
+    },
+    {
+      "name": "Connectivity",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-connectivity"
+      ]
+    },
+    {
+      "name": "Control Manager (video)",
+      "category": "WPEFramework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/control"
+      ]
+    },
+    {
+      "name": "Deep Sleep",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Demux",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Device Info",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Device Settings",
+      "category": "Device Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/devicesettings"
+      ]
+    },
+    {
+      "name": "Device Settings HAL",
+      "category": "Device Management",
+      "layer": "vendor",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-device_settings"
+      ]
+    },
+    {
+      "name": "DeviceAndDisplay",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-deviceanddisplay"
+      ]
+    },
+    {
+      "name": "Dobby",
+      "category": "Containerization & Application Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/Dobby"
+      ]
+    },
+    {
+      "name": "Dobby Thunder Plugin",
+      "category": "Containerization & Application Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/Dobby"
+      ]
+    },
+    {
+      "name": "DRM PlayReady",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "DRM Widevine",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Entservices APIs",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-apis"
+      ]
+    },
+    {
+      "name": "FirmwareDownload",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-firmwaredownload"
+      ]
+    },
+    {
+      "name": "FirmwareUpdate",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-firmwareupdate"
+      ]
+    },
+    {
+      "name": "Flash (update)",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Frontend",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Gstreamer Rialto Plugin",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto-gstreamer"
+      ]
+    },
+    {
+      "name": "HDMI CEC Header",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-hdmi_cec"
+      ]
+    },
+    {
+      "name": "HDMI Input",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "HDMI Output",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "HDMICec",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/hdmicec"
+      ]
+    },
+    {
+      "name": "Indicator",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Infrastructure Services",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-infra"
+      ]
+    },
+    {
+      "name": "InputOutput",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-inputoutput"
+      ]
+    },
+    {
+      "name": "lib Binder",
+      "category": "Core Utilities",
+      "layer": "oss",
+      "url": [
+        "https://github.com/rdkcentral/linux_binder_idl"
+      ]
+    },
+    {
+      "name": "libSysCallWrapper",
+      "category": "Core Utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/libSyscallWrapper"
+      ]
+    },
+    {
+      "name": "MediaAndDrm",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-mediaanddrm"
+      ]
+    },
+    {
+      "name": "memcr",
+      "category": "Utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/LibertyGlobal/memcr"
+      ]
+    },
+    {
+      "name": "PackageManager",
+      "category": "Thunder",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/PackageManager"
+      ]
+    },
+    {
+      "name": "Panel (disp)",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Peripherals",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-peripherals"
+      ]
+    },
+    {
+      "name": "PlaneControl",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "RBUS",
+      "category": "RPC",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rbus"
+      ]
+    },
+    {
+      "name": "RDK Logger",
+      "category": "Core Utilities",
+      "layer": "oss",
+      "url": [
+        "https://github.com/rdkcentral/rdk_logger"
+      ]
+    },
+    {
+      "name": "RDK V Firmware Upgrader",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdkfwupdater"
+      ]
+    },
+    {
+      "name": "RDK Window Manager",
+      "category": "Utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdk-e/rdk-window-manager"
+      ]
+    },
+    {
+      "name": "RDK WPA Supplicant Config",
+      "category": "Security",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/meta-rdk-video/"
+      ]
+    },
+    {
+      "name": "Remote Feature control",
+      "category": "Device Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rfc"
+      ]
+    },
+    {
+      "name": "Rialto",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto"
+      ]
+    },
+    {
+      "name": "Rialto OCDM",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto-ocdm"
+      ]
+    },
+    {
+      "name": "Rialto Server",
+      "category": "VIDEO Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto"
+      ]
+    },
+    {
+      "name": "RunTime",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-runtime"
+      ]
+    },
+    {
+      "name": "SoftwareUpdate",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-softwareupdate"
+      ]
+    },
+    {
+      "name": "System Time Manager",
+      "category": "System",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/systemtimemgr"
+      ]
+    },
+    {
+      "name": "telemetry",
+      "category": "Device Diagnostics",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/telemetry"
+      ]
+    },
+    {
+      "name": "ThunderJS",
+      "category": "Thunder",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/ThunderJS"
+      ]
+    },
+    {
+      "name": "VideoDecoder",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "VideoSink",
+      "category": "HAL",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-aidl"
+      ]
+    },
+    {
+      "name": "Westeros",
+      "category": "Display/Graphics",
+      "layer": "vendor",
+      "url": [
+        "https://code.rdkcentral.com/r/components/opensource/westeros"
+      ]
+    },
+    {
+      "name": "WPEFramework",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/Thunder"
+      ]
+    },
+    {
+      "name": "iarmbus",
+      "category": "RPC",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/iarmbus"
+      ]
+    },
+    {
+      "name": "iarmmgrs",
+      "category": "Device Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/iarmmgrs"
+      ]
+    },
+    {
+      "name": "libunpriv",
+      "category": "Security",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-libunpriv"
+      ]
+    },
+    {
+      "name": "new RDK AppManagers components",
+      "category": "Containerization & Application Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-appmanagers"
+      ]
+    },
+    {
+      "name": "rdkcertconfig",
+      "category": "Security",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-cert-config"
+      ]
+    },
+    {
+      "name": "sysint",
+      "category": "System",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/sysint"
+      ]
+    },
+    {
+      "name": "WPEFramework CDM PlayReady",
+      "category": "VIDEO Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/playready-rdk"
+      ]
+    },
+    {
+      "name": "WPEFramework CDM WideVine",
+      "category": "VIDEO Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/widevine-rdk"
+      ]
+    },
+    {
+      "name": "xdial",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/xdialserver"
+      ]
+    }
+  ]
+}
