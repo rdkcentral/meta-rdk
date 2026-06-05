@@ -1,0 +1,13 @@
+[Unit]
+Description=NTP Packet Capture using tcpdump
+After=nvram.service
+Wants=nvram.service
+
+[Service]
+Type=simple
+ExecStart=tcpdump -i any udp port 123 -nn -U -w  /opt/ntp_chronyd.pcap
+Restart=no
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
