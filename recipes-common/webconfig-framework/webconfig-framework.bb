@@ -37,6 +37,12 @@ CFLAGS:append = " -Wno-restrict -Wno-format-truncation -Wno-format-overflow -Wno
 
 CFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'webconfig_bin', '-DWEBCONFIG_BIN_SUPPORT', '', d)}"
 
+CFLAGS:append:vdevice_x86-64 = " -Wno-stringop-truncation -Wno-error=stringop-truncation"
+CXXFLAGS:append:vdevice_x86-64 = " -Wno-stringop-truncation -Wno-error=stringop-truncation"
+
+CFLAGS:remove:vdevice_x86-64 = "-Werror"
+CXXFLAGS:remove:vdevice_x86-64 = "-Werror"
+
 LDFLAGS += " \
     -lrbuscore \
     -lrtMessage \
