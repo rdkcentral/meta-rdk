@@ -6,6 +6,7 @@ SRC_URI += "file://chrony.conf \
             file://chronyd.service \
             file://rdk_chrony.conf \
             file://chrony-conf-update.sh \
+            file://ntp-pcap-collector.service \
            "
 PACKAGECONFIG:remove = "editline"
 
@@ -24,6 +25,8 @@ do_install:append() {
     # service to start chrony
     rm -rf ${D}${systemd_unitdir}/system/chronyd.service
     install -m 0644 ${WORKDIR}/chronyd.service ${D}${systemd_unitdir}/system/
+    install -m 0644 ${WORKDIR}/ntp-pcap-collector.service ${D}${systemd_unitdir}/system/
+
 }
 
 
@@ -32,6 +35,8 @@ CONFFILES:${PN} += "${sysconfdir}/chrony.conf"
 CONFFILES:${PN} += "${sysconfdir}/rdk_chrony.conf"
 FILES:${PN} += "${base_libdir}/rdk/chrony-conf-update.sh"
 FILES:${PN} += "${systemd_unitdir}/system/chronyd.service"
+FILES:${PN} += "${systemd_unitdir}/system/ntp-pcap-collector.service"
+
 
 
 inherit syslog-ng-config-gen
@@ -40,3 +45,5 @@ SYSLOG-NG_SERVICE_chronyd = "chronyd.service"
 SYSLOG-NG_DESTINATION_chronyd = "chrony.log"
 SYSLOG-NG_LOGRATE_chronyd = "low"
 
+
+SYSTEMD_SERVICE:${PN} += "ntp-pcap-collector.service"
