@@ -1,0 +1,19 @@
+[Unit]
+Description=NTP and DNS Packet Capture
+After=nvram.service
+Wants=nvram.service
+
+[Service]
+Type=simple
+
+# NTP packets
+ExecStart=/bin/sh -c '\
+    /usr/sbin/tcpdump -i any udp port 123 -nn -U -w /opt/ntp_capture.pcap & \
+    /usr/sbin/tcpdump -i any udp port 53  -nn -U -w /opt/dns_capture.pcap & \
+    wait'
+
+Restart=no
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
