@@ -3,7 +3,7 @@ Description=Monitor I/O usage of logging and middleware processes
 
 [Service]
 Type=simple
-ExecStart=/bin/sh -c 'iostat 5 120 > /tmp/iostat_monitor.log'
+ExecStart=/bin/sh -c 'iostat -y -d -x mmcblk0p3 5 120 > /tmp/iostat_monitor.log'
 Restart=no
 
 [Install]
