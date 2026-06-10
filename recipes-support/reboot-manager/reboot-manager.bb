@@ -16,7 +16,7 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "b4cd16f1844161bb6a3c58167208123a0a413339"
+SRCREV_reboot-manager = "0878c86879f5f123cba04a5c1bef673f6058cb92"
 
 S = "${WORKDIR}/git"
 
@@ -45,6 +45,9 @@ LOGROTATE_SIZE_MEM_rebootInfo = "64000"
 LOGROTATE_ROTATION_MEM_rebootInfo = "3"
 
 DEPENDS += "commonutilities telemetry rbus"
+DEPENDS:append:xumo-mt120v1 = " rdk-reboot-reason-hal-mtk"
+DEPENDS:append:rdktv-us-armv7a = " rdk-reboot-reason-hal-amlogic"
+DEPENDS:append:rdktv-uk-armv7a = " rdk-reboot-reason-hal-amlogic"
 RDEPENDS:${PN}:append = " bash"
 
 CFLAGS:append = " -std=c11 -fPIC -D_GNU_SOURCE -Wall -Werror "
