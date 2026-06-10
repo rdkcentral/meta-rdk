@@ -8,9 +8,13 @@ Type=simple
 
 # NTP packets
 ExecStart=/bin/sh -c '\
-    /usr/bin/tcpdump -i any udp port 123 -nn -U -w /opt/ntp_capture.pcap & \
-    /usr/bin/tcpdump -i any udp port 53  -nn -U -w /opt/dns_capture.pcap & \
+    TS="$$(date +%%m%%d_%%H%%M%%S)"; \
+    NTP_PCAP_FILE="/opt/ntp_$${TS}.pcap"; \
+    DNS_PCAP_FILE="/opt/dns_$${TS}.pcap"; \
+    /usr/bin/tcpdump -i any udp port 123 -nn -U -w "$$NTP_PCAP_FILE" & \
+    /usr/bin/tcpdump -i any udp port 53  -nn -U -w "$$DNS_PCAP_FILE" & \
     wait'
+
 
 Restart=no
 KillSignal=SIGINT
