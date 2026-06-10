@@ -20,9 +20,9 @@ SRC_URI:append = " file://meminsight-runner.service \
                    file://upload_MemReports.sh \
                    "
 
-# May 19, 2026
-SRCREV = "545cc6fdd954a2f659dccf5c9f09358e54efd00e"
-PV = "1.1.0"
+# May 25, 2026
+SRCREV = "b71fec03462e75e5d5aa09d4debd00a2f3c39fde"
+PV = "1.1.1"
 PR = "r0"
 S = "${WORKDIR}/git"
 
@@ -30,7 +30,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 inherit autotools syslog-ng-config-gen systemd
 
-# CFLAGS_append_broadband = ' -DDEVICE_IDENTIFIER=\\"erouter0\\" -DDEFAULT_OUT_DIR=\\"/nvram/meminsight\\"'
+# CFLAGS_append_broadband = ' -DDEVICE_INTERFACE_KEY=\\"ARM_INTERFACE\\" -DDEFAULT_OUT_DIR=\\"/nvram/meminsight\\"'
 
 PACKAGECONFIG ??= "cjson"
 PACKAGECONFIG[cjson] = "--enable-cjson,--disable-cjson"
