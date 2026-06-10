@@ -9,7 +9,7 @@ SRCREV = "e3754369df94db0bc5d4563fa031d17d5aabef84"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
 
 SRCREV_FORMAT = "generic"
-# Release version - 1.3.4
+# Release version - 1.3.5
 S = "${WORKDIR}/git"
 
 CFLAGS += " -Wall -Werror"
