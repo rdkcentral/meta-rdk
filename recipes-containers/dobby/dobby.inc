@@ -2,4 +2,4 @@ SRC_URI = "gitsm://github.com/Sonajeya31/Dobbyone.git;protocol=https;branch=topi
 
 PV = "3.19.1"
 PR = "r0"
-SRCREV = "c0d6db301e419ccc708627d495947683c4df978f"
+SRCREV = "984195d16a6bf2e1df76c23724119adbf845210a"
