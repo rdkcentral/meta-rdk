@@ -2,14 +2,14 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-PV = "1.3.5"
+PV = "1.3.6"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-SRCREV = "e3754369df94db0bc5d4563fa031d17d5aabef84"
+SRCREV = "6ff11e27284e51df2475cb3cbdcf38f1ad7d4252"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
 
 SRCREV_FORMAT = "generic"
-# Release version - 1.3.5
+# Release version - 1.3.6
 S = "${WORKDIR}/git"
 
 CFLAGS += " -Wall -Werror"
