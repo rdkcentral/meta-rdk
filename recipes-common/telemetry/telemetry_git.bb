@@ -39,12 +39,6 @@ LDFLAGS:append = " \
         -lprivilege \
       "
 
-CFLAGS:append:vdevice_x86-64-mw = " -Wno-unused-result -Wno-format-security"
-CXXFLAGS:append:vdevice_x86-64-mw = " -Wno-unused-result -Wno-format-security"
-
-CFLAGS:remove:vdevice_x86-64-mw = "-Werror -Werror=format-security"
-CXXFLAGS:remove:vdevice_x86-64-mw = "-Werror -Werror=format-security"
-
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 do_install:append () {

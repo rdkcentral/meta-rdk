@@ -25,8 +25,6 @@ LDFLAGS:append = " -lsafec -lsecure_wrapper"
 
 CFLAGS:append = " -DRDK_LOGGER"
 
-CFLAGS:append:vdevice_x86-64-mw = " -Wno-error"
-
 PV = "1.5.5"
 PR = "r0"
 
