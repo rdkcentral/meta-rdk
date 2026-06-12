@@ -18,15 +18,12 @@
 ##########################################################################
 
 [Unit]
-Description=MemInsight Memory Stats Runner
+Description=MemInsight report upload sidecar
 
 [Service]
-Type=simple
+Type=oneshot
 RemainAfterExit=yes
-EnvironmentFile=-/tmp/meminsight.env
-ExecStart=/bin/sh -c 'PATH="/run/meminsight/usr/bin:/media/apps/meminsight:/media/apps/meminsight/usr/bin:$PATH"; meminsight $ARGS'
-ExecStop=-/bin/rm -f /tmp/.meminsight_upload /tmp/.meminsight_inprogress
-ExecStopPost=-/bin/rm -f /tmp/meminsight.env /tmp/.enable_meminsight 
-Restart=on-failure
-RestartSec=30
+ExecStart=/lib/rdk/upload_MemReports.sh
 
+[Install]
+WantedBy=multi-user.target
