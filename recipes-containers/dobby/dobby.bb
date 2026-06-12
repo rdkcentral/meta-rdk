@@ -30,6 +30,7 @@ inherit pkgconfig cmake systemd logrotate_config
 inherit syslog-ng-config-gen
 
 SYSLOG-NG_FILTER = "rdkappmanagers"
+SYSLOG-NG_SERVICE_rdkappmanagers = "dobby.service"
 SYSLOG-NG_PROGRAM_rdkappmanagers = "com.sky.as.apps.*"
 SYSLOG-NG_DESTINATION_rdkappmanagers = "apps-messages.log"
 SYSLOG-NG_LOGRATE_rdkappmanagers = "high"
