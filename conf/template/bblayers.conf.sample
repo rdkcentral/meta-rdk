@@ -15,6 +15,7 @@ BBLAYERS ?= " \
   ${MANIFEST_PATH_OPENEMBEDDED}/meta-webserver \
   ${MANIFEST_PATH_OPENEMBEDDED}/meta-multimedia \
   ${MANIFEST_PATH_OPENEMBEDDED}/meta-networking \
+  ${MANIFEST_PATH_BINDER} \
   ${MANIFEST_PATH_RDK_AUXILIARY} \
 "
 
