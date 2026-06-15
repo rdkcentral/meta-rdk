@@ -82,12 +82,15 @@ do_configure:prepend:kirkstone() {
 
 do_install () {
    install -d ${D}/${libdir}
-   cp -a ${S}/librtRemote* ${D}/${libdir}
+   cp -R ${S}/librtRemote* ${D}/${libdir}
+
+
 
    mkdir -p ${D}${includedir}/rtcore
    install -m 0644 ${S}/include/rtRemote.h ${D}${includedir}/rtcore/
    install -m 0644 ${S}/include/rtRemote.h ${D}${includedir}/
    cp -R ${S}/external/rapidjson/ ${D}${includedir}/rtcore/
+
 
    mkdir -p ${D}/etc
    install -m 0644 "${WORKDIR}/rtremote.conf" "${D}/etc/"
