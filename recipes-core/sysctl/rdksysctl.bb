@@ -7,8 +7,8 @@ SRC_URI = "file://50-sysctl.conf"
 SRC_URI += "file://98-sysctl-mw.conf"
 
 # Defaults (keep existing behavior unless overridden per MACHINE)
-RDK_VM_DIRTY_BACKGROUND_RATIO ?= "1"
-RDK_VM_DIRTY_RATIO ?= "1"
+RDK_VM_VFS_CACHE_PRESSURE ?= "100"
+RDK_VM_WATERMARK_SCALE_FACTOR ?= "10"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -18,8 +18,8 @@ do_install() {
     install -d ${D}${sysconfdir}/sysctl.d
     install -m 0644 ${S}/50-sysctl.conf ${D}${sysconfdir}/sysctl.d
     # Generate 98-sysctl-mw.conf with machine-configurable values
-    sed -e "s/@RDK_VM_DIRTY_BACKGROUND_RATIO@/${RDK_VM_DIRTY_BACKGROUND_RATIO}/g" \
-        -e "s/@RDK_VM_DIRTY_RATIO@/${RDK_VM_DIRTY_RATIO}/g" \
+    sed -e "s/@RDK_VM_VFS_CACHE_PRESSURE@/${RDK_VM_VFS_CACHE_PRESSURE}/g" \
+        -e "s/@RDK_VM_WATERMARK_SCALE_FACTOR@/${RDK_VM_WATERMARK_SCALE_FACTOR}/g" \
         ${S}/98-sysctl-mw.conf > ${D}${sysconfdir}/sysctl.d/98-sysctl-mw.conf
 
     chmod 0644 ${D}${sysconfdir}/sysctl.d/98-sysctl-mw.conf
