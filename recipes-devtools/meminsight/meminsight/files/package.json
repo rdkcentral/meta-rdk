@@ -1,8 +1,0 @@
-{
-  "name": "meminsight-app",
-  "description": "Performance Monitoring tool - meminsight",
-  "version": "1.0.0",
-  "contents": ["meminsight-app.tar"],
-  "size": "72K",
-  "installScript": "/etc/rdm/post-services/start_meminsight.sh"
-}
