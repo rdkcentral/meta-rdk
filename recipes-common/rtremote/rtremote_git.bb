@@ -82,8 +82,7 @@ do_configure:prepend:kirkstone() {
 
 do_install () {
    install -d ${D}/${libdir}
-   cp -R ${S}/librtRemote* ${D}/${libdir}
-
+   for file in ${S}/librtRemote*; do install -m 0644 "$file" -t ${D}${libdir}/; done
 
 
    mkdir -p ${D}${includedir}/rtcore
@@ -94,6 +93,7 @@ do_install () {
 
    mkdir -p ${D}/etc
    install -m 0644 "${WORKDIR}/rtremote.conf" "${D}/etc/"
+
 }
 
 FILES:${PN} += "${libdir}/*.so"
