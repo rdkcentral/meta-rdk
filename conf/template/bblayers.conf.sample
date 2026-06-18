@@ -75,3 +75,18 @@ BBLAYERS =+ " \
     "
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_MIXIN') if d.getVar('MANIFEST_PATH_META_MIXIN') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_MIXIN') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_CLANG') if d.getVar('MANIFEST_PATH_META_CLANG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_CLANG') + '/conf/layer.conf') else ''}"
+
+# vdevice_x86-64 specific layers
+IS_VDEVICE_X86_64_BUILD = "${@'1' if d.getVar('TOPDIR') and d.getVar('TOPDIR').endswith('/build-vdevice_x86-64-mw') else '0'}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_POKY') + '/meta-poky' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_POKY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_POKY') + '/meta-poky/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_POKY') + '/meta-yocto-bsp' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_POKY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_POKY') + '/meta-yocto-bsp/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-xfce' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_OPENEMBEDDED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-xfce/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-gnome' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_OPENEMBEDDED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-gnome/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_BINDER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_BINDER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_BINDER') + '/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_GSTREAMER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_GSTREAMER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_GSTREAMER') + '/conf/layer.conf') else ''}"
