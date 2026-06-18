@@ -1,18 +1,313 @@
-From 4f95172d70777357a4b90dd356372ae36be3cb07 Mon Sep 17 00:00:00 2001
-From: Adrian Muzyka <adrian.muzyka.it@gmail.com>
-Date: Wed, 30 Jul 2025 08:26:52 +0200
-Subject: [PATCH] RDK-47153: Option to set dump dir and compression per PID
+From d86b845df160d39ca990c950041d557a96a3554d Mon Sep 17 00:00:00 2001
+From: Gurdal Oruklu <gurdaloruklu@gmail.com>
+Date: Tue, 16 Jun 2026 11:17:18 -0700
+Subject: [PATCH] Support per-PID dump directory and compression via v2 service
+ protocol
 
+Rework of RDK-47153 patch to apply on top of lazy-pages changes.
+The zstd compression backend was already present in compress.c;
+this commit adds the service protocol extensions for per-PID options.
+
+Changes:
+- memcrclient_proto.h: Add MEMCR_CMDS_V2 command, checkpoint options
+  enum (MEMCR_CHECKPOINT_DUMPDIR, MEMCR_CHECKPOINT_COMPRESS_ALG),
+  memcr_compress_alg enum, and struct service_options
+- memcr.c: Replace single dump_dir with allowed_dump_dirs list
+  (semicolon-separated via -d), add set_dump_dirs(),
+  is_dump_dir_path_allowed(), read_command_v2() for v2 protocol
+  parsing, set_checkpoint_options_dfl() for per-PID option dispatch
+  in forked workers, SERVICE_MODE_SOCKET_TIMEOUT_MS, update
+  service_command() to accept checkpoint_options, update all
+  cleanup_pid() call sites for new dump_dir parameter
+- memcr-client.c: Add -d (dump dir), -z (compress algorithm), -v
+  (force v1 protocol) options. Default to v2 protocol with
+  send_cmd_v2() that sends MEMCR_CMDS_V2 envelope followed by
+  the actual command and options payload
+- README.md: Document per-PID dump directory, v2 protocol client
+  usage
+
+The v2 protocol is backward-compatible: old clients sending v1
+commands (100/101) are handled normally. The v2 envelope uses
+MEMCR_CMDS_V2 (102) as the outer command with payload length in
+the pid field, followed by the real command and optional TLV
+checkpoint options.
 ---
- memcr.c             | 309 +++++++++++++++++++++++++++++++++++++++++---
+ README.md           |   8 +-
+ memcr-client.c      | 148 ++++++++++++++++++--
+ memcr.c             | 320 +++++++++++++++++++++++++++++++++++++++-----
  memcrclient_proto.h |  23 +++-
- 2 files changed, 312 insertions(+), 20 deletions(-)
+ 4 files changed, 454 insertions(+), 45 deletions(-)
 
+diff --git a/README.md b/README.md
+index 03b48a8..0046b92 100644
+--- a/README.md
++++ b/README.md
+@@ -58,7 +58,7 @@ memcr [-h] [-p PID] [-d DIR] [-S DIR] [-G gid] [-N] [-l PORT|PATH] [-g gid] [-n]
+ options:
+   -h --help             help
+   -p --pid              target process pid
+-  -d --dir              dir where memory dump is stored (defaults to /tmp)
++  -d --dir              dir/dirs where memory dump can be stored (defaults to /tmp. Separated by ';')
+   -S --parasite-socket-dir      dir where socket to communicate with parasite is created
+         (abstract socket will be used if no path specified)
+   -G --parasite-socket-gid      group ID for parasite UNIX domain socket file, valid only for if --parasite-socket-dir provided
+@@ -90,6 +90,12 @@ memcr client:
+ memcr-client -l 9000 -p 1234567 --checkpoint
+ memcr-client -l 9000 -p 1234567 --restore
+ ```
++The client uses a v2 protocol by default that supports per-PID dump directory and compression options:
++```
++memcr-client -l 9000 -p 1234567 --checkpoint -d /mnt/fast -z zstd
++memcr-client -l 9000 -p 1234567 --restore
++```
++Use `--v1` to force the legacy protocol if the server does not support v2.
+ Due to high priviledges of the memcr daemon it is recommended to run memcr daemon process as non-root user with elevated Linux capabilities and permissions, the details are described in: [doc/security_considerations.md](doc/security_considerations.md)
+ 
+ #### lazy page restore
+diff --git a/memcr-client.c b/memcr-client.c
+index 24c5bc0..375b909 100644
+--- a/memcr-client.c
++++ b/memcr-client.c
+@@ -24,19 +24,77 @@
+ #include <unistd.h>
+ #include <getopt.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #include "memcr.h"
++#include "memcrclient_proto.h"
+ #include "libmemcrclient.h"
+ 
++#define CMD_LEN_MAX		(sizeof(struct service_command) + (2*sizeof(memcr_svc_checkpoint_options)) \
++						 + MEMCR_DUMPDIR_LEN_MAX + sizeof(memcr_compress_alg))
++
+ static void print_version(void)
+ {
+ 	fprintf(stdout, "[i] memcr-client version %s\n", GIT_VERSION);
+ }
+ 
++static int send_cmd_v2(int cd, memcr_svc_cmd cmd, pid_t pid, const struct service_options *opt)
++{
++	int ret;
++	struct service_response resp = {0};
++
++	size_t cmd_size = 0;
++	unsigned char cmd_buf[CMD_LEN_MAX];
++
++	struct service_command cmd_cr = {.cmd = cmd, .pid = pid};
++	memcpy(cmd_buf, &cmd_cr, sizeof(struct service_command));
++	cmd_size += sizeof(struct service_command);
++
++	if (opt && opt->is_dump_dir) {
++		memcr_svc_checkpoint_options opt_id = MEMCR_CHECKPOINT_DUMPDIR;
++		memcpy(cmd_buf + cmd_size, &opt_id, sizeof(memcr_svc_checkpoint_options));
++		cmd_size += sizeof(memcr_svc_checkpoint_options);
++		strncpy((char *)cmd_buf + cmd_size, opt->dump_dir, MEMCR_DUMPDIR_LEN_MAX);
++		cmd_size += strlen(opt->dump_dir) + 1;
++	}
++
++	if (opt && opt->is_compress_alg) {
++		memcr_svc_checkpoint_options opt_id = MEMCR_CHECKPOINT_COMPRESS_ALG;
++		memcpy(cmd_buf + cmd_size, &opt_id, sizeof(memcr_svc_checkpoint_options));
++		cmd_size += sizeof(memcr_svc_checkpoint_options);
++		memcpy(cmd_buf + cmd_size, &opt->compress_alg, sizeof(memcr_compress_alg));
++		cmd_size += sizeof(memcr_compress_alg);
++	}
++
++	struct service_command cmd_v2 = {.cmd = MEMCR_CMDS_V2, .pid = cmd_size};
++
++	ret = write(cd, &cmd_v2, sizeof(cmd_v2));
++	if (ret != sizeof(cmd_v2)) {
++		fprintf(stderr, "%s() write v2 header failed: ret %d, errno %m\n", __func__, ret);
++		return -1;
++	}
++
++	ret = write(cd, cmd_buf, cmd_size);
++	if ((size_t)ret != cmd_size) {
++		fprintf(stderr, "%s() write v2 payload failed: ret %d, errno %m\n", __func__, ret);
++		return -1;
++	}
++
++	ret = read(cd, &resp, sizeof(struct service_response));
++	if (ret != sizeof(struct service_response)) {
++		fprintf(stderr, "%s() read response failed: ret %d, errno %m\n", __func__, ret);
++		return -1;
++	}
++
++	fprintf(stdout, "Procedure finished with %s status.\n", MEMCR_OK == resp.resp_code ? "OK" : "ERROR");
++
++	return resp.resp_code;
++}
++
+ static void usage(const char *name, int status)
+ {
+ 	fprintf(status ? stderr : stdout,
+-		"%s -l PORT|PATH -p PID [-c -r] [-V]\n" \
++		"%s -l PORT|PATH -p PID [-c -r [-d DIR] [-z ALG]] [-v] [-V]\n" \
+ 		"options: \n" \
+ 		"  -h --help\t\thelp\n" \
+ 		"  -l --location\t\tTCP port number of localhost memcr service\n" \
+@@ -44,31 +102,41 @@ static void usage(const char *name, int status)
+ 		"  -p --pid\t\tprocess ID to be checkpointed / restored\n" \
+ 		"  -c --checkpoint\tsend checkpoint command to memcr service\n" \
+ 		"  -r --restore\t\tsend restore command to memcr service\n" \
++		"  -d --dir\t\tdir where memory dump is stored (max length %d)\n" \
++		"  -z --compress\t\tcompress memory dump with selected algorithm: 'lz4', 'zstd' or disable with 'none'\n" \
++		"  -v --v1\t\tforce using old (v1) protocol\n" \
+ 		"  -V --version\t\tprint version and exit\n",
+-		name);
++		name, MEMCR_DUMPDIR_LEN_MAX);
+ 	exit(status);
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+-	int ret, cd, opt;
++	int ret = 0, cd, opt;
+ 	int checkpoint = 0;
+ 	int restore = 0;
+ 	int option_index;
+ 	char *comm_location = NULL;
+ 	int pid = 0;
++	const char *dump_dir_s = NULL;
++	const char *compress_alg_s = NULL;
++	struct service_options checkpoint_options = {0};
++	int v1 = 0;
+ 
+ 	struct option long_options[] = {
+ 		{ "help",       0,  0,  'h'},
+ 		{ "location",   1,  0,  'l'},
+ 		{ "pid",        1,  0,  'p'},
+ 		{ "checkpoint", 0,  0,  'c'},
++		{ "dir",        1,  0,  'd'},
++		{ "compress",   1,  0,  'z'},
+ 		{ "restore",    0,  0,  'r'},
+ 		{ "version",    0,  0,  'V'},
++		{ "v1",         0,  0,  'v'},
+ 		{ NULL,         0,  0,  0  }
+ 	};
+ 
+-	while ((opt = getopt_long(argc, argv, "hl:p:crV", long_options, &option_index)) != -1) {
++	while ((opt = getopt_long(argc, argv, "hl:p:crVd:z:v", long_options, &option_index)) != -1) {
+ 		switch (opt) {
+ 			case 'h':
+ 				usage(argv[0], 0);
+@@ -82,12 +150,21 @@ int main(int argc, char *argv[])
+ 			case 'c':
+ 				checkpoint = 1;
+ 				break;
++			case 'd':
++				dump_dir_s = optarg;
++				break;
++			case 'z':
++				compress_alg_s = optarg;
++				break;
+ 			case 'r':
+ 				restore = 1;
+ 				break;
+ 			case 'V':
+ 				print_version();
+ 				exit(0);
++			case 'v':
++				v1 = 1;
++				break;
+ 			default: /* '?' */
+ 				usage(argv[0], 1);
+ 				break;
+@@ -106,25 +183,72 @@ int main(int argc, char *argv[])
+ 		return -1;
+ 	}
+ 
+-	cd = memcr_client_connect(comm_location);
++	if (!checkpoint && (dump_dir_s || compress_alg_s)) {
++		fprintf(stderr, "Dir dump and compression options are available only for checkpoint!\n");
++		usage(argv[0], 1);
++		return -1;
++	}
++
++	if (dump_dir_s) {
++		if (strlen(dump_dir_s) >= MEMCR_DUMPDIR_LEN_MAX) {
++			fprintf(stderr, "Dir dump path too long!\n");
++			usage(argv[0], 1);
++			return -1;
++		}
+ 
+-	if (cd < 0) {
+-		fprintf(stderr, "Connection creation failed!\n");
+-		return cd;
++		strcpy(checkpoint_options.dump_dir, dump_dir_s);
++		checkpoint_options.is_dump_dir = 1;
++	}
++
++	if (compress_alg_s) {
++		checkpoint_options.is_compress_alg = 1;
++		if (strcmp(compress_alg_s, "none") == 0)
++			checkpoint_options.compress_alg = MEMCR_COMPRESS_NONE;
++		else if (strcmp(compress_alg_s, "lz4") == 0)
++			checkpoint_options.compress_alg = MEMCR_COMPRESS_LZ4;
++		else if (strcmp(compress_alg_s, "zstd") == 0)
++			checkpoint_options.compress_alg = MEMCR_COMPRESS_ZSTD;
++		else {
++			fprintf(stderr, "Incorrect compression algorithm provided!\n");
++			usage(argv[0], 1);
++			return -1;
++		}
+ 	}
+ 
+ 	if (checkpoint) {
+ 		fprintf(stdout, "Will checkpoint %d.\n", pid);
+-		ret = memcr_client_checkpoint(cd, pid);
++
++		cd = memcr_client_connect(comm_location);
++		if (cd < 0) {
++			fprintf(stderr, "Connection creation failed!\n");
++			return cd;
++		}
++
++		if (v1)
++			ret = memcr_client_checkpoint(cd, pid);
++		else
++			ret = send_cmd_v2(cd, MEMCR_CHECKPOINT, pid, &checkpoint_options);
++
++		memcr_client_disconnect(cd);
+ 	}
+ 
+ 	if (restore) {
+ 		fprintf(stdout, "Will restore %d.\n", pid);
+-		ret = memcr_client_restore(cd, pid);
++
++		cd = memcr_client_connect(comm_location);
++		if (cd < 0) {
++			fprintf(stderr, "Connection creation failed!\n");
++			return cd;
++		}
++
++		if (v1)
++			ret = memcr_client_restore(cd, pid);
++		else
++			ret = send_cmd_v2(cd, MEMCR_RESTORE, pid, NULL);
++
++		memcr_client_disconnect(cd);
+ 	}
+ 
+ 	fprintf(stdout, "Command executed, exiting.\n");
+-	memcr_client_disconnect(cd);
+-
+ 	return ret;
+ }
 diff --git a/memcr.c b/memcr.c
-index 264ffa3..c12ef3c 100644
+index 1fa1af4..8b7f7e4 100644
 --- a/memcr.c
 +++ b/memcr.c
-@@ -118,7 +118,15 @@ struct vm_area {
+@@ -51,6 +51,7 @@
+ #include <sys/mman.h>
+ #include <sys/stat.h>
+ #include <sys/prctl.h>
++#include <limits.h>
+ 
+ #include "compress.h"
+ 
+@@ -157,7 +158,15 @@ struct vm_area {
  	unsigned long flags;
  };
  
@@ -29,7 +324,7 @@ index 264ffa3..c12ef3c 100644
  static char *parasite_socket_dir;
  static int parasite_socket_gid = -1;
  static int parasite_socket_use_netns;
-@@ -150,6 +158,7 @@ static pid_t tids[MAX_THREADS];
+@@ -190,6 +199,7 @@ static pid_t tids[MAX_THREADS];
  static int nr_threads;
  
  #define SERVICE_MODE_SELECT_TIMEOUT_MS	100
@@ -37,7 +332,7 @@ index 264ffa3..c12ef3c 100644
  
  #define MAX_VMAS			(3*4096)
  static struct vm_area vmas[MAX_VMAS];
-@@ -206,6 +215,7 @@ static struct {
+@@ -246,6 +256,7 @@ static struct {
  	int state;
  	int checkpoint_abort;
  	int checkpoint_cmd_sd;
@@ -45,16 +340,16 @@ index 264ffa3..c12ef3c 100644
  } checkpoint_service_data[CHECKPOINTED_PIDS_LIMIT];
  
  #define SOCKET_INVALID				(-1)
-@@ -430,7 +440,7 @@ static void parasite_socket_init(struct sockaddr_un *addr, pid_t pid)
+@@ -470,7 +481,7 @@ static void parasite_socket_init(struct sockaddr_un *addr, pid_t pid)
  	}
  }
  
 -static void cleanup_pid(pid_t pid)
-+static void cleanup_pid(pid_t pid, const char* dump_dir)
++static void cleanup_pid(pid_t pid, const char *dump_dir)
  {
  	char path[PATH_MAX];
  
-@@ -826,7 +836,15 @@ static int dump_write(int fd, const void *buf, size_t count)
+@@ -869,7 +880,15 @@ static int dump_write(int fd, const void *buf, size_t count)
  	return ret;
  }
  
@@ -71,7 +366,7 @@ index 264ffa3..c12ef3c 100644
  {
  	pthread_mutex_lock(&checkpoint_service_data_lock);
  	for (int i=0; i<CHECKPOINTED_PIDS_LIMIT; ++i) {
-@@ -835,6 +853,15 @@ static void init_pid_checkpoint_data(pid_t pid)
+@@ -878,6 +897,15 @@ static void init_pid_checkpoint_data(pid_t pid)
  			checkpoint_service_data[i].worker = PID_INVALID;
  			checkpoint_service_data[i].checkpoint_cmd_sd = SOCKET_INVALID;
  			checkpoint_service_data[i].state = STATE_RESTORED;
@@ -87,9 +382,9 @@ index 264ffa3..c12ef3c 100644
  			pthread_mutex_unlock(&checkpoint_service_data_lock);
  			return;
  		}
-@@ -851,11 +878,14 @@ static void cleanup_checkpointed_pids(void)
+@@ -894,11 +922,14 @@ static void cleanup_checkpointed_pids(void)
  		if (checkpoint_service_data[i].pid != PID_INVALID) {
- 			fprintf(stdout, "[i] Killing PID %d\n", checkpoint_service_data[i].pid);
+ 			log("Killing PID %d\n", checkpoint_service_data[i].pid);
  			kill(checkpoint_service_data[i].pid, SIGKILL);
 -			cleanup_pid(checkpoint_service_data[i].pid);
 +			const char *dir = checkpoint_service_data[i].options.is_dump_dir ?
@@ -103,7 +398,7 @@ index 264ffa3..c12ef3c 100644
  		}
  	}
  	pthread_mutex_unlock(&checkpoint_service_data_lock);
-@@ -918,6 +948,7 @@ static void clear_pid_checkpoint_data(pid_t pid)
+@@ -961,6 +992,7 @@ static void clear_pid_checkpoint_data(pid_t pid)
  			checkpoint_service_data[i].worker = PID_INVALID;
  			checkpoint_service_data[i].checkpoint_cmd_sd = SOCKET_INVALID;
  			checkpoint_service_data[i].state = STATE_RESTORED;
@@ -111,9 +406,9 @@ index 264ffa3..c12ef3c 100644
  		}
  	}
  	pthread_mutex_unlock(&checkpoint_service_data_lock);
-@@ -929,11 +960,14 @@ static void clear_pid_on_worker_exit_non_blocking(pid_t worker)
+@@ -972,11 +1004,14 @@ static void clear_pid_on_worker_exit_non_blocking(pid_t worker)
  		if (checkpoint_service_data[i].worker == worker) {
- 			fprintf(stdout, "[+] Clearing pid: %d with worker: %d on worker exit ...\n",
+ 			msg("Clearing pid: %d with worker: %d on worker exit ...\n",
  				checkpoint_service_data[i].pid, worker);
 -			cleanup_pid(checkpoint_service_data[i].pid);
 +			const char *dir = checkpoint_service_data[i].options.is_dump_dir ?
@@ -127,16 +422,16 @@ index 264ffa3..c12ef3c 100644
  		}
  	}
  }
-@@ -1629,7 +1663,7 @@ static int get_target_pages(int pid, struct vm_area vmas[], int nr_vmas)
+@@ -1682,7 +1717,7 @@ static int get_target_pages(int pid, struct vm_area vmas[], int nr_vmas)
  	if (pd < 0)
- 		fprintf(stdout, "[i] /proc/pagemap open failed %m, using remote access\n");
+ 		log("/proc/pagemap open failed %m, using remote access\n");
  
 -	snprintf(path, sizeof(path), "%s/pages-%d.img", dump_dir, pid);
 +	snprintf(path, sizeof(path), "%s/pages-%d.img", dfl_dump_dir, pid);
  
  	fd = dump_open(path, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
  	if (fd < 0) {
-@@ -1748,7 +1782,7 @@ static int target_set_pages(pid_t pid)
+@@ -1801,7 +1836,7 @@ static int target_set_pages(pid_t pid)
  	int cd = -1;
  	int fd = -1;
  
@@ -145,24 +440,44 @@ index 264ffa3..c12ef3c 100644
  
  	fd = dump_open(path, O_RDONLY, 0);
  	if (fd < 0) {
-@@ -1870,7 +1904,7 @@ static int cmd_checkpoint(pid_t pid)
+@@ -1925,7 +1960,7 @@ static int cmd_checkpoint(pid_t pid)
  	}
  
- 	fprintf(stdout, "[i] download took %lu ms\n", diff_ms(&ts));
--	fprintf(stdout, "[i] stored at %s/pages-%d.img\n", dump_dir, pid);
-+	fprintf(stdout, "[i] stored at %s/pages-%d.img\n", dfl_dump_dir, pid);
+ 	log("download took %lu ms\n", diff_ms(&ts));
+-	log("stored at %s/pages-%d.img\n", dump_dir, pid);
++	log("stored at %s/pages-%d.img\n", dfl_dump_dir, pid);
  
  	get_target_rss(pid, &vms_b);
  
-@@ -2361,6 +2395,104 @@ static void sigpipe_handler(int sig, siginfo_t *sip, void *notused)
- 	fprintf(stdout, "[!] program received SIGPIPE from %d.\n", sip->si_pid);
+@@ -2149,7 +2184,7 @@ static int cmd_restore_lazy(pid_t pid)
+ 	target_cmd_end(pid);
+ 
+ 	/* Open dump file for the lazy handler */
+-	snprintf(path, sizeof(path), "%s/pages-%d.img", dump_dir, pid);
++	snprintf(path, sizeof(path), "%s/pages-%d.img", dfl_dump_dir, pid);
+ 	dump_fd = dump_open(path, O_RDONLY, 0);
+ 	if (dump_fd < 0) {
+ 		err("lazy restore: failed to open dump file %s: %m\n", path);
+@@ -2760,6 +2795,97 @@ static void sigpipe_handler(int sig, siginfo_t *sip, void *notused)
+ 	err("program received SIGPIPE from %d.\n", sip->si_pid);
  }
  
++static void __attribute__((noreturn)) die(const char *fmt, ...)
++{
++	va_list ap;
++
++	va_start(ap, fmt);
++	vfprintf(stderr, fmt, ap);
++	va_end(ap);
++
++	exit(1);
++}
++
 +static void set_dump_dirs(const char *dirs)
 +{
 +	char real_dir[PATH_MAX];
 +
-+	//clear current allowed dirs
++	/* clear current allowed dirs */
 +	while (allowed_dump_dirs) {
 +		if (allowed_dump_dirs->dir)
 +			free(allowed_dump_dirs->dir);
@@ -172,35 +487,27 @@ index 264ffa3..c12ef3c 100644
 +		free(curr);
 +	}
 +
-+	if (dirs == NULL) {
-+		fprintf(stderr, "[!] %s(): Error dump dir cannot be empty!\n", __func__);
-+		exit(EXIT_FAILURE);
-+	}
++	if (dirs == NULL)
++		die("dump dir cannot be empty\n");
 +
-+	// Create a mutable copy of dirs
++	/* Create a mutable copy of dirs */
 +	char *dirs_copy = strdup(dirs);
-+	if (!dirs_copy) {
-+		fprintf(stderr, "[!] %s(): Memory allocation error!\n", __func__);
-+		exit(EXIT_FAILURE);
-+	}
++	if (!dirs_copy)
++		die("strdup() failed\n");
 +
 +	struct dump_dir_list *dump_dir_iter = NULL;
 +	char *dir = strtok(dirs_copy, ";");
 +	while (dir) {
 +		if (realpath(dir, real_dir)) {
 +			struct dump_dir_list *new_dump_dir = malloc(sizeof(struct dump_dir_list));
-+			if (!new_dump_dir) {
-+				fprintf(stderr, "[!] %s(): Memory allocation error!\n", __func__);
-+				exit(EXIT_FAILURE);
-+			}
++			if (!new_dump_dir)
++				die("malloc() failed\n");
 +
 +			new_dump_dir->dir = strdup(real_dir);
-+			if (!new_dump_dir->dir) {
-+				fprintf(stderr, "[!] %s(): Memory allocation error!\n", __func__);
-+				exit(EXIT_FAILURE);
-+			}
-+			fprintf(stdout, "[+] Allowed dump directory: %s\n", new_dump_dir->dir);
++			if (!new_dump_dir->dir)
++				die("strdup() failed\n");
 +
++			log("Allowed dump directory: %s\n", new_dump_dir->dir);
 +			new_dump_dir->next = NULL;
 +
 +			if (!allowed_dump_dirs) {
@@ -210,10 +517,8 @@ index 264ffa3..c12ef3c 100644
 +				dump_dir_iter->next = new_dump_dir;
 +				dump_dir_iter = dump_dir_iter->next;
 +			}
-+
 +		} else {
-+			fprintf(stderr, "[!] %s(): Unable to resolve allowed directory: %s\n", __func__, dir);
-+			exit(EXIT_FAILURE);
++			err("Unable to resolve allowed directory: %s\n", dir);
 +		}
 +
 +		dir = strtok(NULL, ";");
@@ -221,45 +526,37 @@ index 264ffa3..c12ef3c 100644
 +
 +	free(dirs_copy);
 +
-+	if (!allowed_dump_dirs) {
-+		fprintf(stderr, "[!] %s(): No allowed dump directories!\n", __func__);
-+		exit(EXIT_FAILURE);
-+	}
++	if (!allowed_dump_dirs)
++		die("No valid dump directories\n");
 +
-+	// Default dump dir is the first allowed one
++	/* Default dump dir is the first allowed one */
 +	dfl_dump_dir = allowed_dump_dirs->dir;
-+	fprintf(stdout, "[+] %s(): Allowed dump directories set.\n", __func__);
 +}
 +
-+
-+static int is_dump_dir_path_allowed(const char *dump_dir_path) {
++static int is_dump_dir_path_allowed(const char *dump_dir_path)
++{
 +	char real_dir_path[PATH_MAX];
 +
-+	// Resolve the real path
 +	if (!realpath(dump_dir_path, real_dir_path)) {
-+		fprintf(stderr, "[-] %s(): Unable to resolve dump dir path: %s\n", __func__, dump_dir_path);
++		err("Unable to resolve dump dir path: %s\n", dump_dir_path);
 +		return 0;
 +	}
 +
-+	fprintf(stdout, "[+] %s(): Real dir path to check: %s\n", __func__, real_dir_path);
-+
-+	// iterate over allowed dump dirs and do an exact match
 +	struct dump_dir_list *curr = allowed_dump_dirs;
 +	while (curr) {
-+		if (strcmp(real_dir_path, curr->dir) == 0) {
++		if (strcmp(real_dir_path, curr->dir) == 0)
 +			return 1;
-+		}
 +		curr = curr->next;
 +	}
 +
-+	fprintf(stderr, "[-] %s(): Dump dir path is not allowed: %s\n", __func__, dump_dir_path);
++	err("Dump dir path is not allowed: %s\n", dump_dir_path);
 +	return 0;
 +}
 +
  static int read_command(int cd, struct service_command *svc_cmd)
  {
  	int ret;
-@@ -2374,6 +2506,124 @@ static int read_command(int cd, struct service_command *svc_cmd)
+@@ -2773,6 +2899,122 @@ static int read_command(int cd, struct service_command *svc_cmd)
  	return ret;
  }
  
@@ -267,13 +564,13 @@ index 264ffa3..c12ef3c 100644
 +{
 +	/* There must be at least service_command that can be followed by service_checkpoint_options */
 +	if (len < sizeof(struct service_command)) {
-+		fprintf(stderr, "[-] %s(): cmds len to short: %d\n", __func__, (unsigned int)len);
++		err("%s(): cmds len too short: %zu\n", __func__, len);
 +		return -1;
 +	}
 +
 +	int ret = read_command(cd, svc_cmd);
 +	if (ret < 0) {
-+		fprintf(stderr, "%s(): Error reading a command!\n", __func__);
++		err("%s(): Error reading a command!\n", __func__);
 +		return ret;
 +	}
 +
@@ -281,13 +578,13 @@ index 264ffa3..c12ef3c 100644
 +
 +	switch (svc_cmd->cmd) {
 +		case MEMCR_CHECKPOINT: {
-+			fprintf(stdout, "[+] read MEMCR_CHECKPOINT for %d\n", svc_cmd->pid);
++			log("read MEMCR_CHECKPOINT for %d\n", svc_cmd->pid);
 +			/* try to read checkpoint options */
 +			memcr_svc_checkpoint_options option;
-+			while (len >= sizeof(option) && _read(cd, &option, sizeof(option)) > 0 ) {
++			while (len >= sizeof(option) && _read(cd, &option, sizeof(option)) > 0) {
 +				len -= sizeof(option);
 +
-+				switch (option)	{
++				switch (option) {
 +				case MEMCR_CHECKPOINT_DUMPDIR: {
 +					/* read string till NULL */
 +					unsigned int pos = 0;
@@ -295,15 +592,15 @@ index 264ffa3..c12ef3c 100644
 +						   (options->dump_dir[pos] != 0) && (++pos < MEMCR_DUMPDIR_LEN_MAX));
 +
 +					if (pos >= MEMCR_DUMPDIR_LEN_MAX || options->dump_dir[pos] != 0) {
-+						fprintf(stderr, "[-] %s(): dump dir path too long or not terminated with NULL\n", __func__);
++						err("%s(): dump dir path too long or not terminated with NULL\n", __func__);
 +						return -1;
 +					}
 +
 +					if (is_dump_dir_path_allowed(options->dump_dir)) {
 +						options->is_dump_dir = TRUE;
-+						fprintf(stdout, "[+] read dump dir path for this checkpoint: %s\n", options->dump_dir);
++						log("read dump dir path for this checkpoint: %s\n", options->dump_dir);
 +					} else {
-+						fprintf(stderr, "[i] dump dir path incorrect, using default\n");
++						log("dump dir path incorrect, using default\n");
 +					}
 +					break;
 +				}
@@ -311,42 +608,47 @@ index 264ffa3..c12ef3c 100644
 +				{
 +					if (len < sizeof(options->compress_alg) ||
 +						_read(cd, &options->compress_alg, sizeof(options->compress_alg)) != sizeof(options->compress_alg)) {
-+							fprintf(stderr, "[-] %s(): compression algorithm invalid\n", __func__);
++							err("%s(): compression algorithm invalid\n", __func__);
 +							return -1;
 +					}
 +
 +					len -= sizeof(options->compress_alg);
 +
 +					if (options->compress_alg != MEMCR_COMPRESS_NONE
++#ifdef COMPRESS_LZ4
 +					 && options->compress_alg != MEMCR_COMPRESS_LZ4
++#endif
++#ifdef COMPRESS_ZSTD
 +					 && options->compress_alg != MEMCR_COMPRESS_ZSTD
++#endif
 +					) {
-+						/* skip if not support */
-+						fprintf(stderr, "[-] %s(): compression algorithm not supported: %d\n", __func__, options->compress_alg);
++						/* skip if not supported */
++						err("%s(): compression algorithm not supported: %d\n", __func__, options->compress_alg);
 +						break;
 +					}
 +
 +					options->is_compress_alg = TRUE;
-+					const char *caToS[] = {
++					static const char *compress_alg_names[] = {
 +						[MEMCR_COMPRESS_NONE] = "none",
 +						[MEMCR_COMPRESS_LZ4] = "lz4",
-+						[MEMCR_COMPRESS_ZSTD] = "zstd"};
-+					fprintf(stdout, "[+] read compress alg for this checkpoint: %s\n", caToS[options->compress_alg]);
++						[MEMCR_COMPRESS_ZSTD] = "zstd"
++					};
++					log("read compress alg for this checkpoint: %s\n", compress_alg_names[options->compress_alg]);
 +					break;
 +				}
 +				default:
-+					fprintf(stderr, "[-] %s(): checkpoint option invalid: %d\n", __func__, option);
++					err("%s(): checkpoint option invalid: %d\n", __func__, option);
 +				}
 +			}
 +			break;
 +		}
 +		case MEMCR_RESTORE: {
-+			/* nothing more to read for RESTORE*/
-+			fprintf(stdout, "[+] read MEMCR_RESTORE for %d\n", svc_cmd->pid);
++			/* nothing more to read for RESTORE */
++			log("read MEMCR_RESTORE for %d\n", svc_cmd->pid);
 +			break;
 +		}
 +		default:
-+			fprintf(stderr, "%s(): Error command not expected or invalid: %d!\n", __func__, svc_cmd->cmd);
++			err("%s(): command not expected or invalid: %d!\n", __func__, svc_cmd->cmd);
 +			return -1;
 +	}
 +
@@ -355,26 +657,19 @@ index 264ffa3..c12ef3c 100644
 +
 +static void set_checkpoint_options_dfl(pid_t pid)
 +{
-+	for (int i=0; i<CHECKPOINTED_PIDS_LIMIT; ++i) {
++	for (int i = 0; i < CHECKPOINTED_PIDS_LIMIT; ++i) {
 +		if (checkpoint_service_data[i].pid == pid) {
 +			if (checkpoint_service_data[i].options.is_dump_dir)
 +				dfl_dump_dir = checkpoint_service_data[i].options.dump_dir;
 +
-+			if (checkpoint_service_data[i].options.is_compress_alg)
-+				switch (checkpoint_service_data[i].options.compress_alg) {
-+					case MEMCR_COMPRESS_NONE:
-+						fprintf(stdout, "[+] Default compress algorithm set to NONE.\n");
-+						compress_init(NULL, MAX_VM_REGION_SIZE);   
-+						break;
-+					case MEMCR_COMPRESS_LZ4:
-+						fprintf(stdout, "[+] Default compress algorithm set to LZ4.\n");
-+						compress_init("lz4", MAX_VM_REGION_SIZE); 
-+						break;
-+					case MEMCR_COMPRESS_ZSTD:
-+						fprintf(stdout, "[+] Default compress algorithm set to ZSTD.\n");
-+						compress_init("zstd", MAX_VM_REGION_SIZE);
-+						break;
-+				}
++			if (checkpoint_service_data[i].options.is_compress_alg) {
++				static const char *compress_alg_names[] = {
++					[MEMCR_COMPRESS_NONE] = NULL,
++					[MEMCR_COMPRESS_LZ4] = "lz4",
++					[MEMCR_COMPRESS_ZSTD] = "zstd"
++				};
++				compress = (char *)compress_alg_names[checkpoint_service_data[i].options.compress_alg];
++			}
 +
 +			return;
 +		}
@@ -384,33 +679,38 @@ index 264ffa3..c12ef3c 100644
  static int send_response_to_client(int cd, memcr_svc_response resp_code)
  {
  	struct service_response svc_resp = { .resp_code = resp_code };
-@@ -2505,7 +2755,7 @@ out:
+@@ -2904,7 +3146,7 @@ out:
  	if (ret) {
- 		fprintf(stderr, "[%d] %s() Checkpoint failed! Killing the target PID %d...\n", getpid(), __func__, pid);
+ 		err("[%d] %s() Checkpoint failed! Killing the target PID %d...\n", getpid(), __func__, pid);
  		kill(pid, SIGKILL);
 -		cleanup_pid(pid);
 +		cleanup_pid(pid, dfl_dump_dir);
  		return ret;
  	}
  
-@@ -2536,7 +2786,7 @@ out:
- 		kill(post_checkpoint_cmd.pid, SIGKILL);
+@@ -2942,7 +3184,7 @@ out:
+ 		lazy_pages_wait(&lazy_ctx);
  	}
- 	unseize_target();
+ 
 -	cleanup_pid(post_checkpoint_cmd.pid);
 +	cleanup_pid(post_checkpoint_cmd.pid, dfl_dump_dir);
  
  	return ret;
  }
-@@ -2552,6 +2802,7 @@ static int application_worker(pid_t pid, int checkpoint_resp_socket)
+@@ -2958,6 +3200,12 @@ static int application_worker(pid_t pid, int checkpoint_resp_socket)
  		ret |= rsd;
  
  	register_socket_for_checkpoint_service_cmds(checkpoint_resp_socket);
 +	set_checkpoint_options_dfl(pid);
++
++	/* Re-initialize compression in the forked worker if per-PID options changed it */
++	ret = compress_init(compress, MAX_VM_REGION_SIZE);
++	if (ret)
++		return ret;
  
  	if (0 == ret) {
  		ret |= checkpoint_worker(pid);
-@@ -2637,7 +2888,7 @@ static int checkpoint_procedure_service(int checkpointSocket, int cd, int pid, i
+@@ -3043,7 +3291,7 @@ static int checkpoint_procedure_service(int checkpointSocket, int cd, int pid, i
  		// unable to read response from worker, kill both
  		kill(pid, SIGKILL);
  		kill(worker_pid, SIGKILL);
@@ -419,7 +719,7 @@ index 264ffa3..c12ef3c 100644
  		send_response_to_client(cd, MEMCR_ERROR_GENERAL);
  		return MEMCR_ERROR_GENERAL;
  	}
-@@ -2677,7 +2928,7 @@ static void restore_procedure_service(int cd, struct service_command svc_cmd, in
+@@ -3083,7 +3331,7 @@ static void restore_procedure_service(int cd, struct service_command svc_cmd, in
  		// unable to read response from worker, kill both
  		kill(svc_cmd.pid, SIGKILL);
  		kill(worker_pid, SIGKILL);
@@ -428,7 +728,7 @@ index 264ffa3..c12ef3c 100644
  		ret = -1;
  	}
  
-@@ -2781,7 +3032,7 @@ retry:
+@@ -3187,7 +3435,7 @@ retry:
  	goto retry;
  }
  
@@ -437,7 +737,7 @@ index 264ffa3..c12ef3c 100644
  {
  	int ret = MEMCR_OK;
  	switch (svc_ctx->svc_cmd.cmd)
-@@ -2798,7 +3049,7 @@ static void service_command(struct service_command_ctx *svc_ctx)
+@@ -3204,7 +3452,7 @@ static void service_command(struct service_command_ctx *svc_ctx)
  			break;
  		}
  
@@ -445,8 +745,8 @@ index 264ffa3..c12ef3c 100644
 +		init_pid_checkpoint_data(svc_ctx->svc_cmd.pid, checkpoint_options);
  		ret = service_cmds_push_back(svc_ctx);
  		if (!ret)
- 			fprintf(stdout, "[+] Checkpoint request scheduled...\n");
-@@ -2851,6 +3102,7 @@ static int service_mode(const char *listen_location, const int gid)
+ 			msg("Checkpoint request scheduled...\n");
+@@ -3257,6 +3505,7 @@ static int service_mode(const char *listen_location, const int gid)
  	struct timeval tv;
  	int errsv;
  	pthread_t svc_cmd_thread_id;
@@ -454,21 +754,22 @@ index 264ffa3..c12ef3c 100644
  
  	if (listen_port > 0)
  		csd = setup_listen_tcp_socket(listen_port);
-@@ -2891,6 +3143,13 @@ static int service_mode(const char *listen_location, const int gid)
+@@ -3297,6 +3546,14 @@ static int service_mode(const char *listen_location, const int gid)
  		cd = accept(csd, NULL, NULL);
  		if (cd >= 0) {
  			struct service_command_ctx svc_ctx = { .cd = cd };
-+			// set rcv timeout for the socket
++
++			/* set rcv timeout for the socket */
 +			struct timeval rcv_timeout = {
 +				.tv_sec = SERVICE_MODE_SOCKET_TIMEOUT_MS/1000,
-+				.tv_usec = (SERVICE_MODE_SELECT_TIMEOUT_MS%1000)*1000
++				.tv_usec = (SERVICE_MODE_SOCKET_TIMEOUT_MS%1000)*1000
 +			};
 +			setsockopt(cd, SOL_SOCKET, SO_RCVTIMEO, &rcv_timeout, sizeof(rcv_timeout));
 +
  			ret = read_command(cd, &svc_ctx.svc_cmd);
  			if (ret < 0) {
- 				fprintf(stderr, "%s(): Error reading a command!\n", __func__);
-@@ -2898,7 +3157,19 @@ static int service_mode(const char *listen_location, const int gid)
+ 				err("%s(): Error reading a command!\n", __func__);
+@@ -3304,7 +3561,19 @@ static int service_mode(const char *listen_location, const int gid)
  				continue;
  			}
  
@@ -479,7 +780,7 @@ index 264ffa3..c12ef3c 100644
 +				size_t cmds_len = svc_ctx.svc_cmd.pid;
 +				ret = read_command_v2(cd, &svc_ctx.svc_cmd, &checkpoint_options, cmds_len);
 +				if (ret < 0) {
-+					fprintf(stderr, "%s(): Error reading a command!\n", __func__);
++					err("%s(): Error reading v2 command!\n", __func__);
 +					close(cd);
 +					continue;
 +				}
@@ -489,16 +790,16 @@ index 264ffa3..c12ef3c 100644
  			continue;
  		}
  
-@@ -2968,7 +3239,7 @@ out:
+@@ -3385,7 +3654,7 @@ out:
+ 		lazy_pages_wait(&lazy_ctx);
  	}
  
- 	unseize_target();
 -	cleanup_pid(pid);
 +	cleanup_pid(pid, dfl_dump_dir);
  
  	return ret;
  }
-@@ -2993,7 +3264,7 @@ static void usage(const char *name, int status)
+@@ -3410,7 +3679,7 @@ static void usage(const char *name, int status)
  		"options:\n" \
  		"  -h --help		help\n" \
  		"  -p --pid		target process pid\n" \
@@ -507,7 +808,25 @@ index 264ffa3..c12ef3c 100644
  		"  -S --parasite-socket-dir	dir where socket to communicate with parasite is created\n" \
  		"        (abstract socket will be used if no path specified)\n" \
  		"  -G --parasite-socket-gid	group ID for parasite UNIX domain socket file, valid only for if --parasite-socket-dir provided\n" \
-@@ -3059,7 +3330,7 @@ int main(int argc, char *argv[])
+@@ -3435,17 +3704,6 @@ static void usage(const char *name, int status)
+ 	exit(status);
+ }
+ 
+-static void __attribute__((noreturn)) die(const char *fmt, ...)
+-{
+-	va_list ap;
+-
+-	va_start(ap, fmt);
+-	vfprintf(stderr, fmt, ap);
+-	va_end(ap);
+-
+-	exit(1);
+-}
+-
+ int main(int argc, char *argv[])
+ {
+ 	int ret;
+@@ -3478,7 +3736,7 @@ int main(int argc, char *argv[])
  		{ NULL,				0,	NULL,	0  }
  	};
  
@@ -516,7 +835,7 @@ index 264ffa3..c12ef3c 100644
  	parasite_socket_dir = NULL;
  	parasite_socket_use_netns = 0;
  
-@@ -3072,7 +3343,7 @@ int main(int argc, char *argv[])
+@@ -3491,7 +3749,7 @@ int main(int argc, char *argv[])
  				pid = atoi(optarg);
  				break;
  			case 'd':
@@ -526,46 +845,47 @@ index 264ffa3..c12ef3c 100644
  			case 'S':
  				parasite_socket_dir = optarg;
 diff --git a/memcrclient_proto.h b/memcrclient_proto.h
-index f9dee66..8641834 100644
+index f9dee66..17c9d90 100644
 --- a/memcrclient_proto.h
 +++ b/memcrclient_proto.h
-@@ -21,9 +21,23 @@
+@@ -21,14 +21,35 @@
  
  typedef enum {
    MEMCR_CHECKPOINT = 100,
 -  MEMCR_RESTORE
 +  MEMCR_RESTORE,
-+	MEMCR_CMDS_V2
++  MEMCR_CMDS_V2
  } memcr_svc_cmd;
  
 +typedef enum {
-+	MEMCR_CHECKPOINT_DUMPDIR = 200,
-+	MEMCR_CHECKPOINT_COMPRESS_ALG,
++  MEMCR_CHECKPOINT_DUMPDIR = 200,
++  MEMCR_CHECKPOINT_COMPRESS_ALG,
 +} memcr_svc_checkpoint_options;
 +
 +#define MEMCR_DUMPDIR_LEN_MAX	1024
 +
 +typedef enum {
-+	MEMCR_COMPRESS_NONE = 0,
-+	MEMCR_COMPRESS_LZ4,
-+	MEMCR_COMPRESS_ZSTD
++  MEMCR_COMPRESS_NONE = 0,
++  MEMCR_COMPRESS_LZ4,
++  MEMCR_COMPRESS_ZSTD
 +} memcr_compress_alg;
 +
  struct service_command {
    memcr_svc_cmd cmd;
    pid_t pid;
-@@ -39,4 +53,11 @@ struct service_response {
-   memcr_svc_response resp_code;
  } __attribute__((packed));
  
 +struct service_options {
-+	int is_dump_dir;
-+	char dump_dir[MEMCR_DUMPDIR_LEN_MAX];
-+	int is_compress_alg;
-+	memcr_compress_alg compress_alg;
++  int is_dump_dir;
++  char dump_dir[MEMCR_DUMPDIR_LEN_MAX];
++  int is_compress_alg;
++  memcr_compress_alg compress_alg;
 +};
 +
- #endif /* __MEMCR_CLIENT_PROTO_H__ */
+ typedef enum {
+   MEMCR_OK = 0,
+   MEMCR_ERROR_GENERAL = -1,
 -- 
-2.43.0
+2.50.1 (Apple Git-155)
+
 

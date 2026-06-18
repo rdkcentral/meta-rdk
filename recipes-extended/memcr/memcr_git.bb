@@ -6,18 +6,19 @@ HOMEPAGE = "https://github.com/LibertyGlobal/memcr"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI = "git://git@github.com/LibertyGlobal/memcr.git;branch=main;protocol=ssh"
+#SRC_URI = "git://git@github.com/LibertyGlobal/memcr.git;branch=main;protocol=ssh"
+SRC_URI = "git://git@github.com/goruklu/memcr.git;branch=lazy-pages;protocol=ssh"
 SRC_URI += " file://memcr.service"
-SRC_URI += " file://0001-RDK-47153-Option-to-set-dump-dir-and-compression-per.patch"
-SRC_URI += " file://0001-RDK-54059-retry-ptrace-seize-on-EPERM.patch"
+#SRC_URI += " file://0001-RDK-47153-Option-to-set-dump-dir-and-compression-per.patch"
+#SRC_URI += " file://0001-RDK-54059-retry-ptrace-seize-on-EPERM.patch"
 
 INSANE_SKIP:${PN} += "ldflags"
 
-PV = "1.0.3"
-PR = "r0"
+PV = "1.1.1"
+PR = "r1"
 # Code base from 18.08.2025
-SRCREV = "e58cf09b092b5e269acb5e8a3aa311b6d748bfe0"
-
+#SRCREV = "e58cf09b092b5e269acb5e8a3aa311b6d748bfe0"
+SRCREV = "a524946af541b8018d4cb44086d5cc8214939c4a"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS += " util-linux-native lz4 openssl zstd"
