@@ -18,9 +18,6 @@
 # limitations under the License.
 ##########################################################################
 
-SRC_BIN="/media/apps/meminsight/usr/bin/meminsight"
-DST_BIN="/run/meminsight/usr/bin/meminsight"
-RFC_PARAM="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.meminsight.Trigger"
 
 # Load DEVICE_TYPE
 if [ -f /etc/device.properties ]; then
@@ -43,6 +40,14 @@ case "$DEVICE_TYPE" in
         RDM_LOG_FILE="/var/log/rdm-status.log"
         ;;
 esac
+
+APP_HOME_DIR=/media/apps/${MODEL_NUM}-meminsight
+rm -rf /media/apps/meminsight
+ln -snf "$APP_HOME_DIR" /media/apps/meminsight
+
+SRC_BIN="/media/apps/meminsight/usr/bin/meminsight"
+DST_BIN="/run/meminsight/usr/bin/meminsight"
+RFC_PARAM="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.meminsight.Trigger"
 
 log_info() {
     echo "[start_meminsight] [INFO] $*" >> $RDM_LOG_FILE
