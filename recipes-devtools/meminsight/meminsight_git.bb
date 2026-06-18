@@ -21,7 +21,7 @@ SRC_URI:append = " file://meminsight-runner.service \
                    "
 
 # May 25, 2026
-SRCREV = "b71fec03462e75e5d5aa09d4debd00a2f3c39fde"
+SRCREV = "b90db0dffdf695eccb4e099f600c8bf75c148678"
 PV = "1.1.1"
 PR = "r0"
 S = "${WORKDIR}/git"
