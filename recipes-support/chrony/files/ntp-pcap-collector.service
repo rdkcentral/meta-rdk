@@ -8,9 +8,13 @@ Type=simple
 
 # NTP packets
 ExecStart=/bin/sh -c '\
-    TS="$$(date +%%m%%d_%%H%%M%%S)"; \
-    NTP_PCAP_FILE="/opt/ntp_$${TS}.pcap"; \
-    DNS_PCAP_FILE="/opt/dns_$${TS}.pcap"; \
+COUNT_FILE=/opt/.boot_count
+
+COUNT=$(( $(cat $COUNT_FILE 2>/dev/null || echo 0) + 1 ))
+echo "$COUNT" > "$COUNT_FILE"
+
+NTP_PCAP_FILE="/opt/ntp_boot${COUNT}.pcap"
+DNS_PCAP_FILE="/opt/dns_boot${COUNT}.pcap"
     /usr/bin/tcpdump -i any udp port 123 -nn -U -w "$$NTP_PCAP_FILE" & \
     /usr/bin/tcpdump -i any udp port 53  -nn -U -w "$$DNS_PCAP_FILE" & \
     wait'
