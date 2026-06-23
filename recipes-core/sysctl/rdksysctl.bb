@@ -7,7 +7,6 @@ SRC_URI = "file://50-sysctl.conf"
 SRC_URI += "file://98-sysctl-mw.conf"
 
 RDK_VM_VFS_CACHE_PRESSURE ?= "100"
-RDK_VM_WATERMARK_SCALE_FACTOR ?= "10"
 
 S = "${WORKDIR}"
 
@@ -17,7 +16,6 @@ do_install() {
 
     # Generate 98-sysctl-mw.conf with machine-configurable values
     sed -e "s/@RDK_VM_VFS_CACHE_PRESSURE@/${RDK_VM_VFS_CACHE_PRESSURE}/g" \
-        -e "s/@RDK_VM_WATERMARK_SCALE_FACTOR@/${RDK_VM_WATERMARK_SCALE_FACTOR}/g" \
         ${S}/98-sysctl-mw.conf > ${D}${sysconfdir}/sysctl.d/98-sysctl-mw.conf
 
    chmod 0644 ${D}${sysconfdir}/sysctl.d/98-sysctl-mw.conf
