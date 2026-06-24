@@ -19,9 +19,9 @@ BBLAYERS ?= " \
 "
 
 # Common layers
-BBLAYERS =+ "${@'${MANIFEST_PATH_COMMON_OSS_REFERENCE}' if os.path.isfile('${MANIFEST_PATH_COMMON_OSS_REFERENCE}/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_STACK_LAYERING_SUPPORT}' if os.path.isfile('${MANIFEST_PATH_STACK_LAYERING_SUPPORT}/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_RDK_HALIF_HEADERS}' if os.path.isfile('${MANIFEST_PATH_RDK_HALIF_HEADERS}/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_COMMON_OSS_REFERENCE') if d.getVar('MANIFEST_PATH_COMMON_OSS_REFERENCE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_COMMON_OSS_REFERENCE') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_STACK_LAYERING_SUPPORT') if d.getVar('MANIFEST_PATH_STACK_LAYERING_SUPPORT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_STACK_LAYERING_SUPPORT') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_HALIF_HEADERS') if d.getVar('MANIFEST_PATH_RDK_HALIF_HEADERS') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_HALIF_HEADERS') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_EXT') if d.getVar('MANIFEST_PATH_OSS_EXT') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OSS_EXT') + '/conf/layer.conf') else ''}"
 
 # Common layers: optional
@@ -41,12 +41,12 @@ BBLAYERS =+ " \
 # Middleware layers: generic
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') + '/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC}' if os.path.isfile('${MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC}/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') + '/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_META_RDK}' if os.path.isfile('${MANIFEST_PATH_META_RDK}/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_RDK') if d.getVar('MANIFEST_PATH_META_RDK') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_RDK') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_RESTRICTED') if d.getVar('MANIFEST_PATH_RDK_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_RESTRICTED') + '/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_RDK_VIDEO}' if os.path.isfile('${MANIFEST_PATH_RDK_VIDEO}/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_META_PYTHON2}' if os.path.isfile('${MANIFEST_PATH_META_PYTHON2}/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_VIDEO') if d.getVar('MANIFEST_PATH_RDK_VIDEO') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_VIDEO') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_PYTHON2') if d.getVar('MANIFEST_PATH_META_PYTHON2') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_PYTHON2') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_PRODUCT_LAYER') if d.getVar('MANIFEST_PATH_PRODUCT_LAYER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_PRODUCT_LAYER') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_SKY') if d.getVar('MANIFEST_PATH_RDK_SKY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_SKY') + '/conf/layer.conf') else ''}"
 
@@ -66,8 +66,8 @@ BBLAYERS =+ " \
     "
 
 # Config layers: generic
-BBLAYERS =+ "${@'${MANIFEST_PATH_COMMON_CONFIG}' if os.path.isfile('${MANIFEST_PATH_COMMON_CONFIG}/conf/layer.conf') else ''}"
-BBLAYERS =+ "${@'${MANIFEST_PATH_PROFILE_CONFIG}' if os.path.isfile('${MANIFEST_PATH_PROFILE_CONFIG}/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_COMMON_CONFIG') if d.getVar('MANIFEST_PATH_COMMON_CONFIG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_COMMON_CONFIG') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_PROFILE_CONFIG') if d.getVar('MANIFEST_PATH_PROFILE_CONFIG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_PROFILE_CONFIG') + '/conf/layer.conf') else ''}"
 
 # Config layers: restricted/proprietary/optional
 BBLAYERS =+ " \
@@ -75,3 +75,18 @@ BBLAYERS =+ " \
     "
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_MIXIN') if d.getVar('MANIFEST_PATH_META_MIXIN') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_MIXIN') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_CLANG') if d.getVar('MANIFEST_PATH_META_CLANG') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_CLANG') + '/conf/layer.conf') else ''}"
+
+# vdevice_x86-64 specific layers
+IS_VDEVICE_X86_64_BUILD = "${@'1' if d.getVar('TOPDIR') and d.getVar('TOPDIR').endswith('/build-vdevice_x86-64-mw') else '0'}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_POKY') + '/meta-poky' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_POKY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_POKY') + '/meta-poky/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_POKY') + '/meta-yocto-bsp' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_POKY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_POKY') + '/meta-yocto-bsp/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-xfce' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_OPENEMBEDDED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-xfce/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-gnome' if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_OPENEMBEDDED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-gnome/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_BINDER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_BINDER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_BINDER') + '/conf/layer.conf') else ''}"
+
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_GSTREAMER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_GSTREAMER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_GSTREAMER') + '/conf/layer.conf') else ''}"
