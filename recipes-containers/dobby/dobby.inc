@@ -1,5 +1,5 @@
-SRC_URI = "gitsm://github.com/rdkcentral/Dobby;protocol=https;branch=topic/RDKEMW-16955"
+SRC_URI = "gitsm://github.com/rdkcentral/Dobby;protocol=https;branch=topic/RDKEMW-16955_1"
 
 PV = "3.20.0"
 PR = "r0"
-SRCREV = "64d370bcfe43d808bd48bbca8d86cf22709be17d"
+SRCREV = "c0b89f6cf062f0c76a31882add50371cf7b46959"
