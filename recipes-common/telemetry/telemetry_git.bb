@@ -30,7 +30,7 @@ inherit pkgconfig autotools systemd ${@bb.utils.contains("DISTRO_FEATURES", "kir
 CFLAGS += " -DDROP_ROOT_PRIV -DENABLE_MTLS "
 
 CFLAGS:remove = "-Os"
-CFLAGS += " -O2 -Wno-stringop-truncation "
+CFLAGS += " -O3 -Wno-stringop-truncation "
 
 LDFLAGS:append = " \
         -lbreakpadwrapper \
