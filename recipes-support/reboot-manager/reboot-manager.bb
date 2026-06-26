@@ -10,13 +10,13 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=86d3f3a95c324c9479bd8986968f4327"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
-
-PV = "2.2.1"
+# Release Tag - 2.2.2 on 24thJune2026
+PV = "2.2.2"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "00c4e3b3274154fadabf0af20870d252401ce34b"
+SRCREV_reboot-manager = "dce6c27a91bafaac4224aa1d0d1aa30e8e5dd4c1"
 
 S = "${WORKDIR}/git"
 
