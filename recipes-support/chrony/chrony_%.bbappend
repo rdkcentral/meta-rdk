@@ -7,6 +7,11 @@ SRC_URI += "file://chrony.conf \
             file://rdk_chrony.conf \
             file://chrony-conf-update.sh \
            "
+
+
+SRC_URI += " file://test-HE.sh \
+           "
+
 PACKAGECONFIG:remove = "editline"
 
 do_install:append() {
