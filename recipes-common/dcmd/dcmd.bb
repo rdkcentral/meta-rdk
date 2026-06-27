@@ -28,11 +28,6 @@ SYSLOG-NG_SERVICE_dcmd = "dcmd.service"
 SYSLOG-NG_DESTINATION_dcmd = "dcmscript.log"
 SYSLOG-NG_LOGRATE_dcmd = "high"
 
-SYSLOG-NG_FILTER = "logupload"
-SYSLOG-NG_SERVICE_dcmd = "logupload.service"
-SYSLOG-NG_DESTINATION_dcmd = "dcmscript.log"
-SYSLOG-NG_LOGRATE_dcmd = "high"
-
 # The autotools configuration I am basing this on seems to have a problem with a race condition when parallel make is enabled
 PARALLEL_MAKE = ""
 #RDKEMW-43
