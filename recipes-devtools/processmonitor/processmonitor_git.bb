@@ -1,7 +1,4 @@
-# Copyright 2026 Comcast Cable Communications Management, LLC
-# SPDX-License-Identifier: Apache-2.0
-
-SUMMARY = "Process Moniter utility and runner service"
+SUMMARY = "Process Monitor utility and runner service"
 DESCRIPTION = "Linux process monitor - track and record the execution times of all processes"
 LICENSE = "Apache-2.0"
 
