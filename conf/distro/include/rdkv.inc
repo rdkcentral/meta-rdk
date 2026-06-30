@@ -24,6 +24,8 @@ PREFERRED_VERSION_brotli-native_dunfell = "1.0.7"
 PREFERRED_VERSION_brotli:kirkstone = "1.0.9"
 PREFERRED_VERSION_brotli-native:kirkstone = "1.0.9"
 
+PREFERRED_VERSION_wpe-webkit = "2.38.8%"
+
 PREFERRED_VERSION_libwebsockets:kirkstone = "4.2.2"
 
 # Disabling Dunfell version of breakpad for timebeing due to DELIA-48240. Till issue is fixed morty version of breakpad will be used in dunfell builds.
