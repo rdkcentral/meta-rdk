@@ -84,7 +84,6 @@ do_install () {
    install -d ${D}/${libdir}
    for file in ${S}/librtRemote*; do install -m 0644 "$file" -t ${D}${libdir}/; done
 
-
    mkdir -p ${D}${includedir}/rtcore
    install -m 0644 ${S}/include/rtRemote.h ${D}${includedir}/rtcore/
    install -m 0644 ${S}/include/rtRemote.h ${D}${includedir}/
