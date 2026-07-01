@@ -82,7 +82,13 @@ do_configure:prepend:kirkstone() {
 
 do_install () {
    install -d ${D}/${libdir}
-   for file in ${S}/librtRemote*; do install -m 0644 "$file" -t ${D}${libdir}/; done
+   for f in ${B}/lib/libJavaScriptCore.so*; do
+       if [ -L "$f" ]; then
+           cp -d "$f" ${D}/${libdir}/javascriptcore/.
+       else
+           install -m 0755 "$f" ${D}/${libdir}/javascriptcore/.
+       fi
+   done
 
    mkdir -p ${D}${includedir}/rtcore
    install -m 0644 ${S}/include/rtRemote.h ${D}${includedir}/rtcore/
