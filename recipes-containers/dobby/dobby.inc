@@ -1,4 +1,4 @@
-SRC_URI = "gitsm://github.com/rdkcentral/Dobby;protocol=https;branch=develop"
+SRC_URI = "gitsm://github.com/rdkcentral/Dobby;protocol=https;branch=topic/RDKEMW-16213"
 
 PV = "3.19.1"
 PR = "r0"
