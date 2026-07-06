@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
 DEPENDS = "systimemgrinetrface systimemgrfactory rdk-logger libsyswrapper wpeframework-clientlibraries telemetry libchronyctl"
 
-SRCREV_systemtimemgr = "1bf386d4806baec8b6ceeed17288ccf1a22c74a3"
+SRCREV_systemtimemgr = "340f0d335f899da2f4dfee75b687875646a4be33"
 SRC_URI = "${CMF_GITHUB_ROOT}/systemtimemgr;${CMF_GITHUB_SRC_URI_SUFFIX};name=systemtimemgr"
 
 SRC_URI:append = " file://systimemgr.conf "
