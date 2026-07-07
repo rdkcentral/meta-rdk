@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2441d6cdabdc0f370be5cd8a746eb647"
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "db0139009f74fc5d8eb980e5ed30f9f9b07179bd"
+SRCREV = "977c69b47f0b9bd103d8f728b4cf9a630237abb2"
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PV = "2.1.4"
 PR = "r0"
@@ -27,11 +27,6 @@ SYSLOG-NG_FILTER = "dcmd"
 SYSLOG-NG_SERVICE_dcmd = "dcmd.service"
 SYSLOG-NG_DESTINATION_dcmd = "dcmscript.log"
 SYSLOG-NG_LOGRATE_dcmd = "high"
-
-SYSLOG-NG_FILTER = "logupload"
-SYSLOG-NG_SERVICE_logupload = "logupload.service"
-SYSLOG-NG_DESTINATION_logupload = "logupload.log"
-SYSLOG-NG_LOGRATE_logupload = "high"
 
 # The autotools configuration I am basing this on seems to have a problem with a race condition when parallel make is enabled
 PARALLEL_MAKE = ""
