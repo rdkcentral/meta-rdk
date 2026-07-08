@@ -28,11 +28,6 @@ SYSLOG-NG_SERVICE_dcmd = "dcmd.service"
 SYSLOG-NG_DESTINATION_dcmd = "dcmscript.log"
 SYSLOG-NG_LOGRATE_dcmd = "high"
 
-SYSLOG-NG_FILTER = "logupload"
-SYSLOG-NG_SERVICE_logupload = "logupload.service"
-SYSLOG-NG_DESTINATION_logupload = "dcmscript.log"
-SYSLOG-NG_LOGRATE_logupload = "high"
-
 # The autotools configuration I am basing this on seems to have a problem with a race condition when parallel make is enabled
 PARALLEL_MAKE = ""
 #RDKEMW-43
@@ -52,7 +47,6 @@ do_install:append () {
     install -d ${D}${bindir}
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${S}/dcmd.service ${D}${systemd_unitdir}/system
-    install -m 0644 ${S}/logupload.service ${D}${systemd_unitdir}/system
     install -d ${D}${includedir}
     install -m 0644 ${S}/uploadstblogs/include/*.h ${D}${includedir}
 }
@@ -70,4 +64,4 @@ CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 # Add any extra packaging if needed
 SYSTEMD_SERVICE:${PN} += "dcmd.service"
-SYSTEMD_SERVICE:${PN} += "logupload.service"
+FILES_${PN} += "${bindir}/logupload"
