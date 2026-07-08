@@ -69,6 +69,5 @@ CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 
 # Add any extra packaging if needed
-FILES_${PN} += "${bindir}/logupload"
 SYSTEMD_SERVICE:${PN} += "dcmd.service"
 SYSTEMD_SERVICE:${PN} += "logupload.service"
