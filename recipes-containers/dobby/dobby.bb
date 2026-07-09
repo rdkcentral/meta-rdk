@@ -51,7 +51,7 @@ SRC_URI += "file://secure_wrapper.patch"
 
 # Enable plugins
 # Logging, networking, ipc, storage, minidump, oomcrash enabled by default for all builds
-PACKAGECONFIG ?= "logging networking ipc storage minidump oomcrash"
+PACKAGECONFIG ?= "logging networking ipc storage oomcrash"
 
 # Options for plugins
 # -------------------------------------
