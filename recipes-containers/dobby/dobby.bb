@@ -15,7 +15,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 DEPENDS = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', ' systemd ', '', d)} libnl dbus jsoncpp boost yajl breakpad breakpad-wrapper libsyswrapper libcap"
 DEPENDS:append = " autoconf-native automake-native "
 RDEPENDS:${PN} = "crun (>= 0.14.1) ${@bb.utils.contains('DISTRO_FEATURES', 'dac', '', ' dobby-thunderplugin', d)} "
-RDEPENDS:${PN} += "libc6 libgcc1 libstdc++6"
+RDEPENDS:${PN} += "libc libgcc libstdc++"
 
 CFLAGS:append = " --sysroot=${RECIPE_SYSROOT}"
 
