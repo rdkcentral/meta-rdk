@@ -10,8 +10,8 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 DEPENDS += "  libsyswrapper "
 
 #code will be cloned from the following SRC_URI
-SRCREV = "cd445dd473a9a82488d553faaf7e60e57a0e102b"
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk-cert-config;${CMF_GITHUB_SRC_URI_SUFFIX}"
+SRCREV = "4dcfaf4ebf69c259c1a8032ed20cd9b604abb2f5"
+SRC_URI = "git://github.com/Lasya-Prakarsha-D-V/rdk-cert-config.git;protocol=https;branch=topic/RDK-61158_oldL3"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/git"
