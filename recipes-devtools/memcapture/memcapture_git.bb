@@ -5,12 +5,12 @@ LICENSE = "Apache-2.0"
 
 LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1b8525f92b462b86205ffaba159b4481"
 
-PV = "2.0.1"
+PV = "2.0.2"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "1b826d585dd32426d834bf25540606d9ea879b49"
-SRC_URI = "git://github.com/RDKCentral/MemCapture.git;branch=main;name=src;destsuffix=git"
+SRCREV = "0331c6f16a985e23f6a2133e2351f4f781317e5d"
+SRC_URI = "git://github.com/rdkcentral/MemCapture.git;branch=main;name=src;destsuffix=git"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
