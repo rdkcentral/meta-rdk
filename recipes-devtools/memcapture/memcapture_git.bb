@@ -9,7 +9,7 @@ PV = "2.0.3"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "0331c6f16a985e23f6a2133e2351f4f781317e5d"
+SRCREV = "ca79a27446a2b31528f713c677807b541df63f69"
 SRC_URI = "git://github.com/rdkcentral/MemCapture.git;branch=develop;name=src;destsuffix=git"
 
 S = "${WORKDIR}/git"
