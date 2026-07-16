@@ -1,0 +1,25 @@
+--- a/WebKitBrowser/WebKitImplementation.cpp
++++ b/WebKitBrowser/WebKitImplementation.cpp
+@@ -2980,6 +2980,22 @@
+             webkit_settings_set_enable_page_cache(preferences, FALSE);
+             webkit_settings_set_enable_directory_upload(preferences, FALSE);
+ 
++#if WEBKIT_CHECK_VERSION(2, 46, 0)
++            {
++                WebKitFeatureList* featureList = webkit_settings_get_all_features();
++                gsize len = webkit_feature_list_get_length(featureList);
++                for (gsize i = 0; i < len; i++) {
++                    WebKitFeature* feature = webkit_feature_list_get(featureList, i);
++                    if (g_strcmp0(webkit_feature_get_identifier(feature), "BackForwardCacheWithMedia") == 0) {
++                        webkit_settings_set_feature_enabled(preferences, feature, FALSE);
++                        g_message("BackForwardCacheWithMedia feature disabled (RDK-60346)");
++                        break;
++                    }
++                }
++                webkit_feature_list_unref(featureList);
++            }
++#endif
++
+ #if WEBKIT_CHECK_VERSION(2, 38, 0)
+             webkit_settings_set_enable_webrtc(preferences, TRUE);
+ #endif

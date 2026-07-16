@@ -19,6 +19,7 @@ SRC_URI = "git://github.com/rdkcentral/rdkservices.git;protocol=git;branch=main 
   file://0007-Legacy-launch-metrics.patch;patchdir=../ \
   file://0008-Thunder-upgrade-quirks.patch;patchdir=../ \
   file://0009-Thunder-R4.4.3-upgrade-Fix.patch;patchdir=../ \
+  file://0010-Disable-BFCache-for-pages-with-media.patch;patchdir=../ \
 "
 
 # Tip of the main at June 27, 2025
