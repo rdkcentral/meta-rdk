@@ -8,7 +8,7 @@ DEPENDS += "rbus"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=8700a1d105cac2a90d4f51290ac6e466"
 
-PV = "2.2.2"
+PV = "2.2.2v1"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
