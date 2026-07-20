@@ -4,7 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "9db3fba319b7854e128cdba25f1ee36a312b4a3b"
+SRCREV = "37bf97ccf2b44391d2ac19bb6917940446a1628c"
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -76,6 +76,10 @@ CUSTOM_PKG_EXTNS="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'gtest', '
 SKIP_MAIN_PKG="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', 'no', d)}"
 DOWNLOAD_ON_DEMAND="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', 'no', d)}"
 
+
+
 # Breakpad processname and logfile mapping
 BREAKPAD_LOGMAPPER_PROCLIST = "telemetry2_0"
 BREAKPAD_LOGMAPPER_LOGLIST = "telemetry2_0.txt.0"
+
+EXTRA_OECONF:append = " --enable-dynamic-table-support"
