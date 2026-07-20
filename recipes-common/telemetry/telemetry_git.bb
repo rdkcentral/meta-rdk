@@ -76,6 +76,10 @@ CUSTOM_PKG_EXTNS="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'gtest', '
 SKIP_MAIN_PKG="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', 'no', d)}"
 DOWNLOAD_ON_DEMAND="${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', 'yes', 'no', d)}"
 
+
+
 # Breakpad processname and logfile mapping
 BREAKPAD_LOGMAPPER_PROCLIST = "telemetry2_0"
 BREAKPAD_LOGMAPPER_LOGLIST = "telemetry2_0.txt.0"
+
+EXTRA_OECONF:append = " --enable-dynamic-table-support"
