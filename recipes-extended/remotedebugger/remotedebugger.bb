@@ -16,9 +16,9 @@ CFLAGS += " -Wall -Werror"
 
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
 
-DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper dcmd"
+DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper dcmd opentelemetry-cpp"
 DEPENDS:append:client = " iarmbus iarmmgrs"
-RDEPENDS:${PN}:append = " bash"
+RDEPENDS:${PN}:append = " bash rdk-otel-collector"
 RDEPENDS:${PN}:remove_morty = "bash"
 
 # Add wpeframework-clientlibraries dependency for Ent-os powermanager
