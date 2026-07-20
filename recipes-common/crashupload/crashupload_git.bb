@@ -4,12 +4,12 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-PV = "2.0.1"
+PV = "2.0.1v0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "ed1ed302feebff546893d32000b4177e69a84deb"
+SRCREV = "0ce0f03dbb7c609311657e6d407cb7069c1bc3de"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
