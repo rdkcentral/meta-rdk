@@ -7,12 +7,12 @@ SECTION = "dcmd"
 DEPENDS += "rbus"
 DEPENDS += "commonutilities"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=2441d6cdabdc0f370be5cd8a746eb647"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=31507c3c771f85b4cb615b359765f58d"
 
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "0b00b30e28f0847671e228ec421405c85c8e6706"
+SRCREV = "373fad9e9968262e8046023ec21c93c330148fff"
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PV = "2.1.4"
 PR = "r0"
@@ -63,5 +63,5 @@ CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 
 # Add any extra packaging if needed
-FILES_${PN} += "${bindir}/logupload"
 SYSTEMD_SERVICE:${PN} += "dcmd.service"
+FILES_${PN} += "${bindir}/logupload"
