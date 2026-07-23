@@ -67,3 +67,5 @@ setup script will search for possible machines using the following
 command, executed from the top level folder:
 
 $ ls -1 *{,/*}/conf/machine/*.conf
+
+
