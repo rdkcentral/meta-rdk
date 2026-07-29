@@ -2,14 +2,17 @@ SUMMARY = "Crash Upload Utility for RDK Platforms"
 SECTION = "console/utils"
 
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://../LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
+LIC_FILES_CHKSUM = "file://../LICENSE;md5=377ffe30094aa2a7a3e56ea7aa355abd"
 
 PV = "2.1.2"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
-SRCREV = "8fcb791cf927c91f53353cc6e5ac15a37bee1905"
+#SRC_URI = "${CMF_GITHUB_ROOT}/${BPN}.git;nobranch=1;protocol=${CMF_GIT_PROTOCOL}"
+#SRCREV = "8fcb791cf927c91f53353cc6e5ac15a37bee1905"
+
+SRC_URI = "git://github.com/rdkcteam/crashupload.git;branch=develop;protocol=https"
+SRCREV = "104a9f5d93b03cc3dfd32a34eaf3389ae34e5e61"
 
 S = "${WORKDIR}/git/c_sourcecode"
 
