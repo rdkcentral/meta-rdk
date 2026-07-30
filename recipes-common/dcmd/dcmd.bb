@@ -7,12 +7,12 @@ SECTION = "dcmd"
 DEPENDS += "rbus"
 DEPENDS += "commonutilities"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=2441d6cdabdc0f370be5cd8a746eb647"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=31507c3c771f85b4cb615b359765f58d"
 
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "0b00b30e28f0847671e228ec421405c85c8e6706"
+SRCREV = "03a408e7c59fc85b673c10c6bc7264f0b7415782"
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PV = "2.1.4"
 PR = "r0"
