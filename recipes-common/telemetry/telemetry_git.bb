@@ -27,6 +27,8 @@ CFLAGS:append:broadband += " -DRDK_LOGGER -Wno-sign-compare -Wno-unused-paramete
 
 inherit pkgconfig autotools systemd ${@bb.utils.contains("DISTRO_FEATURES", "kirkstone", "python3native", "pythonnative", d)} breakpad-logmapper
 
+EXTRA_OECONF += "TREE_REFERENCE=${SRCREV}"
+
 CFLAGS += " -DDROP_ROOT_PRIV -DENABLE_MTLS "
 
 LDFLAGS:append = " \
