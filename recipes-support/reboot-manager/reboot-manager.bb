@@ -11,12 +11,12 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=86d3f3a95c324c9479bd8986968f4327"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 # Release Tag - 2.2.3 on 20thJuly2026
-PV = "2.2.3"
+PV = "2.2.4"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "2c991ae7a90e8d0aa8e0c06d25053d440305e08b"
+SRCREV_reboot-manager = "a805e5d5bcea75f92b4530c15c05a9bda30ed81f"
 
 S = "${WORKDIR}/git"
 
