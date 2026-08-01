@@ -23,10 +23,6 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
 
 inherit autotools coverity systemd syslog-ng-config-gen
-SYSLOG-NG_FILTER = "dcmd"
-SYSLOG-NG_SERVICE_dcmd = "dcmd.service"
-SYSLOG-NG_DESTINATION_dcmd = "dcmscript.log"
-SYSLOG-NG_LOGRATE_dcmd = "high"
 
 # The autotools configuration I am basing this on seems to have a problem with a race condition when parallel make is enabled
 PARALLEL_MAKE = ""
