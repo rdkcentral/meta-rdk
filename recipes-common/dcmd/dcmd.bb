@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=31507c3c771f85b4cb615b359765f58d"
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "d517ef41bdfa311dfb469cb8fd6244d816f513e2"
+SRCREV = "5f2adfc61225453c767a29736b19a46393dfa775"
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PV = "2.2.1"
 PR = "r0"
