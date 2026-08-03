@@ -31,18 +31,18 @@ LOGROTATE_NAME="reboot_reason rebootInfo"
 LOGROTATE_LOGNAME_reboot_reason="rebootreason.log"
 #HDD_ENABLE
 LOGROTATE_SIZE_reboot_reason="1572864"
-LOGROTATE_ROTATION_reboot_reason="3"
+LOGROTATE_ROTATION_reboot_reason="0"
 #HDD_DISABLE
 LOGROTATE_SIZE_MEM_reboot_reason="1572864"
-LOGROTATE_ROTATION_MEM_reboot_reason="3"
+LOGROTATE_ROTATION_MEM_reboot_reason="0"
 
 LOGROTATE_LOGNAME_rebootInfo = "rebootInfo.log"
 #HDD_ENABLE
 LOGROTATE_SIZE_rebootInfo = "64000"
-LOGROTATE_ROTATION_rebootInfo = "3"
+LOGROTATE_ROTATION_rebootInfo = "0"
 #HDD_DISABLE
 LOGROTATE_SIZE_MEM_rebootInfo = "64000"
-LOGROTATE_ROTATION_MEM_rebootInfo = "3"
+LOGROTATE_ROTATION_MEM_rebootInfo = "0"
 
 DEPENDS += "commonutilities telemetry rbus"
 RDEPENDS:${PN}:append = " bash"
