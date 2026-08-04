@@ -90,3 +90,6 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-gnome' if d.getV
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_BINDER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_BINDER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_BINDER') + '/conf/layer.conf') else ''}"
 
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_GSTREAMER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_GSTREAMER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_GSTREAMER') + '/conf/layer.conf') else ''}"
+
+# Polaris AV
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_MEDIAPIPELINE') if d.getVar('MANIFEST_PATH_RDK_MEDIAPIPELINE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_MEDIAPIPELINE') + '/conf/layer.conf') else ''}"
