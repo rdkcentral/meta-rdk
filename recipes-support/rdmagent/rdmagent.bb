@@ -70,6 +70,15 @@ do_install:append () {
         install -D -m600 ${S}/rdm-manifest.json ${D}${sysconfdir}/rdm/rdm-manifest.json
 }
 
+# generating minidumps symbols
+inherit breakpad-wrapper
+BREAKPAD_BIN:append = " rebootnow"
+PACKAGECONFIG:append = " breakpad"
+PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
+
+LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
+CXXFLAGS += "-DINCLUDE_BREAKPAD"
+
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
 SYSTEMD_SERVICE:${PN} += "apps_rdm.path"
 
