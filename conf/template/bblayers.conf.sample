@@ -42,6 +42,7 @@ BBLAYERS =+ " \
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_GENERIC') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_OSS_EXT_MIDDLEWARE') if d.getVar('MANIFEST_PATH_RDK_OSS_EXT_MIDDLEWARE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_OSS_EXT_MIDDLEWARE') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_RDK') if d.getVar('MANIFEST_PATH_META_RDK') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_RDK') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_RESTRICTED') if d.getVar('MANIFEST_PATH_RDK_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_RESTRICTED') + '/conf/layer.conf') else ''}"
