@@ -12,7 +12,6 @@ PACKAGES = "\
 
 # Generic RDK components
 RDEPENDS:packagegroup-rdk-media-common = "\
-    devicesettings \
     iarmbus \
     iarmmgrs \
     rdk-logger \
