@@ -12,7 +12,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=31507c3c771f85b4cb615b359765f58d"
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "671514a3f293399f76cc431eb52cb067812c3c88"
+SRCREV = "c894975533f43b8ad0f505bc8540cbd0c8e0b4ce"
 SRC_URI = "${CMF_GITHUB_ROOT}/dcm-agent;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PV = "2.2.1"
 PR = "r0"
@@ -54,6 +54,8 @@ do_install:append () {
 inherit breakpad-wrapper
 DEPENDS += "breakpad breakpad-wrapper"
 BREAKPAD_BIN:append = "logupload"
+BREAKPAD_BIN:append = "dcmd"
+BREAKPAD_BIN:append = "backup_logs"
 
 PACKAGECONFIG:append = " breakpad"
 PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
