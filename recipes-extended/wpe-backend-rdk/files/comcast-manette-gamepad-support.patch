@@ -278,14 +278,14 @@ index 0000000..71ee82a
 +  static enum wpe_gamepad_button toStandardGamepadButton(uint16_t manetteButton)
 +  {
 +    switch (manetteButton) {
-+      case BTN_A:
++      case BTN_SOUTH:
 +        return WPE_GAMEPAD_BUTTON_BOTTOM;
-+      case BTN_B:
++      case BTN_EAST:
 +        return WPE_GAMEPAD_BUTTON_RIGHT;
-+      case BTN_X:
-+        return WPE_GAMEPAD_BUTTON_LEFT;
-+      case BTN_Y:
++      case BTN_NORTH:
 +        return WPE_GAMEPAD_BUTTON_TOP;
++      case BTN_WEST:
++        return WPE_GAMEPAD_BUTTON_LEFT;
 +      case BTN_TL:
 +        return WPE_GAMEPAD_BUTTON_LEFT_SHOULDER;
 +      case BTN_TR:
