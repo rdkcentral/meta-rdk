@@ -110,6 +110,7 @@ do_install:append() {
     install -D -m 0644 ${WORKDIR}/btmgr.conf ${D}${systemd_unitdir}/system/btmgr.service.d/btmgr.conf
 }
 
+SYSTEMD_SERVICE:${PN}  = "btmgr.service"
 SYSTEMD_AUTO_ENABLE = "${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth-audio-pipewire', 'disable', 'enable', d)}"
 
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service"
