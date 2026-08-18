@@ -140,7 +140,7 @@
     },
     {
       "name": "entservices-audiooutput",
-      "category": "Security",
+      "category": "Entertainment Services",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/entservices-audiooutput"
@@ -280,14 +280,6 @@
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/entservices-powermanager"
-      ]
-    },
-    {
-      "name": "entservices-rdkshell",
-      "category": "Entertainment Services",
-      "layer": "middleware",
-      "url": [
-        "https://github.com/rdkcentral/entservices-rdkshell"
       ]
     },
     {
