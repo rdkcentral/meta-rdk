@@ -48,6 +48,16 @@ SYSLOG-NG_LOGRATE_remote-debugger = "high"
 BREAKPAD_LOGMAPPER_PROCLIST = "remotedebugger"
 BREAKPAD_LOGMAPPER_LOGLIST = "remote-debugger.log"
 
+# generating minidumps symbols
+inherit breakpad-wrapper
+DEPENDS += "breakpad breakpad-wrapper"
+BREAKPAD_BIN:append = "remotedebugger"
+PACKAGECONFIG:append = " breakpad"
+PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
+
+LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
+CXXFLAGS += "-DINCLUDE_BREAKPAD"
+
 do_install:append () {
         install -d ${D}${bindir}/
         install -d ${D}${sysconfdir}/
