@@ -4,7 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "ff823cd555a2dcdffe439a183a70b1c655df3087"
+SRCREV = "e6b31018541e140f2100f01ab8fc62a0013a3ffe"
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -15,7 +15,7 @@ RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
 
 
 PV = "1.9.9"
-PR = "r0"
+PR = "r1"
 
 S = "${WORKDIR}/git"
 
