@@ -15,7 +15,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 # This tells bitbake where to find the files we're providing on the local filesystem
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-SRCREV = "8ddda9a49fa442f15feddbbeed591a6701a4bc4c"
+SRCREV = "413015bf05aaab93622c9b50ca92e0ae8d69fac1"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
 SRCREV_FORMAT = "rdmagent"
 
@@ -57,6 +57,16 @@ LDFLAGS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' `pkg-confi
 
 DEPENDS:append = " iarmmgrs iarmbus"
 LDFLAGS:append = " -lIARMBus"
+
+# generating minidumps symbols
+inherit breakpad-wrapper
+DEPENDS += "breakpad breakpad-wrapper"
+BREAKPAD_BIN:append = "rdm"
+PACKAGECONFIG:append = " breakpad"
+PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
+
+LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
+CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 do_install:append () {
         install -d ${D}${bindir}/
