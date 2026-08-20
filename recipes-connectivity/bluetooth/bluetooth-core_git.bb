@@ -10,7 +10,7 @@ DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " 
 DEPENDS:append = "${@bb.utils.contains('DISTRO_FEATURES', 'gdbus_bluez5', 'glib-2.0-native', '', d)}"
 
 RDEPENDS:${PN} = "dbus ${BLUEZ} rdk-logger telemetry"
-PV = "1.0.11"
+PV = "1.0.12"
 PR = "r2"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
