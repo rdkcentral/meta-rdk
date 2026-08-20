@@ -32,6 +32,7 @@ BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_VENDOR_IMAGE_PACKAGER') if d.getVar('MA
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OSS_RELEASE') if d.getVar('MANIFEST_PATH_OSS_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_OSS_RELEASE') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_VENDOR_RELEASE') if d.getVar('MANIFEST_PATH_VENDOR_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_VENDOR_RELEASE') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_CSPC_SECURITY_RELEASE') if d.getVar('MANIFEST_PATH_CSPC_SECURITY_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_CSPC_SECURITY_RELEASE') + '/conf/layer.conf') else ''}"
+BBLAYERS += "${@'${MANIFEST_PATH_OSS_EXT}' if os.path.isfile('${MANIFEST_PATH_OSS_EXT}/conf/layer.conf') else ''}"
 
 # Release layers: restricted/proprietary/optional
 BBLAYERS =+ " \
