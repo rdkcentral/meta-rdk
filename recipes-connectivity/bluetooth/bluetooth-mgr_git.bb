@@ -12,6 +12,7 @@ SRCREV = "2936e490103870d0449018f6fec0e269402dece0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
+SRC_URI:append = " file://btmgr-bluetooth-sdk.conf"
 S = "${WORKDIR}/git"
 
 DEPENDS = "bluetooth-core cjson wpeframework-clientlibraries"
@@ -108,12 +109,14 @@ do_install:append() {
     sed -i -- "s/##BTMGR_STARTUP_DELAY##/${BTMGR_STARTUP_DELAY}/" ${WORKDIR}/btmgr.conf
     install -d ${D}${systemd_unitdir}/system/btmgr.service.d
     install -D -m 0644 ${WORKDIR}/btmgr.conf ${D}${systemd_unitdir}/system/btmgr.service.d/btmgr.conf
+    install -D -m 0644 ${WORKDIR}/btmgr-bluetooth-sdk.conf ${D}${systemd_unitdir}/system/btmgr.service.d/btmgr-bluetooth-sdk.conf
 }
 
 SYSTEMD_SERVICE:${PN}  = "btmgr.service"
-SYSTEMD_AUTO_ENABLE = "${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth-audio-pipewire', 'disable', 'enable', d)}"
 
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr.conf"
+FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr-bluetooth-sdk.conf"
+
 
 
