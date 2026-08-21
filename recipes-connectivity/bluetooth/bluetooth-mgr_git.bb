@@ -4,11 +4,11 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-PV = "1.0.11"
+PV = "1.0.12"
 PR = "r2"
 
 SRCREV_FORMAT = "bluetooth-mgr"
-SRCREV = "cbdbcc195aad9a720f3c5e9c5ee73eab6c4f232f"
+SRCREV = "2936e490103870d0449018f6fec0e269402dece0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
