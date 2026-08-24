@@ -61,7 +61,7 @@ LDFLAGS:append = " -lIARMBus"
 # generating minidumps symbols
 inherit breakpad-wrapper
 DEPENDS += "breakpad breakpad-wrapper"
-BREAKPAD_BIN:append = "rdm"
+BREAKPAD_BIN:append = " rdm"
 PACKAGECONFIG:append = " breakpad"
 PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
 
