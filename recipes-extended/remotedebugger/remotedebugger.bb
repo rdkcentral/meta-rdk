@@ -5,8 +5,8 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 PV = "1.3.6"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-SRCREV = "6ff11e27284e51df2475cb3cbdcf38f1ad7d4252"
-SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
+SRCREV = "6c4439edd5612c7f1664e87c90ebf3598af4548f"
+SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};branch=develop;name=generic"
 
 SRCREV_FORMAT = "generic"
 # Release version - 1.3.6
