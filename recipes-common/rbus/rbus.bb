@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
 SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
 
-SRCREV = "3e344546469f2ac2daf4314ff6acc7ca718580f6"
+SRCREV = "0a746d6683445d3beb9f562a7100dc3c3f76ada1"
 SRCREV_FORMAT = "base"
 
 PV = "2.12.0"
@@ -17,7 +17,8 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
 
 inherit cmake systemd pkgconfig coverity syslog-ng-config-gen breakpad-wrapper breakpad-logmapper logrotate_config
-DEPENDS = "cjson msgpack-c rdk-logger linenoise breakpad breakpad-wrapper "
+DEPENDS = "cjson msgpack-c rdk-logger linenoise breakpad breakpad-wrapper opentelemetry-cpp "
+RDEPENDS:${PN}:append = " rdk-otel-collector "
 EXTRA_OECMAKE += " -DINCLUDE_BREAKPAD=ON "
 BREAKPAD_BIN:append = " rtrouted"
 
@@ -28,6 +29,7 @@ BREAKPAD_LOGMAPPER_LOGLIST = "rtrouted.log"
 #RDK Specific Enablements
 EXTRA_OECMAKE += " -DCMAKE_BUILD_TYPE=Release "
 EXTRA_OECMAKE += " -DMSG_ROUNDTRIP_TIME=ON -DENABLE_RDKLOGGER=ON"
+EXTRA_OECMAKE += " -DBUILD_OTEL_BRIDGE=ON "
 
 #Gtest Specific Enablements
 EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '-DENABLE_UNIT_TESTING=ON -DBUILD_RBUS_BENCHMARK_TEST=ON', '', d)}"
