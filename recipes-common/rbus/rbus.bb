@@ -3,7 +3,7 @@ SUMMARY = "rbus library component"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
-SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
+SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=OTEL_rbus"
 
 SRCREV = "0a746d6683445d3beb9f562a7100dc3c3f76ada1"
 SRCREV_FORMAT = "base"
