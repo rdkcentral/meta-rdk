@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rdkcentral.com/schemas/core-v-components.schema.json",
+  "title": "Core RDK Components",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "components"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "category",
+        "layer",
+        "url"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "Containerization & Application Management",
+            "Core Device Control Protocols",
+            "Core Utilities",
+            "Device Diagnostics",
+            "Device Management",
+            "Display/Graphics",
+            "Entertainment Services",
+            "HAL",
+            "RPC",
+            "Security",
+            "System",
+            "Thunder",
+            "Utilities",
+            "VIDEO",
+            "VIDEO Services",
+            "WPEFramework"
+          ]
+        },
+        "layer": {
+          "type": "string",
+          "enum": [
+            "middleware",
+            "oss",
+            "vendor"
+          ]
+        },
+        "url": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+  }
+}
