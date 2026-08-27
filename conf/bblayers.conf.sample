@@ -39,6 +39,7 @@ BBLAYERS += "${@'${RDKROOT}/meta-rdk-mesh' if os.path.isfile('${RDKROOT}/meta-rd
 BBLAYERS =+ "${@'${RDKROOT}/meta-rdk-comcast-broadband' if os.path.isfile('${RDKROOT}/meta-rdk-comcast-broadband/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-broadband' if os.path.isfile('${RDKROOT}/meta-rdk-broadband/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@'${RDKROOT}/meta-rdk-comcast-video' if os.path.isfile('${RDKROOT}/meta-rdk-comcast-video/conf/layer.conf') else ''}"
+BBLAYERS += "${@'${RDKROOT}/meta-rdke-thunder5-upgrade' if os.path.isfile('${RDKROOT}/meta-rdke-thunder5-upgrade/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-video' if os.path.isfile('${RDKROOT}/meta-rdk-video/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-rdk-voice' if os.path.isfile('${RDKROOT}/meta-rdk-voice/conf/layer.conf') else ''}"
 BBLAYERS += "${@'${RDKROOT}/meta-openembedded/meta-python' if os.path.isfile('${RDKROOT}/meta-openembedded/meta-python/conf/layer.conf') else ''}"
