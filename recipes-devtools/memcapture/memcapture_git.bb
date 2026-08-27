@@ -3,14 +3,14 @@ DESCRIPTION = "A C++ tool to capture the average memory usage of a platform incl
 
 LICENSE = "Apache-2.0"
 
-LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=1b8525f92b462b86205ffaba159b4481"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=5641643c88ff68e1adc479003011cc6c"
 
-PV = "2.0.2"
+PV = "2.0.3"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "0331c6f16a985e23f6a2133e2351f4f781317e5d"
-SRC_URI = "git://github.com/rdkcentral/MemCapture.git;branch=main;name=src;destsuffix=git"
+SRCREV = "ca79a27446a2b31528f713c677807b541df63f69"
+SRC_URI = "git://github.com/rdkcentral/MemCapture.git;branch=develop;name=src;destsuffix=git"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
