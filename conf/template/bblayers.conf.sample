@@ -46,6 +46,7 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_OSS_EXT_MIDDLEWARE') if d.getVar('MA
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_RDK') if d.getVar('MANIFEST_PATH_META_RDK') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_RDK') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_RESTRICTED') if d.getVar('MANIFEST_PATH_RDK_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_RESTRICTED') + '/conf/layer.conf') else ''}"
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDKE_THUNDER5_UPGRADE') if d.getVar('MANIFEST_PATH_RDKE_THUNDER5_UPGRADE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDKE_THUNDER5_UPGRADE') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_VIDEO') if d.getVar('MANIFEST_PATH_RDK_VIDEO') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_VIDEO') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_META_PYTHON2') if d.getVar('MANIFEST_PATH_META_PYTHON2') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_META_PYTHON2') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_PRODUCT_LAYER') if d.getVar('MANIFEST_PATH_PRODUCT_LAYER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_PRODUCT_LAYER') + '/conf/layer.conf') else ''}"
