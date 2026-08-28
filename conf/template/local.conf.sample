@@ -264,3 +264,6 @@ CONF_VERSION = "1"
 # This option enables gperftools heap checking for the entire build (for recipes that set ENABLE_GPERFTOOLS_HEAPCHECK_WP_DISTRO = “1”).
 # It can be added on a per-recipe basis by adding ENABLE_GPERFTOOLS_HEAPCHECK_WP_RECIPE = “1” to a recipe.
 #DISTRO_FEATURES_RDK += "comcast-gperftools-heapcheck-wp"
+
+TARGET_CFLAGS:append = " -fno-omit-frame-pointer"
+TARGET_CXXFLAGS:append = " -fno-omit-frame-pointer"
