@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-25T13:25:42.526587+00:00",
+  "generatedAt": "2026-08-28T12:36:08.683581+00:00",
   "components": [
     {
       "name": "AppGateway",
@@ -44,7 +44,7 @@
     },
     {
       "name": "BreakPad",
-      "category": "Device Diagnostics",
+      "category": "Data Collection, Test and Diagnostic",
       "layer": "oss",
       "url": [
         "https://github.com/google/breakpad"
@@ -60,7 +60,7 @@
     },
     {
       "name": "cimplog",
-      "category": "Core Utilities",
+      "category": "Data Collection, Test and Diagnostic",
       "layer": "middleware",
       "url": [
         "https://github.com/xmidt-org/cimplog"
@@ -68,7 +68,7 @@
     },
     {
       "name": "Common Utilities",
-      "category": "Core Utilities",
+      "category": "System Start, Platform Management and misc utilities",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/common_utilities"
@@ -92,7 +92,7 @@
     },
     {
       "name": "DBUS",
-      "category": "RPC",
+      "category": "InterProcess Communications",
       "layer": "oss",
       "url": [
         "https://www.freedesktop.org/wiki/Software/dbus"
@@ -100,7 +100,7 @@
     },
     {
       "name": "Device Settings",
-      "category": "Device Management",
+      "category": "Remote Device Management",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/devicesettings"
@@ -116,7 +116,7 @@
     },
     {
       "name": "Dobby",
-      "category": "Containerization & Application Management",
+      "category": "App Framework",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/Dobby"
@@ -124,7 +124,7 @@
     },
     {
       "name": "Dobby Thunder Plugin",
-      "category": "Containerization & Application Management",
+      "category": "App Framework",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/Dobby"
@@ -180,7 +180,7 @@
     },
     {
       "name": "iarmbus",
-      "category": "RPC",
+      "category": "InterProcess Communications",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/iarmbus"
@@ -188,7 +188,7 @@
     },
     {
       "name": "iarmmgrs",
-      "category": "Device Management",
+      "category": "Remote Device Management",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/iarmmgrs"
@@ -212,7 +212,7 @@
     },
     {
       "name": "libSysCallWrapper",
-      "category": "Core Utilities",
+      "category": "Code Security",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/libSyscallWrapper"
@@ -220,7 +220,7 @@
     },
     {
       "name": "libunpriv",
-      "category": "Security",
+      "category": "Code Security",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rdk-libunpriv"
@@ -236,7 +236,7 @@
     },
     {
       "name": "memcr",
-      "category": "Utilities",
+      "category": "System Start, Platform Management and misc utilities",
       "layer": "middleware",
       "url": [
         "https://github.com/LibertyGlobal/memcr"
@@ -244,7 +244,7 @@
     },
     {
       "name": "new RDK AppManagers components",
-      "category": "Containerization & Application Management",
+      "category": "App Framework",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/entservices-appmanagers"
@@ -252,7 +252,7 @@
     },
     {
       "name": "OpenSSL",
-      "category": "Security",
+      "category": "Code Security",
       "layer": "middleware",
       "url": [
         "https://www.openssl.org"
@@ -276,7 +276,7 @@
     },
     {
       "name": "Protobuf",
-      "category": "RPC",
+      "category": "InterProcess Communications",
       "layer": "oss",
       "url": [
         "https://github.com/protocolbuffers/protobuf"
@@ -284,7 +284,7 @@
     },
     {
       "name": "RBUS",
-      "category": "RPC",
+      "category": "InterProcess Communications",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rbus"
@@ -292,7 +292,7 @@
     },
     {
       "name": "RDK Logger",
-      "category": "Core Utilities",
+      "category": "Data Collection, Test and Diagnostic",
       "layer": "oss",
       "url": [
         "https://github.com/rdkcentral/rdk_logger"
@@ -308,7 +308,7 @@
     },
     {
       "name": "RDK Window Manager",
-      "category": "Utilities",
+      "category": "System Start, Platform Management and misc utilities",
       "layer": "middleware",
       "url": [
         "https://github.com/rdk-e/rdk-window-manager"
@@ -316,7 +316,7 @@
     },
     {
       "name": "RDK WPA Supplicant Config",
-      "category": "Security",
+      "category": "Code Security",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/meta-rdk-video/"
@@ -324,7 +324,7 @@
     },
     {
       "name": "rdkcertconfig",
-      "category": "Security",
+      "category": "Code Security",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rdk-cert-config"
@@ -332,7 +332,7 @@
     },
     {
       "name": "Remote Feature control",
-      "category": "Device Management",
+      "category": "Remote Device Management",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rfc"
@@ -380,7 +380,7 @@
     },
     {
       "name": "sysint",
-      "category": "System",
+      "category": "System Start, Platform Management and misc utilities",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/sysint"
@@ -388,7 +388,7 @@
     },
     {
       "name": "System Time Manager",
-      "category": "System",
+      "category": "System Start, Platform Management and misc utilities",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/systemtimemgr"
@@ -396,7 +396,7 @@
     },
     {
       "name": "Systemd",
-      "category": "Containerization & Application Management",
+      "category": "App Framework",
       "layer": "oss",
       "url": [
         "https://systemd.io"
@@ -404,7 +404,7 @@
     },
     {
       "name": "telemetry",
-      "category": "Device Diagnostics",
+      "category": "Data Collection, Test and Diagnostic",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/telemetry"
@@ -420,7 +420,7 @@
     },
     {
       "name": "trower-base64",
-      "category": "Core Utilities",
+      "category": "System Start, Platform Management and misc utilities",
       "layer": "oss",
       "url": [
         "https://github.com/Comcast/trower-base64"
@@ -436,7 +436,7 @@
     },
     {
       "name": "wdmp-c (WebPA Data model parser)",
-      "category": "Core Utilities",
+      "category": "Remote Device Management",
       "layer": "middleware",
       "url": [
         "https://github.com/xmidt-org/wdmp-c"

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-06-05T11:58:51.735371+00:00",
+  "generatedAt": "2026-08-28T14:41:00.000000+00:00",
   "components": [
     {
       "name": "Aamp",
@@ -68,7 +68,7 @@
     },
     {
       "name": "SysMonTools",
-      "category": "Core RDK Validation Layer",
+      "category": "Data Collection, Test and Diagnostic",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/sys_mon_tools"
