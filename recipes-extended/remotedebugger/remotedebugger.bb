@@ -5,8 +5,8 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 PV = "1.3.6"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-SRCREV = "6ff11e27284e51df2475cb3cbdcf38f1ad7d4252"
-SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
+SRCREV = "6b7bcfc0a9537dc4182400df85f038fe377914b6"
+SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};branch=develop;name=generic"
 
 SRCREV_FORMAT = "generic"
 # Release version - 1.3.6
@@ -17,9 +17,13 @@ CFLAGS += " -Wall -Werror"
 inherit autotools pkgconfig coverity systemd syslog-ng-config-gen breakpad-logmapper
 
 DEPENDS = "cjson rdk-logger trower-base64 msgpack-c webconfig-framework rbus libsyswrapper dcmd"
+DEPENDS += " opentelemetry-cpp "
+
 DEPENDS:append:client = " iarmbus iarmmgrs"
 RDEPENDS:${PN}:append = " bash"
 RDEPENDS:${PN}:remove_morty = "bash"
+
+RDEPENDS:${PN}:append = " rdk-otel-collector "
 
 # Add wpeframework-clientlibraries dependency for Ent-os powermanager
 DEPENDS +=  "${@bb.utils.contains('DISTRO_FEATURES', 'pwrmgr-plugin', 'wpeframework-clientlibraries', '', d)}"
