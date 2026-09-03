@@ -9,7 +9,7 @@ PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
 PV = "1.2.6"
 PR = "r0"
 
-SRCREV = "75993b3ebd73080c9916de412a84d4bdeeaac7fc"
+SRCREV = "de102a8af42b5c3a9b5014f7ca8effc19f93b40c"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
