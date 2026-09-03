@@ -1,0 +1,20 @@
+From: Comcast
+Subject: [PATCH] Add RFC controller dependency to Dobby service
+
+Upstream-Status: Inappropriate [Platform integration]
+
+---
+Index: git/daemon/process/dobby.service
+===================================================================
+--- git.orig/daemon/process/dobby.service
++++ git/daemon/process/dobby.service
+@@ -35,9 +35,9 @@
+ Description=RDK Dobby (Container) daemon
+-Requires=dbus.socket dbus.service
++Requires=dbus.socket dbus.service entos-appmanagers-rfc-controller.service
+ Before=wpeframework.service
+-After=dbus.socket dbus.service
++After=dbus.socket dbus.service entos-appmanagers-rfc-controller.service
+ 
+ [Service]
+ Type=notify
