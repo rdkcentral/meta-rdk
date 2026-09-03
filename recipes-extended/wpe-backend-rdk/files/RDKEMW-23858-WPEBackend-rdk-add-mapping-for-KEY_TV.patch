@@ -1,0 +1,30 @@
+From b9e3f2ed7517a74026a86d53b27a55a640904b51 Mon Sep 17 00:00:00 2001
+From: Andrzej Surdej <Andrzej_Surdej@comcast.com>
+Date: Thu, 3 Sep 2026 10:48:35 +0200
+Subject: [PATCH] RDKEMW-23858: WPEBackend-rdk - add mapping for KEY_TV LiveTV
+ remote button
+
+---
+ src/essos/renderer-backend.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/essos/renderer-backend.cpp b/src/essos/renderer-backend.cpp
+index 9aa72be..918a9e7 100644
+--- a/src/essos/renderer-backend.cpp
++++ b/src/essos/renderer-backend.cpp
+@@ -535,6 +535,12 @@ void EGLTarget::onKeyEvent(unsigned int key, bool pressed)
+     uint32_t time = getSourceTimeMs();
+     uint32_t modifiers = wpe_input_xkb_context_get_modifiers(wpe_input_xkb_context_get_default(), depresedMask, 0, 0, 0);
+     uint32_t keysym = wpe_input_xkb_context_get_key_code(wpe_input_xkb_context_get_default(), key, pressed);
++    if (!keysym && key == KEY_TV + 8) {
++        // KEY_TV does not resolve to a keysym in the default xkb keymap, so map it explicitly to XF86XK_MediaSelectTV
++        // The value comes from include/X11/XF86keysym.h recent xorgproto repo
++        // https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/master/include/X11/XF86keysym.h
++        keysym = 0x10081179; // XF86XK_MediaSelectTV
++    }
+ 
+     DEBUG_LOG("hw key=%u, xkb keysym=%u, modifiers=%u (%s)", key, keysym, modifiers, pressed ? "pressed" : "released" );
+ 
+-- 
+2.53.0
+
