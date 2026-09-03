@@ -2,7 +2,7 @@ SUMMARY = "Crash Upload Utility for RDK Platforms"
 SECTION = "console/utils"
 
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://../LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
+LIC_FILES_CHKSUM = "file://../LICENSE;md5=377ffe30094aa2a7a3e56ea7aa355abd"
 
 PV = "2.2.2"
 PR = "r0"
