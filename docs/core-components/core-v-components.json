@@ -1,0 +1,462 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-28T12:36:08.683581+00:00",
+  "components": [
+    {
+      "name": "AppGateway",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-appgateway"
+      ]
+    },
+    {
+      "name": "AvOutput",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-avoutput"
+      ]
+    },
+    {
+      "name": "Bluetooth Manager",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/bluetooth_mgr"
+      ]
+    },
+    {
+      "name": "bluetooth-core",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/bluetooth"
+      ]
+    },
+    {
+      "name": "BlueZ",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://www.bluez.org"
+      ]
+    },
+    {
+      "name": "BreakPad",
+      "category": "Data Collection, Test and Diagnostic",
+      "layer": "oss",
+      "url": [
+        "https://github.com/google/breakpad"
+      ]
+    },
+    {
+      "name": "Casting",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-casting"
+      ]
+    },
+    {
+      "name": "cimplog",
+      "category": "Data Collection, Test and Diagnostic",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/xmidt-org/cimplog"
+      ]
+    },
+    {
+      "name": "Common Utilities",
+      "category": "System Start, Platform Management and misc utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/common_utilities"
+      ]
+    },
+    {
+      "name": "Connectivity",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-connectivity"
+      ]
+    },
+    {
+      "name": "Control Manager (video)",
+      "category": "WPEFramework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/control"
+      ]
+    },
+    {
+      "name": "DBUS",
+      "category": "InterProcess Communications",
+      "layer": "oss",
+      "url": [
+        "https://www.freedesktop.org/wiki/Software/dbus"
+      ]
+    },
+    {
+      "name": "Device Settings",
+      "category": "Remote Device Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/devicesettings"
+      ]
+    },
+    {
+      "name": "DeviceAndDisplay",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-deviceanddisplay"
+      ]
+    },
+    {
+      "name": "Dobby",
+      "category": "App Framework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/Dobby"
+      ]
+    },
+    {
+      "name": "Dobby Thunder Plugin",
+      "category": "App Framework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/Dobby"
+      ]
+    },
+    {
+      "name": "Entservices APIs",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-apis"
+      ]
+    },
+    {
+      "name": "FirmwareDownload",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-firmwaredownload"
+      ]
+    },
+    {
+      "name": "FirmwareUpdate",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-firmwareupdate"
+      ]
+    },
+    {
+      "name": "Gstreamer Rialto Plugin",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto-gstreamer"
+      ]
+    },
+    {
+      "name": "HDMI CEC Header",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-halif-hdmi_cec"
+      ]
+    },
+    {
+      "name": "HDMICec",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/hdmicec"
+      ]
+    },
+    {
+      "name": "iarmbus",
+      "category": "InterProcess Communications",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/iarmbus"
+      ]
+    },
+    {
+      "name": "iarmmgrs",
+      "category": "Remote Device Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/iarmmgrs"
+      ]
+    },
+    {
+      "name": "Infrastructure Services",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-infra"
+      ]
+    },
+    {
+      "name": "InputOutput",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-inputoutput"
+      ]
+    },
+    {
+      "name": "libSysCallWrapper",
+      "category": "Code Security",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/libSyscallWrapper"
+      ]
+    },
+    {
+      "name": "libunpriv",
+      "category": "Code Security",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-libunpriv"
+      ]
+    },
+    {
+      "name": "MediaAndDrm",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-mediaanddrm"
+      ]
+    },
+    {
+      "name": "memcr",
+      "category": "System Start, Platform Management and misc utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/LibertyGlobal/memcr"
+      ]
+    },
+    {
+      "name": "new RDK AppManagers components",
+      "category": "App Framework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-appmanagers"
+      ]
+    },
+    {
+      "name": "OpenSSL",
+      "category": "Code Security",
+      "layer": "middleware",
+      "url": [
+        "https://www.openssl.org"
+      ]
+    },
+    {
+      "name": "PackageManager",
+      "category": "Thunder",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/PackageManager"
+      ]
+    },
+    {
+      "name": "Peripherals",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-peripherals"
+      ]
+    },
+    {
+      "name": "Protobuf",
+      "category": "InterProcess Communications",
+      "layer": "oss",
+      "url": [
+        "https://github.com/protocolbuffers/protobuf"
+      ]
+    },
+    {
+      "name": "RBUS",
+      "category": "InterProcess Communications",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rbus"
+      ]
+    },
+    {
+      "name": "RDK Logger",
+      "category": "Data Collection, Test and Diagnostic",
+      "layer": "oss",
+      "url": [
+        "https://github.com/rdkcentral/rdk_logger"
+      ]
+    },
+    {
+      "name": "RDK V Firmware Upgrader",
+      "category": "Core Device Control Protocols",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdkfwupdater"
+      ]
+    },
+    {
+      "name": "RDK Window Manager",
+      "category": "System Start, Platform Management and misc utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdk-e/rdk-window-manager"
+      ]
+    },
+    {
+      "name": "RDK WPA Supplicant Config",
+      "category": "Code Security",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/meta-rdk-video/"
+      ]
+    },
+    {
+      "name": "rdkcertconfig",
+      "category": "Code Security",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rdk-cert-config"
+      ]
+    },
+    {
+      "name": "Remote Feature control",
+      "category": "Remote Device Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rfc"
+      ]
+    },
+    {
+      "name": "Rialto",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto"
+      ]
+    },
+    {
+      "name": "Rialto OCDM",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto-ocdm"
+      ]
+    },
+    {
+      "name": "Rialto Server",
+      "category": "VIDEO Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/rialto"
+      ]
+    },
+    {
+      "name": "RunTime",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-runtime"
+      ]
+    },
+    {
+      "name": "SoftwareUpdate",
+      "category": "Entertainment Services",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/entservices-maintenancemanager"
+      ]
+    },
+    {
+      "name": "sysint",
+      "category": "System Start, Platform Management and misc utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/sysint"
+      ]
+    },
+    {
+      "name": "System Time Manager",
+      "category": "System Start, Platform Management and misc utilities",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/systemtimemgr"
+      ]
+    },
+    {
+      "name": "Systemd",
+      "category": "App Framework",
+      "layer": "oss",
+      "url": [
+        "https://systemd.io"
+      ]
+    },
+    {
+      "name": "telemetry",
+      "category": "Data Collection, Test and Diagnostic",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/telemetry"
+      ]
+    },
+    {
+      "name": "ThunderJS",
+      "category": "Thunder",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/ThunderJS"
+      ]
+    },
+    {
+      "name": "trower-base64",
+      "category": "System Start, Platform Management and misc utilities",
+      "layer": "oss",
+      "url": [
+        "https://github.com/Comcast/trower-base64"
+      ]
+    },
+    {
+      "name": "Wayland",
+      "category": "Display/Graphics",
+      "layer": "oss",
+      "url": [
+        "https://wayland.freedesktop.org"
+      ]
+    },
+    {
+      "name": "wdmp-c (WebPA Data model parser)",
+      "category": "Remote Device Management",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/xmidt-org/wdmp-c"
+      ]
+    },
+    {
+      "name": "Westeros",
+      "category": "Display/Graphics",
+      "layer": "vendor",
+      "url": [
+        "https://code.rdkcentral.com/r/components/opensource/westeros"
+      ]
+    },
+    {
+      "name": "WPEFramework",
+      "category": "VIDEO",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/Thunder"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-08-28T14:41:00.000000+00:00",
+  "components": [
+    {
+      "name": "Aamp",
+      "category": "Core RDK Validation Layer",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/aamp"
+      ]
+    },
+    {
+      "name": "Bluetooth Audio (app)",
+      "category": "Core RDK Validation Layer",
+      "layer": "application",
+      "url": [
+        "https://wiki.rdkcentral.com/spaces/RDK/pages/259131962/Accelerator+Home+UI+-+v3"
+      ]
+    },
+    {
+      "name": "Cobalt and Cobalt libraries",
+      "category": "Core RDK Validation Layer",
+      "layer": "application",
+      "url": [
+        "https://developers.google.com/youtube/cobalt/docs/gen/starboard/doc/evergreen/cobalt_evergreen_overview"
+      ]
+    },
+    {
+      "name": "Firebolt UI",
+      "category": "Core RDK Validation Layer",
+      "layer": "application",
+      "url": [
+        "https://wiki.rdkcentral.com/display/RDK/RDK+Accelerator+Home+UI"
+      ]
+    },
+    {
+      "name": "libdash",
+      "category": "Core RDK Validation Layer",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/bitmovin/libdash"
+      ]
+    },
+    {
+      "name": "RDK Perf",
+      "category": "Core RDK Validation Layer",
+      "layer": "oss",
+      "url": [
+        "https://github.com/rdkcentral/rdkperf"
+      ]
+    },
+    {
+      "name": "Remote Debugger",
+      "category": "Core RDK Validation Layer",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/remote_debugger"
+      ]
+    },
+    {
+      "name": "Resident UI",
+      "category": "Core RDK Validation Layer",
+      "layer": "application",
+      "url": [
+        "https://github.com/rdkcentral/rdke-refui"
+      ]
+    },
+    {
+      "name": "SysMonTools",
+      "category": "Data Collection, Test and Diagnostic",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/sys_mon_tools"
+      ]
+    },
+    {
+      "name": "WayMetric",
+      "category": "Core RDK Validation Layer",
+      "layer": "middleware",
+      "url": [
+        "https://code.rdkcentral.com/r/components/opensource/waymetric"
+      ]
+    },
+    {
+      "name": "WPE Client Libraries",
+      "category": "Core RDK Validation Layer",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/WebPlatformForEmbedded/libwpe"
+      ]
+    },
+    {
+      "name": "WPE WebKit",
+      "category": "Core RDK Validation Layer",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/WebPlatformForEmbedded/WPEWebKit"
+      ]
+    },
+    {
+      "name": "WPEFramework UI",
+      "category": "Core RDK Validation Layer",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/ThunderUI"
+      ]
+    }
+  ]
+}
