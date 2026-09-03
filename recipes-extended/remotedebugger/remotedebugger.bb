@@ -5,7 +5,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 PV = "1.3.6"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
-SRCREV = "6ff11e27284e51df2475cb3cbdcf38f1ad7d4252"
+SRCREV = "907e0631268c635868de87cafe16bfd79cbe7322"
 SRC_URI = "${CMF_GITHUB_ROOT}/remote_debugger;${CMF_GITHUB_SRC_URI_SUFFIX};name=generic"
 
 SRCREV_FORMAT = "generic"
@@ -47,6 +47,16 @@ SYSLOG-NG_LOGRATE_remote-debugger = "high"
 # Breakpad processname and logfile mapping
 BREAKPAD_LOGMAPPER_PROCLIST = "remotedebugger"
 BREAKPAD_LOGMAPPER_LOGLIST = "remote-debugger.log"
+
+# generating minidumps symbols
+inherit breakpad-wrapper
+DEPENDS += "breakpad breakpad-wrapper"
+BREAKPAD_BIN:append = "remotedebugger"
+PACKAGECONFIG:append = " breakpad"
+PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
+
+LDFLAGS += "-lbreakpadwrapper -lpthread -lstdc++"
+CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 do_install:append () {
         install -d ${D}${bindir}/
