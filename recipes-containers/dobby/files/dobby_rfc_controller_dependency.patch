@@ -1,15 +1,24 @@
-diff --git a/daemon/process/dobby.service b/daemon/process/dobby.service
-index 567d5358..28024902 100644
---- a/daemon/process/dobby.service
-+++ b/daemon/process/dobby.service
-@@ -34,8 +34,8 @@
- [Unit]
+From: Punam Kumbhar <Punam_Kumbhar@comcast.com>
+Date: Thu, 3 Sep 2025 
+Subject: [PATCH] RDKEMW-23692:  Adding dependency entos-appmanagers-rfc-controller.service for dobby
+
+Source: Comcast
+Upstream-Status: Inappropriate [Comcast specific]
+
+Signed-off-by: Punam Kumbhar <Punam_Kumbhar@comcast.com>
+---
+
+Index: git/daemon/process/dobby.service
+===================================================================
+--- git.orig/daemon/process/dobby.service
++++ git/daemon/process/dobby.service
+@@ -35,7 +35,7 @@
  Description=RDK Dobby (Container) daemon
- Requires=dbus.socket dbus.service
--Before=wpeframework.service
--After=dbus.socket dbus.service
-+Before=wpeframework.service entos-appmanagers-rfc-controller.service
-+After=dbus.socket dbus.service entos-appmanagers-rfc-controller.service
+-Requires=dbus.socket dbus.service
++Requires=dbus.socket dbus.service entos-appmanagers-rfc-controller.service
+ Before=wpeframework.service
+-After=dbus.socket dbus.service apparmor.service
++After=dbus.socket dbus.service apparmor.service entos-appmanagers-rfc-controller.service
  
  [Service]
  Type=notify
