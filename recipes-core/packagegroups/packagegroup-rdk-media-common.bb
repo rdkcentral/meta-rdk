@@ -4,7 +4,6 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 inherit packagegroup
-BLUEZ ?= "${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth', bb.utils.contains('DISTRO_FEATURES', 'bluez5', 'bluez5', 'bluez4', d), '', d)}"
 
 PACKAGES = "\
     packagegroup-rdk-media-common \
@@ -26,7 +25,7 @@ RDEPENDS:packagegroup-rdk-media-common = "\
     key-simulator \
     tcpdump \
     iptables \
-    ${@bb.utils.contains("DISTRO_FEATURES", "bluetooth", "${BLUEZ} bluetooth-core bluetooth-mgr virtual/vendor-media-utils", "", d)} \
+    ${@bb.utils.contains("DISTRO_FEATURES", "bluetooth", "bluetooth-core bluetooth-mgr virtual/vendor-media-utils", "", d)} \
     systemd-usb-support \
     nghttp2-server \
     nghttp2-common \
