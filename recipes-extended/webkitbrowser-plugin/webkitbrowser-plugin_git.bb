@@ -1,6 +1,6 @@
 SUMMARY = "WebKitBrowser plugin"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://../LICENSE;md5=16cf2209d4e903e4d5dcd75089d7dfe2"
+LIC_FILES_CHKSUM = "file://../LICENSE;md5=dc6e390ad71aef79d0c2caf3cde03a19"
 
 # keep PV/PR in sync with meta-middleware-generic-support/conf/include/generic-pkgrev.inc
 PV = "1.1.30"
@@ -10,7 +10,7 @@ PATCHTOOL = "git"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git/WebKitBrowser"
 
-SRC_URI = "git://github.com/rdkcentral/rdkservices.git;protocol=git;branch=main \
+SRC_URI = "${CMF_GITHUB_ROOT}/entservices-runtime;${CMF_GITHUB_SRC_URI_SUFFIX} \
   file://0001-RDKTV-177-Configure-wpeframework-plugin-startup-orde.patch;patchdir=../ \
   file://0003-Increase-browser-creation-timeout.patch;patchdir=../ \
   file://0004-Reduce-BrowserConsoleLog.patch;patchdir=../ \
@@ -21,8 +21,8 @@ SRC_URI = "git://github.com/rdkcentral/rdkservices.git;protocol=git;branch=main 
   file://0009-Thunder-R4.4.3-upgrade-Fix.patch;patchdir=../ \
 "
 
-# Tip of the main at June 27, 2025
-SRCREV = "857eff8cdcf0a3506683043d0676d541e48dfaa3"
+# entservices-runtime, RDKEMW-24379 backport branch
+SRCREV = "2f15c2dbb80458dbf14ca2775651c165ce2a9e60"
 
 inherit cmake pkgconfig python3native
 
