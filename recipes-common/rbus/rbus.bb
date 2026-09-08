@@ -3,13 +3,13 @@ SUMMARY = "rbus library component"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
-SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=OTEL_rbus"
+SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=OTEL_rbus_E"
 
-SRCREV = "6f092f9eae2e0649d711dd0522b2021afa5296aa"
+SRCREV = "51f8b738969bb9a6fedab2a6d8ad19ca67672713"
 SRCREV_FORMAT = "base"
 
 PV = "2.12.0"
-PR = "r0"
+PR = "r1"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -29,7 +29,7 @@ BREAKPAD_LOGMAPPER_LOGLIST = "rtrouted.log"
 #RDK Specific Enablements
 EXTRA_OECMAKE += " -DCMAKE_BUILD_TYPE=Release "
 EXTRA_OECMAKE += " -DMSG_ROUNDTRIP_TIME=ON -DENABLE_RDKLOGGER=ON"
-EXTRA_OECMAKE += " -DBUILD_OTEL_BRIDGE=ON "
+EXTRA_OECMAKE += " -DENABLE_RBUS_OTEL_TRACE_CONTEXT=ON "
 
 #Gtest Specific Enablements
 EXTRA_OECMAKE += " ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '-DENABLE_UNIT_TESTING=ON -DBUILD_RBUS_BENCHMARK_TEST=ON', '', d)}"
