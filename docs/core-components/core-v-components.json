@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-28T12:36:08.683581+00:00",
+  "generatedAt": "2026-09-09T11:48:56.163783+00:00",
   "components": [
     {
       "name": "AppGateway",
@@ -184,14 +184,6 @@
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/iarmbus"
-      ]
-    },
-    {
-      "name": "iarmmgrs",
-      "category": "Remote Device Management",
-      "layer": "middleware",
-      "url": [
-        "https://github.com/rdkcentral/iarmmgrs"
       ]
     },
     {
@@ -451,11 +443,35 @@
       ]
     },
     {
+      "name": "WPE Client Libraries",
+      "category": "WPEFramework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/WebPlatformForEmbedded/libwpe"
+      ]
+    },
+    {
+      "name": "WPE WebKit",
+      "category": "WPEFramework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/WebPlatformForEmbedded/WPEWebKit"
+      ]
+    },
+    {
       "name": "WPEFramework",
       "category": "VIDEO",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/Thunder"
+      ]
+    },
+    {
+      "name": "WPEFramework UI",
+      "category": "WPEFramework",
+      "layer": "middleware",
+      "url": [
+        "https://github.com/rdkcentral/ThunderUI"
       ]
     }
   ]
