@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-09-09T11:48:56.163783+00:00",
+  "generatedAt": "2026-09-10T09:16:19.091172+00:00",
   "components": [
     {
       "name": "AppGateway",
@@ -20,7 +20,7 @@
     },
     {
       "name": "Bluetooth Manager",
-      "category": "Core Device Control Protocols",
+      "category": "Device Control Protocols",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/bluetooth_mgr"
@@ -28,7 +28,7 @@
     },
     {
       "name": "bluetooth-core",
-      "category": "Core Device Control Protocols",
+      "category": "Device Control Protocols",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/bluetooth"
@@ -36,7 +36,7 @@
     },
     {
       "name": "BlueZ",
-      "category": "Core Device Control Protocols",
+      "category": "Device Control Protocols",
       "layer": "middleware",
       "url": [
         "https://www.bluez.org"
@@ -156,7 +156,7 @@
     },
     {
       "name": "Gstreamer Rialto Plugin",
-      "category": "VIDEO",
+      "category": "Video",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rialto-gstreamer"
@@ -164,7 +164,7 @@
     },
     {
       "name": "HDMI CEC Header",
-      "category": "Core Device Control Protocols",
+      "category": "Device Control Protocols",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rdk-halif-hdmi_cec"
@@ -172,7 +172,7 @@
     },
     {
       "name": "HDMICec",
-      "category": "Core Device Control Protocols",
+      "category": "Device Control Protocols",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/hdmicec"
@@ -292,7 +292,7 @@
     },
     {
       "name": "RDK V Firmware Upgrader",
-      "category": "Core Device Control Protocols",
+      "category": "Device Control Protocols",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rdkfwupdater"
@@ -332,7 +332,7 @@
     },
     {
       "name": "Rialto",
-      "category": "VIDEO",
+      "category": "Video",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rialto"
@@ -340,7 +340,7 @@
     },
     {
       "name": "Rialto OCDM",
-      "category": "VIDEO",
+      "category": "Video",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rialto-ocdm"
@@ -348,7 +348,7 @@
     },
     {
       "name": "Rialto Server",
-      "category": "VIDEO Services",
+      "category": "Video Services",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rialto"
@@ -460,7 +460,7 @@
     },
     {
       "name": "WPEFramework",
-      "category": "VIDEO",
+      "category": "Video",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/Thunder"

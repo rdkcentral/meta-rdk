@@ -44,8 +44,8 @@
           "enum": [
             "App Framework",
             "Code Security",
-            "Core Device Control Protocols",
-            "Core RDK Validation Layer",
+            "Device Control Protocols",
+            "RDK Validation Layer",
             "Data Collection, Test and Diagnostic",
             "Display/Graphics",
             "Entertainment Services",
@@ -54,8 +54,8 @@
             "Remote Device Management",
             "System Start, Platform Management and misc utilities",
             "Thunder",
-            "VIDEO",
-            "VIDEO Services",
+            "Video",
+            "Video Services",
             "WPEFramework"
           ]
         },
