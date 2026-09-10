@@ -115,4 +115,3 @@ SYSTEMD_SERVICE:${PN}  = "btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr.conf"
 
-
