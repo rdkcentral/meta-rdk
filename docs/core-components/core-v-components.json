@@ -204,7 +204,7 @@
     },
     {
       "name": "libSysCallWrapper",
-      "category": "Code Security",
+      "category": "Security",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/libSyscallWrapper"
@@ -212,7 +212,7 @@
     },
     {
       "name": "libunpriv",
-      "category": "Code Security",
+      "category": "Security",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rdk-libunpriv"
@@ -244,7 +244,7 @@
     },
     {
       "name": "OpenSSL",
-      "category": "Code Security",
+      "category": "Security",
       "layer": "middleware",
       "url": [
         "https://www.openssl.org"
@@ -303,20 +303,12 @@
       "category": "System Start, Platform Management and misc utilities",
       "layer": "middleware",
       "url": [
-        "https://github.com/rdk-e/rdk-window-manager"
-      ]
-    },
-    {
-      "name": "RDK WPA Supplicant Config",
-      "category": "Code Security",
-      "layer": "middleware",
-      "url": [
-        "https://github.com/rdkcentral/meta-rdk-video/"
+        "https://github.com/rdkcentral/rdk-window-manager"
       ]
     },
     {
       "name": "rdkcertconfig",
-      "category": "Code Security",
+      "category": "Security",
       "layer": "middleware",
       "url": [
         "https://github.com/rdkcentral/rdk-cert-config"
@@ -439,7 +431,7 @@
       "category": "Display/Graphics",
       "layer": "vendor",
       "url": [
-        "https://code.rdkcentral.com/r/components/opensource/westeros"
+        "https://github.com/rdkcentral/westeros"
       ]
     },
     {

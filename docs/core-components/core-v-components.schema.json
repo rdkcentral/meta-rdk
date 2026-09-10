@@ -43,7 +43,7 @@
           "type": "string",
           "enum": [
             "App Framework",
-            "Code Security",
+            "Security",
             "Device Control Protocols",
             "RDK Validation Layer",
             "Data Collection, Test and Diagnostic",
