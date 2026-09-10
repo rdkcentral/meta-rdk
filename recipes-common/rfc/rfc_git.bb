@@ -1,15 +1,15 @@
 SUMMARY = "RFC helper applications"
 SECTION = "console/utils"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=bef3b9130aa5d626df3f7171f2dadfe2"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 
 PACKAGECONFIG ??= "rfctool"
 PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
 
-PV = "1.2.6"
+PV = "1.2.8"
 PR = "r0"
 
-SRCREV = "df9171e723c5aa2bb007484db71e67ffd9d0518a"
+SRCREV = "cdf9ecad2c043e34036579fa127f91e7b005e1a4"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
