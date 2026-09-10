@@ -54,6 +54,8 @@ do_install:append () {
 inherit breakpad-wrapper
 DEPENDS += "breakpad breakpad-wrapper"
 BREAKPAD_BIN:append = "logupload"
+BREAKPAD_BIN:append = "dcmd"
+BREAKPAD_BIN:append = "backup_logs"
 
 PACKAGECONFIG:append = " breakpad"
 PACKAGECONFIG[breakpad] = "--enable-breakpad,,breakpad,"
