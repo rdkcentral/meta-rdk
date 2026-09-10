@@ -1,0 +1,1 @@
+INHERIT += "embed-source-metadata"
