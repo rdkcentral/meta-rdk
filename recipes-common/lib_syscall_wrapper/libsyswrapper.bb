@@ -10,7 +10,7 @@ S = "${WORKDIR}/git"
 DEPENDS += "rdk-logger"
 SRCREV = "69fab9ab4403b7cda68af1d6a095b2cf5749c84f"
 SRC_URI = "${CMF_GITHUB_ROOT}/libSyscallWrapper;${CMF_GITHUB_SRC_URI_SUFFIX};name=libsyswrapper"
-#EXTRA_OECONF += "--enable-testapp"
+EXTRA_OECONF += "--enable-testapp"
 CFLAGS:append = " -Wall -Werror"
 CXXFLAGS:append = " -Wall -Werror"
 
