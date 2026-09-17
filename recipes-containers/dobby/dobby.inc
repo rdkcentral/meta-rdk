@@ -2,4 +2,4 @@ SRC_URI = "gitsm://github.com/rdkcentral/Dobby;protocol=https;branch=topic/RDKEM
 
 PV = "3.19.1"
 PR = "r0"
-SRCREV = "c2aa7ca6065fd21fc2d6ef96245dfdd353383553"
+SRCREV = "3f567b59d818c2dbed07e8559f543ba0d6eb3be6"
