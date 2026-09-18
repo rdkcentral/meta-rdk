@@ -3,9 +3,9 @@ SUMMARY = "rbus library component"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
-SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
+SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=feature/hasheq-test-rbus"
 
-SRCREV = "3e344546469f2ac2daf4314ff6acc7ca718580f6"
+SRCREV = "fb3217a76489e39bd8acde42fb34c38805f124c4"
 SRCREV_FORMAT = "base"
 
 PV = "2.12.0"
