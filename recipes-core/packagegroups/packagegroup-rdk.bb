@@ -11,7 +11,6 @@ PACKAGES = "\
 
 # Generic RDK components
 RDEPENDS:packagegroup-rdk-generic = "\
-    devicesettings \
     gst-plugins-rdk \
     iarmbus \
     iarmmgrs \
