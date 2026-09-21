@@ -367,12 +367,13 @@ index 072349bad..073dc9312 100644
              // Oke, so we are good to go.. Release....
              Core::Thread::Run();
  
-@@ -3556,3 +3561,5 @@ static GSourceFuncs _handlerIntervention =
+@@ -3553,4 +3558,6 @@ static GSourceFuncs _handlerIntervention =
+         bool _webProcessCheckInProgress;
++        Core::Sink<LaunchMetrics> _launchMetrics { };
++
          uint32_t _unresponsiveReplyNum;
          unsigned _frameCount;
          gint64 _lastDumpTime;
-+
-+        Core::Sink<LaunchMetrics> _launchMetrics { };
 -- 
 2.25.1
 
