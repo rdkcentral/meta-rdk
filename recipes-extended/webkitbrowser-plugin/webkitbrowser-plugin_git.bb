@@ -21,8 +21,9 @@ SRC_URI = "${CMF_GITHUB_ROOT}/entservices-runtime;${CMF_GITHUB_SRC_URI_SUFFIX} \
   file://0009-Thunder-R4.4.3-upgrade-Fix.patch;patchdir=../ \
 "
 
-# entservices-runtime, RDKEMW-24379 backport (PR 54)
-SRCREV = "cbbb9182e9791b0ec246aa998e91342ef5d68380"
+# entservices-runtime test/RDKEMW-24379-webkitbrowser-build-verification
+# TEMPORARY: squash of all eight RDKEMW-24379 branches, for a build only.
+SRCREV = "b656e8c2e1b08ea37e8aef87675fee3b02a5b77d"
 
 inherit cmake pkgconfig python3native
 
