@@ -15,7 +15,7 @@ RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
 
 
 PV = "1.9.9"
-PR = "r0"
+PR = "r1"
 
 S = "${WORKDIR}/git"
 
