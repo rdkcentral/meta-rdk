@@ -14,8 +14,8 @@ DEPENDS += "rdk-logger"
 RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
 
 
-PV = "1.9.9.1"
-PR = "r1"
+PV = "1.9.9"
+PR = "r0"
 
 S = "${WORKDIR}/git"
 
