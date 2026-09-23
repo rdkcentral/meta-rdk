@@ -1,4 +1,4 @@
-QTVER = "${@bb.utils.contains('DISTRO_FEATURES','comcast_qt5', '5.1.1%', '5.15.7', d)}"
+QTVER = "${@bb.utils.contains('DISTRO_FEATURES', 'comcast_qt5', '5.1.1%', bb.utils.contains('QT5_1_ENABLED', 'true', '5.1.1%', '5.15.7', d), d)}"
 
 PREFERRED_VERSION_qtbase-native = "${QTVER}"
 PREFERRED_VERSION_qtbase = "${QTVER}"
