@@ -3,7 +3,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://../LICENSE;md5=dc6e390ad71aef79d0c2caf3cde03a19"
 
 # keep PV/PR in sync with meta-middleware-generic-support/conf/include/generic-pkgrev.inc
-PV = "1.1.30"
+PV = "1.2.0"
 PR = "r0"
 PATCHTOOL = "git"
 
