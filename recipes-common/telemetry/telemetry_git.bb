@@ -12,6 +12,7 @@ DEPENDS += "curl cjson glib-2.0 breakpad-wrapper rbus libsyswrapper libunpriv"
 DEPENDS += "rdk-logger"
 
 RDEPENDS:${PN} += "curl cjson glib-2.0 rbus"
+RRECOMMENDS:${PN} += "curl"
 
 
 PV = "1.9.9"
