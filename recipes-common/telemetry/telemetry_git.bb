@@ -4,7 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "ff823cd555a2dcdffe439a183a70b1c655df3087"
+SRCREV = "6fb44430d880209b391657068e12603e38550b85"
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -45,6 +45,7 @@ do_install:append () {
     install -d ${D}/usr/include/
     install -d ${D}/lib/rdk/
     install -d ${D}${systemd_unitdir}/system
+    install -m 0644 ${S}/tests/telemetry-mixed-output.data ${D}/lib/rdk/
     install -m 644 ${S}/include/telemetry_busmessage_sender.h ${D}/usr/include/
     install -m 644 ${S}/include/telemetry2_0.h ${D}/usr/include/
     install -m 0755 ${S}/source/commonlib/t2Shared_api.sh ${D}/lib/rdk
