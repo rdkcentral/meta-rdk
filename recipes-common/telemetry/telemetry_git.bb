@@ -4,7 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "ff823cd555a2dcdffe439a183a70b1c655df3087"
+SRCREV = "99c8f6a886c99eca6aa483eb5c1803ad50a54b6a"
 SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -42,6 +42,8 @@ LDFLAGS:append = " \
 CXXFLAGS += "-DINCLUDE_BREAKPAD"
 
 do_install:append () {
+    install -d ${D}${libdir}/pkgconfig
+    install -m 0644 ${S}/tests/telemetry-hash-test.pc ${D}${libdir}/pkgconfig/
     install -d ${D}/usr/include/
     install -d ${D}/lib/rdk/
     install -d ${D}${systemd_unitdir}/system
@@ -59,6 +61,7 @@ FILES:${PN} = "\
 "
 FILES:${PN} += "${libdir}/*.so*"
 FILES:${PN} += "/lib/rdk/*"
+FILES:${PN} += "${libdir}/pkgconfig/telemetry-hash-test.pc"
 FILES:${PN}-dbg += "${sysconfdir}/logrotate/*"
 
 FILES_SOLIBSDEV = ""
