@@ -4,7 +4,6 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 
 PACKAGECONFIG ??= ""
-#PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
 
 PV = "1.2.8.1"
 PR = "r0"
@@ -45,6 +44,7 @@ do_install:append () {
         install -d ${D}${sysconfdir}
 
         install -m 0644 ${S}/rfc.properties ${D}${sysconfdir}/rfc.properties
+        rm -f ${D}${bindir}/rfctool
 }
 
 RDEPENDS:${PN} += "busybox"
@@ -55,7 +55,6 @@ PACKAGES =+ "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${PN}-gtest', 
 FILES:${PN}-gtest = "\
     ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${bindir}/rfc_gtest.bin', '', d)} \
 "
-#FILES:${PN} += "${bindir}/rfctool"
 FILES:${PN} += "${base_libdir}/*"
 FILES:${PN} += "${sysconfdir}/*"
 
