@@ -1,6 +1,6 @@
 SUMMARY = "Dobby Container Manager"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=c466d4ab8a68655eb1edf0bf8c1a8fb8"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=f8c666f8335218dba8b8d80121cf33f7"
 
 include dobby.inc
 
