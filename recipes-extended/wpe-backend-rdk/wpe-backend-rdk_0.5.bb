@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=ab5b52d145a58f5fcc0e2a531e7a2370"
 
 DEPENDS += "libwpe glib-2.0"
 
-PV ?= "0.5.0"
+PV ?= "0.5.1"
 PR ?= "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
@@ -23,6 +23,7 @@ SRC_URI += "file://0001-Send-SIGHUP-if-compositor-is-terminated.patch"
 SRC_URI += "file://comcast-manette-gamepad-support.patch"
 SRC_URI += "file://comcast-manette-gamepad-analog-button.patch"
 SRC_URI += "file://comcast-manette-gamepad-digital-trigger-fix.patch"
+SRC_URI += "file://comcast-RDKEMW-18589-manettegamepad-support-libmanette-1.0.patch"
 
 S = "${WORKDIR}/git"
 
