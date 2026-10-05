@@ -4,9 +4,9 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 
 PV = "1.2.8.1"
-PR = "r0"
+PR = "r1"
 
-SRCREV = "6b21cb134eec9c7a82a7abdd6a11c3e3a089ef8e"
+SRCREV = "ea6bd12662211ab6fdeac7ab2a19c39a3a9cf1f8"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
