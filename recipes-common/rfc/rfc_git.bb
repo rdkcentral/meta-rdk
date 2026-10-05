@@ -3,8 +3,6 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 
-PACKAGECONFIG ??= ""
-
 PV = "1.2.8.1"
 PR = "r0"
 
@@ -44,7 +42,6 @@ do_install:append () {
         install -d ${D}${sysconfdir}
 
         install -m 0644 ${S}/rfc.properties ${D}${sysconfdir}/rfc.properties
-        rm -f ${D}${bindir}/rfctool
 }
 
 RDEPENDS:${PN} += "busybox"
