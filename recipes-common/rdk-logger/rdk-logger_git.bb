@@ -4,7 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
+SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=develop"
 S = "${WORKDIR}/git"
 SRCREV = "3ce73a1d5946acc3b287111330214285202e3d4d"
 PV = "3.1.0"
