@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 PACKAGECONFIG ??= "rfctool"
 PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
 
-PV = "1.2.8.1"
+PV = "1.2.9"
 PR = "r0"
 
 SRCREV = "d8ee80c437621f5eb0029d9353c482d80b1a7215"
