@@ -40,7 +40,6 @@ BBMASK .= "|meta-rdk-comcast-video/recipes-extended/halsnmp/halsnmp-emu_git.bb"
 BBMASK .= "|.meta-rdk-comcast/recipes-common/nvm-sqlite/nvm-sqlite.bb"
 BBMASK .= "|meta-rdk-comcast/recipes-common/rdm/rdm.bbappend"
 
-
 # add rdkfwupgrader.bb to bbmask till such time that it supports video devices.
 # BBMASK .= "|.meta-rdk-comcast/recipes-extended/rdkfwupgrader/rdkfwupgrader.bb"
 

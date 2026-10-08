@@ -39,6 +39,9 @@ BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_APP_RELEASE') if d.getVar('MANIFEST_PATH_APP_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_APP_RELEASE') + '/conf/layer.conf') else ''} \
     "
 
+#wpa-supplicant
+BBLAYERS += "${@'${MANIFEST_PATH_META_RDK_WIRELESS_CONNECTIVITY}' if os.path.isfile('${MANIFEST_PATH_META_RDK_WIRELESS_CONNECTIVITY}/conf/layer.conf') else ''}"
+
 # Middleware layers: generic
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') + '/conf/layer.conf') else ''}"
