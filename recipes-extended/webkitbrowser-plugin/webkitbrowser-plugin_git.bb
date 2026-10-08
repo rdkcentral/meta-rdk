@@ -21,8 +21,8 @@ SRC_URI = "${CMF_GITHUB_ROOT}/entservices-runtime;${CMF_GITHUB_SRC_URI_SUFFIX} \
   file://0009-Thunder-R4.4.3-upgrade-Fix.patch;patchdir=../ \
 "
 
-# entservices-runtime develop
-SRCREV = "2ff4441c9be97fa475c54d48618eb91297a659a0"
+# entservices-runtime 1.2.7 tag
+SRCREV = "e057af11fffba885b2de96142f0c3bc76c2e3aad"
 
 inherit cmake pkgconfig python3native
 
