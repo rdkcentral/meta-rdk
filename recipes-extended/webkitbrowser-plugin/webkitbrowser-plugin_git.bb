@@ -22,7 +22,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/entservices-runtime;${CMF_GITHUB_SRC_URI_SUFFIX} \
 "
 
 # entservices-runtime develop
-SRCREV = "2ff4441c9be97fa475c54d48618eb91297a659a0"
+SRCREV = "9e149a1f3cce723f4079c24df7dcae46b092b673"
 
 inherit cmake pkgconfig python3native
 
