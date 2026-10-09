@@ -17,6 +17,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRCREV = "9bd5a2f4ab8587dbc9552d57e1e0310e561ce81f"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
+SRC_URI += "file://rdmDebugToolCron.sh"
 SRCREV_FORMAT = "rdmagent"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
