@@ -12,6 +12,7 @@ SRCREV = "dafeeebe73f826e2246682c2622752291c0a9985"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
+SRC_URI:append = " file://btmgr-bluetooth-sdk.conf"
 S = "${WORKDIR}/git"
 
 DEPENDS = "bluetooth-core cjson wpeframework-clientlibraries"
@@ -108,11 +109,14 @@ do_install:append() {
     sed -i -- "s/##BTMGR_STARTUP_DELAY##/${BTMGR_STARTUP_DELAY}/" ${WORKDIR}/btmgr.conf
     install -d ${D}${systemd_unitdir}/system/btmgr.service.d
     install -D -m 0644 ${WORKDIR}/btmgr.conf ${D}${systemd_unitdir}/system/btmgr.service.d/btmgr.conf
+    install -D -m 0644 ${WORKDIR}/btmgr-bluetooth-sdk.conf ${D}${systemd_unitdir}/system/btmgr.service.d/btmgr-bluetooth-sdk.conf
 }
 
 SYSTEMD_SERVICE:${PN}  = "btmgr.service"
 
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service"
 FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr.conf"
+FILES:${PN} += "${systemd_unitdir}/system/btmgr.service.d/btmgr-bluetooth-sdk.conf"
+
 
 
