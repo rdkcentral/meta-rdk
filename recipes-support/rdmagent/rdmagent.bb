@@ -73,14 +73,14 @@ do_install:append () {
         install -d ${D}${bindir}/
         install -d ${D}${sysconfdir}
         install -d ${D}${sysconfdir}/rdm/
-        install -d ${D}/rdklogger/
+        install -d ${D}/opt/rdm/
         install -D -m644 ${S}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
         install -D -m644 ${S}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m755 ${S}/scripts/getRdmDwldPath.sh ${D}${sysconfdir}/rdm/getRdmDwldPath.sh
         install -D -m755 ${S}/scripts/downloadUtils.sh ${D}${sysconfdir}/rdm/downloadUtils.sh
         install -D -m755 ${S}/scripts/loggerUtils.sh ${D}${sysconfdir}/rdm/loggerUtils.sh
         install -D -m600 ${S}/rdm-manifest.json ${D}${sysconfdir}/rdm/rdm-manifest.json
-        install -D -m755 ${WORKDIR}/rdmDebugToolCron.sh ${D}/rdklogger/rdmDebugToolCron.sh
+        install -D -m755 ${WORKDIR}/rdmDebugToolCron.sh ${D}/opt/rdm/rdmDebugToolCron.sh
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
@@ -89,4 +89,4 @@ SYSTEMD_SERVICE:${PN} += "apps_rdm.path"
 FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.service"
 FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.path"
 FILES:${PN} += "${sysconfdir}/rdm/* "
-FILES:${PN} += "/rdklogger/rdmDebugToolCron.sh"
+FILES:${PN} += "/opt/rdm/"
