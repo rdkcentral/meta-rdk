@@ -7,7 +7,8 @@ HOUR="$2"
 
 CRONTAB_DIR="/var/spool/cron/crontabs/"
 CRONFILE_BK="/tmp/rdmcron$$.txt"
-LOGFILE="/rdklogs/logs/rdm_debug_expiry.log"
+LOGFILE="/opt/logs/rdm_debug_expiry.log"
+CRON_LOGFILE="/opt/logs/rdm_status.log"
 
 if [ -z "$MIN" ] || [ -z "$HOUR" ]; then
     echo "Invalid cron time: MIN=$MIN HOUR=$HOUR" >> "$LOGFILE"
@@ -23,7 +24,7 @@ fi
 sed -i '/\/usr\/bin\/rdm -e/d' "$CRONFILE_BK"
 
 # Add the new RDM expiry cron entry
-echo "$MIN $HOUR * * * /usr/bin/rdm -e >> /rdklogs/logs/rdm_status.log 2>&1" >> "$CRONFILE_BK"
+echo "$MIN $HOUR * * * /usr/bin/rdm -e >> $CRON_LOGFILE 2>&1" >> "$CRONFILE_BK"
 
 # Update crontab
 if crontab "$CRONFILE_BK" -c "$CRONTAB_DIR"; then
@@ -35,4 +36,3 @@ fi
 echo "Failed to configure RDM expiry cron" >> "$LOGFILE"
 rm -f "$CRONFILE_BK"
 exit 1
-
