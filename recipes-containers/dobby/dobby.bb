@@ -31,9 +31,9 @@ inherit syslog-ng-config-gen
 
 SYSLOG-NG_FILTER = "rdkappmanagers"
 SYSLOG-NG_SERVICE_rdkappmanagers = "dobby.service"
-SYSLOG-NG_DESTINATION_rdkappmanagers = "rdkappmanagers.log"
+SYSLOG-NG_DESTINATION_rdkappmanagers = "apps-messages.log"
 SYSLOG-NG_LOGRATE_rdkappmanagers = "high"
-LOGROTATE_LOGNAME_rdkappmanagers = "rdkappmanagers.log"
+LOGROTATE_LOGNAME_rdkappmanagers = "apps-messages.log"
 LOGROTATE_SIZE_MEM_rdkappmanagers = "10485760"
 LOGROTATE_ROTATION_MEM_rdkappmanagers = "4"
 
@@ -104,5 +104,3 @@ FILES:${PN} += "${libexecdir}/DobbyInit"
 FILES:${PN} += "${libdir}/plugins/dobby/*.so*"
 FILES:${PN} += "${libdir}/libethanlog.so*"
 FILES:${PN} += "${libdir}/libocispec.so*"
-PV = "3.16.0"
-PR = "r0"

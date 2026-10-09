@@ -82,7 +82,7 @@ do_configure:prepend:kirkstone() {
 
 do_install () {
    install -d ${D}/${libdir}
-   cp -a ${S}/librtRemote* ${D}/${libdir}
+   install -m 0755 ${S}/librtRemote* ${D}/${libdir}
 
    mkdir -p ${D}${includedir}/rtcore
    install -m 0644 ${S}/include/rtRemote.h ${D}${includedir}/rtcore/
