@@ -17,6 +17,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRCREV = "9bd5a2f4ab8587dbc9552d57e1e0310e561ce81f"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
+SRC_URI += "file://rdmDebugToolCron.sh"
 SRCREV_FORMAT = "rdmagent"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
@@ -72,12 +73,14 @@ do_install:append () {
         install -d ${D}${bindir}/
         install -d ${D}${sysconfdir}
         install -d ${D}${sysconfdir}/rdm/
+        install -d ${D}/opt/rdm/
         install -D -m644 ${S}/apps-rdm.service ${D}${systemd_unitdir}/system/apps-rdm.service
         install -D -m644 ${S}/apps_rdm.path ${D}${systemd_unitdir}/system/apps_rdm.path
         install -D -m755 ${S}/scripts/getRdmDwldPath.sh ${D}${sysconfdir}/rdm/getRdmDwldPath.sh
         install -D -m755 ${S}/scripts/downloadUtils.sh ${D}${sysconfdir}/rdm/downloadUtils.sh
         install -D -m755 ${S}/scripts/loggerUtils.sh ${D}${sysconfdir}/rdm/loggerUtils.sh
         install -D -m600 ${S}/rdm-manifest.json ${D}${sysconfdir}/rdm/rdm-manifest.json
+        install -D -m755 ${WORKDIR}/rdmDebugToolCron.sh ${D}/opt/rdm/rdmDebugToolCron.sh
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
@@ -86,3 +89,4 @@ SYSTEMD_SERVICE:${PN} += "apps_rdm.path"
 FILES:${PN} += "${systemd_unitdir}/system/apps-rdm.service"
 FILES:${PN} += "${systemd_unitdir}/system/apps_rdm.path"
 FILES:${PN} += "${sysconfdir}/rdm/* "
+FILES:${PN} += "/opt/rdm/"
