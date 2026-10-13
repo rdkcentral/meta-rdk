@@ -10,7 +10,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 DEPENDS += "  libsyswrapper "
 
 #code will be cloned from the following SRC_URI
-SRCREV = "cd445dd473a9a82488d553faaf7e60e57a0e102b"
+SRCREV = "42a669c13430f95df03d32f0a15a0c7c045a7151"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk-cert-config;${CMF_GITHUB_SRC_URI_SUFFIX}"
 
 S = "${WORKDIR}/git"
