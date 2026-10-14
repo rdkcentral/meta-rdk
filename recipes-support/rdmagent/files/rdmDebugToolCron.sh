@@ -10,6 +10,16 @@ CRONFILE_BK="/tmp/rdmcron$$.txt"
 LOGFILE="/opt/logs/rdm_debug_expiry.log"
 CRON_LOGFILE="/opt/logs/rdm_status.log"
 
+mkdir -p /var/spool/cron 2>/dev/null || true
+
+if [ ! -d "$CRONTAB_DIR" ]; then
+    if [ -d "/var/spool/cron/crontabs" ]; then
+        CRONTAB_DIR="/var/spool/cron/crontabs"
+    else
+        CRONTAB_DIR="/var/spool/cron"
+    fi
+fi
+
 mkdir -p "$CRONTAB_DIR" 2>/dev/null || true
 
 if [ -z "$MIN" ] || [ -z "$HOUR" ]; then
