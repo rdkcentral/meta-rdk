@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "git://github.com/dshett549/rdk_logger.git;branch=topic/AllMythos;protocol=https"
 S = "${WORKDIR}/git"
-SRCREV = "${AUTOREV}"
+SRCREV = "f440c7c82985896f7ea23692d8354a2ec0a4dadd"
 PV = "3.1.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
