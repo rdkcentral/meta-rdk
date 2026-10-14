@@ -254,7 +254,7 @@ BB_SRCREV_POLICY ??= "cache"
 # CONF_VERSION is increased each time build/conf/ changes incompatibly and is used to
 # track the version of this file when it was generated. This can safely be ignored if
 # this doesn't mean anything to you.
-CONF_VERSION = "1"
+CONF_VERSION = "2"
 
 #
 # Debugging Tools
