@@ -27,6 +27,7 @@ BBLAYERS ?= " \
   ${@'${RDKROOT}/meta-rdk-auxiliary' if os.path.isfile('${RDKROOT}/meta-rdk-auxiliary/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-rdk-oss-reference' if os.path.isfile('${RDKROOT}/meta-rdk-oss-reference/conf/layer.conf') else ''} \
   ${@'${RDKROOT}/meta-rdk-oss-ext' if os.path.isfile('${RDKROOT}/meta-rdk-oss-ext/conf/layer.conf') else ''} \
+  ${@'${RDKROOT}/meta-rdk-bluetooth' if os.path.isfile('${RDKROOT}/meta-rdk-bluetooth/conf/layer.conf') else ''} \
   "
 
 # CPC requires dedicated licenses, we need to support build when CPC is not
