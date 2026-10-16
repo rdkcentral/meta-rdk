@@ -1,0 +1,17 @@
+Upstream-Status: Pending
+
+The exported DobbyTargets file must use the same library directory as the
+installed libocispec target on lib64 systems.
+
+--- a/cmake/Findlibocispec.cmake
++++ b/cmake/Findlibocispec.cmake
+@@ -174,8 +174,8 @@ function(GenerateLibocispec)
+     install(
+         TARGETS libocispec
+         EXPORT DobbyTargets
+-        LIBRARY DESTINATION lib
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     )
+
+     set_target_properties(libocispec PROPERTIES
+          POSITION_INDEPENDENT_CODE ON
