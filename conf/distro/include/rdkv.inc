@@ -82,7 +82,7 @@ PREFERRED_VERSION_cairo:kirkstone ?= "1.16.0"
 #Downgrade the cairo version since 1.16.0 is having compatibility issues in Arm devices.
 PREFERRED_VERSION_cairo_dunfell:arm = "1.14.6"
 
-PREFERRED_VERSION_systemd ?= "1:230%"
+PREFERRED_VERSION_systemd ?= "1:250%"
 
 PREFERRED_VERSION_mosquitto_dunfell = "1.6.%"
 PREFERRED_VERSION_mosquitto:kirkstone = "2.0.14"
