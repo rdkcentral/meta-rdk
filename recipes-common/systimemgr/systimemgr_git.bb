@@ -15,7 +15,7 @@ SRC_URI:append = " file://secure.conf "
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRCREV_FORMAT = "systemtimemgr"
-PV = "1.7.0"
+PV = "1.7.1"
 PR = "r0"
 
 CXXFLAGS += " -I${PKG_CONFIG_SYSROOT_DIR}/${includedir}/WPEFramework/powercontroller"
