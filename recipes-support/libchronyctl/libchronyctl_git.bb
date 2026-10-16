@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=3b83ef96387f14655fc854ddc3
 
 SRC_URI = "${CMF_GITHUB_ROOT}/time-utils.git;${CMF_GITHUB_SRC_URI_SUFFIX};name=time-utils"
 SRCREV = "c6bf6a42b8f780bc923858af40446c56d3ae77ca"
-PV = "1.1.0"
+PV = "1.1.1"
 PR = "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
