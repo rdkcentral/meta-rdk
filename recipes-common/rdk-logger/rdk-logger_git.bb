@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "git://github.com/dshett549/rdk_logger.git;branch=topic/RDKEMW-26942;protocol=https"
 S = "${WORKDIR}/git"
-SRCREV = "880a9f5eb80c9af252d45f067ef4cc53e709deee"
+SRCREV = "175c0a7e4e9ca7f8b4b16a6a62a03d662b61de04"
 PV = "3.1.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
