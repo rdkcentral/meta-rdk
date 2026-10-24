@@ -1,0 +1,26 @@
+
+--- a/sdk/src/common/CMakeLists.txt
++++ b/sdk/src/common/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ # Copyright The OpenTelemetry Authors
+ # SPDX-License-Identifier: Apache-2.0
+
++find_package(absl CONFIG REQUIRED)
++
+ set(COMMON_SRCS random.cc global_log_handler.cc env_variables.cc base64.cc
+                 disabled.cc)
+ if(WIN32)
+@@ -17,6 +19,16 @@
+ target_link_libraries(
+   opentelemetry_common PUBLIC opentelemetry_api opentelemetry_sdk
+                               Threads::Threads)
++
++  target_link_libraries(opentelemetry_common PRIVATE
++    absl::strings absl::strings_internal 
++    absl::base
++    absl::raw_logging_internal
++    absl::log_severity
++    absl::throw_delegate
++  )
++
++  set_target_properties(opentelemetry_common PROPERTIES LINK_FLAGS "-Wl,--no-as-needed")
