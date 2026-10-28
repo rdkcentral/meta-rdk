@@ -10,12 +10,12 @@ DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'safec', ' safec', " 
 DEPENDS:append = "${@bb.utils.contains('DISTRO_FEATURES', 'gdbus_bluez5', 'glib-2.0-native', '', d)}"
 
 RDEPENDS:${PN} = "dbus ${BLUEZ} rdk-logger telemetry"
-PV = "1.0.11"
+PV = "1.1.0"
 PR = "r2"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
-SRCREV = "c8d1ca7eb057eff90b7ce342ce532b9cd18a55e7"
+SRCREV = "b4298911ac587dd88029ff68e85290c6eb5d1eb2"
 SRCREV_FORMAT = "bluetooth-core"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth;${CMF_GITHUB_SRC_URI_SUFFIX}"
