@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 PV = "1.3.0"
 PR = "r0"
 
-SRCREV = "3e89270673192c94125cd0e5592bac5b5a1ab09e"
+SRCREV = "b28c50b49d19d4dccc1839d97c072107aa158486"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
@@ -42,6 +42,7 @@ do_install:append () {
         install -d ${D}${sysconfdir}
 
         install -m 0644 ${S}/rfc.properties ${D}${sysconfdir}/rfc.properties
+        rm -f ${D}${bindir}/rfctool
 }
 
 RDEPENDS:${PN} += "busybox"
@@ -52,7 +53,6 @@ PACKAGES =+ "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${PN}-gtest', 
 FILES:${PN}-gtest = "\
     ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${bindir}/rfc_gtest.bin', '', d)} \
 "
-FILES:${PN} += "${bindir}/rfctool"
 FILES:${PN} += "${base_libdir}/*"
 FILES:${PN} += "${sysconfdir}/*"
 
