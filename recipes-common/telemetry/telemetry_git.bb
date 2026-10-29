@@ -4,8 +4,8 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-SRCREV = "ff823cd555a2dcdffe439a183a70b1c655df3087"
-SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX}"
+SRCREV = "${AUTOREV}"
+SRC_URI = "${CMF_GITHUB_ROOT}/telemetry;${CMF_GITHUB_SRC_URI_SUFFIX};branch=topic/RDKB-66750"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 DEPENDS += "curl cjson glib-2.0 breakpad-wrapper rbus libsyswrapper libunpriv"
