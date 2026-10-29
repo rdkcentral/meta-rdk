@@ -1,11 +1,11 @@
 SUMMARY = "Chrony Control Shared Library"
 DESCRIPTION = "Builds and installs libchronyctl and headers"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=9456f9b4a53d355fa79ca11c5c912238"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/time-utils.git;${CMF_GITHUB_SRC_URI_SUFFIX};name=time-utils"
-SRCREV = "cb3c153dcc0919dd680adb496ea3897541aea7c7"
-PV = "1.1.0"
+SRCREV = "c6bf6a42b8f780bc923858af40446c56d3ae77ca"
+PV = "1.1.1"
 PR = "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
