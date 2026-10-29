@@ -3,13 +3,10 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 
-PACKAGECONFIG ??= "rfctool"
-PACKAGECONFIG[rfctool] = "--enable-rfctool=yes"
-
-PV = "1.2.9"
+PV = "1.3.0"
 PR = "r0"
 
-SRCREV = "fa851f2f6bb32df8154ebba09a91a37242384866"
+SRCREV = "f9454a977ca3919b248fe5199040e58bb62debc1"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
@@ -45,6 +42,7 @@ do_install:append () {
         install -d ${D}${sysconfdir}
 
         install -m 0644 ${S}/rfc.properties ${D}${sysconfdir}/rfc.properties
+        rm -f ${D}${bindir}/rfctool
 }
 
 RDEPENDS:${PN} += "busybox"
@@ -55,7 +53,6 @@ PACKAGES =+ "${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${PN}-gtest', 
 FILES:${PN}-gtest = "\
     ${@bb.utils.contains('DISTRO_FEATURES', 'gtestapp', '${bindir}/rfc_gtest.bin', '', d)} \
 "
-FILES:${PN} += "${bindir}/rfctool"
 FILES:${PN} += "${base_libdir}/*"
 FILES:${PN} += "${sysconfdir}/*"
 
