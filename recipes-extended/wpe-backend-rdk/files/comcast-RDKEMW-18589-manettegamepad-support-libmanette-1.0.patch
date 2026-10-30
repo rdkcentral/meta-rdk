@@ -1,0 +1,215 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Petar Tijanic <petartijanic01@gmail.com>
+Date: Wed, 2 Jul 2026 12:00:00 +0000
+Subject: [PATCH] manettegamepad: support both libmanette 0.2 and 1.0
+
+Add compile-time detection of the libmanette version via pkg-config.
+When manette-1 (libmanette 1.0) is found, define HAVE_MANETTE_1 and
+use the 1.0 API:
+ - Signals pass values directly (no ManetteEvent object)
+ - Signal names: button-pressed, button-released, absolute-axis-changed
+ - Device iteration via manette_monitor_list_devices()
+ - Button/axis enums (ManetteButton, ManetteAxis) instead of raw evdev codes
+ - D-pad mapped to buttons natively (no hat-axis handler needed)
+ - Triggers emitted as axis events (no analog button hack needed)
+
+When manette-0.2 is found, existing code path is used unchanged.
+
+Source: COMCAST
+Ticket: RDKEMW-18589
+---
+ cmake/FindLibManette.cmake            | 14 ++-
+ src/manettegamepad/CMakeLists.txt     |  4 +
+ src/manettegamepad/manette_gamepad.cpp | 136 +++++++++++++++++++++++++
+ 3 files changed, 151 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/FindLibManette.cmake b/cmake/FindLibManette.cmake
+index 3bdca83..a1b2c01 100644
+--- a/cmake/FindLibManette.cmake
++++ b/cmake/FindLibManette.cmake
+@@ -1,7 +1,8 @@
+ # - Try to find libmanette.
+ # Once done, this will define
+ #
+-#  LIBMANETTE_FOUND - system has libmanette.
++#  LIBMANETTE_FOUND       - system has libmanette.
++#  LIBMANETTE_IS_1_0      - TRUE if libmanette 1.0 (manette-1) was found.
+ #  LIBMANETTE_INCLUDE_DIRS - the libmanette include directories
+ #  LIBMANETTE_LIBRARIES - link these to use libmanette.
+ #
+@@ -30,8 +31,15 @@ elseif(LibManette_FIND_REQUIRED)
+ endif()
+ 
+ find_package(PkgConfig)
+-pkg_check_modules(LIBMANETTE ${_LIBMANETTE_MODE} manette-0.2)
+-
++# Try manette-1 (libmanette 1.0) first, fall back to manette-0.2
++pkg_check_modules(LIBMANETTE QUIET manette-1)
++if(LIBMANETTE_FOUND)
++    set(LIBMANETTE_IS_1_0 TRUE CACHE BOOL "libmanette 1.0 detected")
++else()
++    pkg_check_modules(LIBMANETTE ${_LIBMANETTE_MODE} manette-0.2)
++    set(LIBMANETTE_IS_1_0 FALSE CACHE BOOL "libmanette 0.2 detected")
++endif()
++
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(Libudev DEFAULT_MSG LIBMANETTE_FOUND LIBMANETTE_INCLUDE_DIRS LIBMANETTE_LIBRARIES)
+ mark_as_advanced(LIBMANETTE_INCLUDE_DIRS LIBMANETTE_LIBRARIES)
+diff --git a/src/manettegamepad/CMakeLists.txt b/src/manettegamepad/CMakeLists.txt
+index e7e15b7..f2a3c01 100644
+--- a/src/manettegamepad/CMakeLists.txt
++++ b/src/manettegamepad/CMakeLists.txt
+@@ -1,5 +1,9 @@
+ add_definitions(-DENABLE_MANETTE_GAMEPAD=1)
+ 
++if(LIBMANETTE_IS_1_0)
++    add_definitions(-DHAVE_MANETTE_1=1)
++endif()
++
+ list(APPEND WPE_PLATFORM_SOURCES
+     src/manettegamepad/manette_gamepad.cpp
+ )
+diff --git a/src/manettegamepad/manette_gamepad.cpp b/src/manettegamepad/manette_gamepad.cpp
+index c7a8336..e5f8a01 100644
+--- a/src/manettegamepad/manette_gamepad.cpp
++++ b/src/manettegamepad/manette_gamepad.cpp
+@@ -26,8 +26,14 @@
+ #include <functional>
+ #include <glib.h>
+ #include <glib-unix.h>
++#ifdef HAVE_MANETTE_1
++#include <libmanette.h>
++#else
+ #include <libmanette/libmanette.h>
++#endif
+ #include <linux/input.h>
++#ifndef HAVE_MANETTE_1
+ #include <dlfcn.h>`
++#endif
+ 
+ struct GamepadProxy;
+@@ -66,5 +72,73 @@ struct GamepadProvider
+     return WPE_GAMEPAD_AXIS_COUNT; //Should have been unknown
+   }
++#ifdef HAVE_MANETTE_1
++  // libmanette 1.0: ManetteAxis enum → wpe_gamepad_axis / trigger buttons
++  static void onAbsoluteAxisChanged(ManetteDevice* device, ManetteAxis axis, double value, GamepadProvider* provider)
++  {
++    switch (axis) {
++    case MANETTE_AXIS_LEFT_X:
++        provider->absoluteAxisChanged(device, WPE_GAMEPAD_AXIS_LEFT_STICK_X, value);
++        break;
++    case MANETTE_AXIS_LEFT_Y:
++        provider->absoluteAxisChanged(device, WPE_GAMEPAD_AXIS_LEFT_STICK_Y, value);
++        break;
++    case MANETTE_AXIS_RIGHT_X:
++        provider->absoluteAxisChanged(device, WPE_GAMEPAD_AXIS_RIGHT_STICK_X, value);
++        break;
++    case MANETTE_AXIS_RIGHT_Y:
++        provider->absoluteAxisChanged(device, WPE_GAMEPAD_AXIS_RIGHT_STICK_Y, value);
++        break;
++    case MANETTE_AXIS_LEFT_TRIGGER:
++        // 1.0 mapping already normalizes triggers to 0.0-1.0
++        provider->analogButtonChanged(device, WPE_GAMEPAD_BUTTON_LEFT_TRIGGER, value);
++        break;
++    case MANETTE_AXIS_RIGHT_TRIGGER:
++        provider->analogButtonChanged(device, WPE_GAMEPAD_BUTTON_RIGHT_TRIGGER, value);
++        break;
++    default:
++        break;
++    }
++  }
++
++  // libmanette 1.0: ManetteButton enum → wpe_gamepad_button
++  static enum wpe_gamepad_button toStandardGamepadButton_v1(ManetteButton button)
++  {
++    switch (button) {
++    case MANETTE_BUTTON_SOUTH:          return WPE_GAMEPAD_BUTTON_BOTTOM;
++    case MANETTE_BUTTON_EAST:           return WPE_GAMEPAD_BUTTON_RIGHT;
++    case MANETTE_BUTTON_WEST:           return WPE_GAMEPAD_BUTTON_LEFT;
++    case MANETTE_BUTTON_NORTH:          return WPE_GAMEPAD_BUTTON_TOP;
++    case MANETTE_BUTTON_LEFT_SHOULDER:  return WPE_GAMEPAD_BUTTON_LEFT_SHOULDER;
++    case MANETTE_BUTTON_RIGHT_SHOULDER: return WPE_GAMEPAD_BUTTON_RIGHT_SHOULDER;
++    case MANETTE_BUTTON_SELECT:         return WPE_GAMEPAD_BUTTON_SELECT;
++    case MANETTE_BUTTON_START:          return WPE_GAMEPAD_BUTTON_START;
++    case MANETTE_BUTTON_MODE:           return WPE_GAMEPAD_BUTTON_CENTER;
++    case MANETTE_BUTTON_LEFT_STICK:     return WPE_GAMEPAD_BUTTON_LEFT_STICK;
++    case MANETTE_BUTTON_RIGHT_STICK:    return WPE_GAMEPAD_BUTTON_RIGHT_STICK;
++    case MANETTE_BUTTON_DPAD_UP:        return WPE_GAMEPAD_BUTTON_D_PAD_TOP;
++    case MANETTE_BUTTON_DPAD_DOWN:      return WPE_GAMEPAD_BUTTON_D_PAD_BOTTOM;
++    case MANETTE_BUTTON_DPAD_LEFT:      return WPE_GAMEPAD_BUTTON_D_PAD_LEFT;
++    case MANETTE_BUTTON_DPAD_RIGHT:     return WPE_GAMEPAD_BUTTON_D_PAD_RIGHT;
++    default:
++        g_warning("ManetteGamepad: Unsupported button %d", button);
++        return WPE_GAMEPAD_BUTTON_COUNT;
++    }
++  }
++
++  // libmanette 1.0: button-pressed signal (ManetteButton passed directly)
++  static void onButtonPressed(ManetteDevice* device, ManetteButton button, GamepadProvider* provider)
++  {
++    provider->buttonPressedOrReleased(device, toStandardGamepadButton_v1(button), true);
++  }
++
++  // libmanette 1.0: button-released signal (ManetteButton passed directly)
++  static void onButtonReleased(ManetteDevice* device, ManetteButton button, GamepadProvider* provider)
++  {
++    provider->buttonPressedOrReleased(device, toStandardGamepadButton_v1(button), false);
++  }
++
++#else /* !HAVE_MANETTE_1 — libmanette 0.2 code follows */
++
+   static void onAbsoluteAxisEvent(ManetteDevice* device, ManetteEvent* event, GamepadProvider* provider)
+   {
+     uint16_t axis;
+@@ -211,14 +279,23 @@ struct GamepadProvider
+     else
+       provider->buttonPressedOrReleased(device, toStandardGamepadButton(button), false);
+   }
++#endif /* HAVE_MANETTE_1 */
+ 
+   void listentoManetteDevice(ManetteDevice * device)
+   {
++#ifdef HAVE_MANETTE_1
++     g_signal_connect(device, "button-pressed", G_CALLBACK(onButtonPressed), this);
++     g_signal_connect(device, "button-released", G_CALLBACK(onButtonReleased), this);
++     g_signal_connect(device, "absolute-axis-changed", G_CALLBACK(onAbsoluteAxisChanged), this);
++     // In 1.0, d-pad is mapped to buttons natively — no hat-axis handler needed
++#else
+      g_signal_connect(device, "button-press-event", G_CALLBACK(onButtonPressEvent), this);
+      g_signal_connect(device, "button-release-event", G_CALLBACK(onButtonReleaseEvent), this);
+      g_signal_connect(device, "absolute-axis-event", G_CALLBACK(onAbsoluteAxisEvent), this);
+      g_signal_connect(device, "hat-axis-event", G_CALLBACK(onHatAxisEvent), this);
++#endif
+   }
++
+   
+  void analogButtonChanged(ManetteDevice* device, enum wpe_gamepad_button  button, double value)
+   {
+@@ -472,5 +543,18 @@ struct GamepadProvider
+   gboolean discoverGamePads()
+   {
++#ifdef HAVE_MANETTE_1
++    if (!monitoring) {
++        mtMonitor.reset(manette_monitor_new());
++        g_signal_connect(mtMonitor.get(), "device-connected", G_CALLBACK(onDeviceConnected), this);
++        g_signal_connect(mtMonitor.get(), "device-disconnected", G_CALLBACK(onDeviceDisconnected), this);
++        gsize numDevices = 0;
++        ManetteDevice** devices = manette_monitor_list_devices(mtMonitor.get(), &numDevices);
++        for (gsize i = 0; i < numDevices; i++)
++            deviceConnected(devices[i]);
++        g_free(devices);
++        monitoring = true;
++    }
++#else
+     struct IterDeleter
+     {
+        void operator()(ManetteMonitorIter * ptr)
+@@ -491,6 +573,7 @@ struct GamepadProvider
+       }
+      monitoring = true;
+     }
++#endif
+     return true;
+   }
+ 
