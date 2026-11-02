@@ -17,7 +17,6 @@ RDEPENDS:packagegroup-rdk-generic-mediaserver = "\
     hdparm \
     dibbler-client \
     procps \
-    sys-utils \
     xfsprogs \
     ntp \
     power-state-monitor \
