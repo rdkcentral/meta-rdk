@@ -1,7 +1,7 @@
 SUMMARY = "Dobby Thunder Plugin - allows containers to access Thunder via \
            JSON-RPC and generate security token"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=c466d4ab8a68655eb1edf0bf8c1a8fb8"
+LIC_FILES_CHKSUM = "file://${WORKDIR}/git/LICENSE;md5=f8c666f8335218dba8b8d80121cf33f7"
 
 include dobby.inc
 
