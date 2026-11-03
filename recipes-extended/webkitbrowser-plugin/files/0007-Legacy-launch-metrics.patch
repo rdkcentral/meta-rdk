@@ -344,15 +344,12 @@ diff --git a/WebKitBrowser/WebKitImplementation.cpp b/WebKitBrowser/WebKitImplem
 index 072349bad..073dc9312 100644
 --- a/WebKitBrowser/WebKitImplementation.cpp
 +++ b/WebKitBrowser/WebKitImplementation.cpp
-@@ -89,6 +89,8 @@ WK_EXPORT void WKPreferencesSetPageCacheEnabled(WKPreferencesRef preferences, bo
- #include <testrunner.h>
- #endif // ENABLE_TESTING
+@@ -88,3 +88,5 @@
  
 +#include "LegacyLaunchMetrics.h"
 +
  namespace WPEFramework {
  namespace Plugin {
- 
 @@ -1674,6 +1676,7 @@ static GSourceFuncs _handlerIntervention =
                          string url = std::get<1>(data);
                          object->_adminLock.Lock();
@@ -370,15 +367,13 @@ index 072349bad..073dc9312 100644
              // Oke, so we are good to go.. Release....
              Core::Thread::Run();
  
-@@ -3556,6 +3561,8 @@ static GSourceFuncs _handlerIntervention =
+@@ -3553,4 +3558,6 @@ static GSourceFuncs _handlerIntervention =
+         bool _webProcessCheckInProgress;
++        Core::Sink<LaunchMetrics> _launchMetrics { };
++
          uint32_t _unresponsiveReplyNum;
          unsigned _frameCount;
          gint64 _lastDumpTime;
-+
-+        Core::Sink<LaunchMetrics> _launchMetrics { };
-     };
- 
-     SERVICE_REGISTRATION(WebKitImplementation, 1, 0);
 -- 
 2.25.1
 
