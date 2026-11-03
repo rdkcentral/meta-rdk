@@ -23,7 +23,6 @@ CFLAGS:append = " \
                 -DRFC_API_ENABLED \
                 -DT2_EVENT_ENABLED \
                 -DRDK_LOGGER \
-                -DUSE_EXTENDED_LOGGER_INIT \
                 -DRBUS_API_ENABLED \
                 "
 
