@@ -1,0 +1,12 @@
+diff --git a/daemon/process/dobby.service b/daemon/process/dobby.service
+index 567d535..d4cbab5 100644
+--- a/daemon/process/dobby.service
++++ b/daemon/process/dobby.service
+@@ -34,7 +34,6 @@
+ [Unit]
+ Description=RDK Dobby (Container) daemon
+ Requires=dbus.socket dbus.service
+-Before=wpeframework.service
+ After=dbus.socket dbus.service apparmor.service
+ 
+ [Service]
