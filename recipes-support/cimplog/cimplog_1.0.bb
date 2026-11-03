@@ -21,3 +21,4 @@ EXTRA_OECMAKE += "-DRDK_LOGGER=ON -DBUILD_TESTING=OFF -DBUILD_YOCTO=true"
 
 ASNEEDED_hybrid = ""
 ASNEEDED_client = ""
+FILES:${PN}-staticdev += "/usr/lib/libcimplog.a"
