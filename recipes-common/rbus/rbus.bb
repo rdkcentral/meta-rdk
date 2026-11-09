@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
 SRC_URI = "git://github.com/dshett549/rbus.git;branch=topic/Mythos-Critical"
 
-SRCREV = "d209634231e74c5964971b0ad782fab17e870d45"
+SRCREV = "15a6b4b163c2b4fa1fd34a5fa4d0df137677bad6"
 SRCREV_FORMAT = "base"
 
 PV = "2.14.0"
