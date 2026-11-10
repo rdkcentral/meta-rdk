@@ -3,10 +3,10 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ab9fb9cce9e613f50442aa48f62301fc"
 
-PV = "1.3.0"
+PV = "1.3.1"
 PR = "r0"
 
-SRCREV = "f9454a977ca3919b248fe5199040e58bb62debc1"
+SRCREV = "20ae5ebf834b5c70dbba43e01f50a6b032654086"
 SRC_URI = "${CMF_GITHUB_ROOT}/rfc;${CMF_GITHUB_SRC_URI_SUFFIX};name=rfc"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 S = "${WORKDIR}/git"
