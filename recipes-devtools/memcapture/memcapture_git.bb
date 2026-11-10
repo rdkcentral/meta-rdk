@@ -10,12 +10,12 @@ PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRCREV = "0f32312c24483ee1d41748d24746349dda05aeff"
-SRC_URI = "git://github.com/Saranya2421/MemCapture.git;branch=main;name=src;destsuffix=git"
+SRC_URI = "git://github.com/Saranya2421/MemCapture.git;branch=topic/RDKEMW-25821;name=src;destsuffix=git"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-DEPENDS = "inja nlohmann-json"
+DEPENDS = "inja nlohmann-json re2"
 
 inherit cmake syslog-ng-config-gen systemd
 EXTRA_OECMAKE += "-DCMAKE_BUILD_TYPE=Release"
