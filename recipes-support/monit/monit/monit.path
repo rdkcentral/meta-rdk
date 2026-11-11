@@ -1,0 +1,10 @@
+[Unit]
+Description=Start monit when /tmp/.monit.start exists
+
+[Path]
+# Start monit.service once this trigger file is created.
+PathExists=/tmp/.monit.start
+Unit=monit.service
+
+[Install]
+WantedBy=multi-user.target
