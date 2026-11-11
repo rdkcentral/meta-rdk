@@ -39,6 +39,9 @@ BBLAYERS =+ " \
     ${@d.getVar('MANIFEST_PATH_APP_RELEASE') if d.getVar('MANIFEST_PATH_APP_RELEASE') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_APP_RELEASE') + '/conf/layer.conf') else ''} \
     "
 
+#wpa-supplicant
+BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_WIRELESS_CONNECTIVITY') if d.getVar('MANIFEST_PATH_RDK_WIRELESS_CONNECTIVITY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_WIRELESS_CONNECTIVITY') + '/conf/layer.conf') else ''}"
+
 # Middleware layers: generic
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_CSPC') + '/conf/layer.conf') else ''}"
 BBLAYERS =+ " ${@d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') if d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_MIDDLEWARE_DEV_RESTRICTED') + '/conf/layer.conf') else ''}"
@@ -92,6 +95,3 @@ BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_OPENEMBEDDED') + '/meta-gnome' if d.getV
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_BINDER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_BINDER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_BINDER') + '/conf/layer.conf') else ''}"
 
 BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_GSTREAMER') if d.getVar('IS_VDEVICE_X86_64_BUILD') == '1' and d.getVar('MANIFEST_PATH_GSTREAMER') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_GSTREAMER') + '/conf/layer.conf') else ''}"
-
-#wpa-supplicant
-BBLAYERS =+ "${@d.getVar('MANIFEST_PATH_RDK_WIRELESS_CONNECTIVITY') if d.getVar('MANIFEST_PATH_RDK_WIRELESS_CONNECTIVITY') is not None and os.path.isfile(d.getVar('MANIFEST_PATH_RDK_WIRELESS_CONNECTIVITY') + '/conf/layer.conf') else ''}"
