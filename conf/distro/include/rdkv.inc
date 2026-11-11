@@ -32,9 +32,6 @@ PREFERRED_VERSION_breakpad-native_dunfell = "${@bb.utils.contains('DISTRO_FEATUR
 
 BBMASK .= "|.*recipes-ccsp|.*recipes-rdkb|.*webpabroadband"
 
-# Build flags to control default SecAPI engine for netflix component
-DISTRO_FEATURES:append = " netflix_cryptanium"
-
 BBMASK .= "|meta-rdk-comcast-video/recipes-extended/mediaframework/emu-podserver_git.bb"
 BBMASK .= "|meta-rdk-comcast-video/recipes-extended/halsnmp/halsnmp-emu_git.bb"
 BBMASK .= "|.meta-rdk-comcast/recipes-common/nvm-sqlite/nvm-sqlite.bb"
@@ -47,7 +44,6 @@ BBMASK .= "|meta-rdk-comcast/recipes-common/rdm/rdm.bbappend"
 # add webconfig-framework.bb to bbmask till such time that it supports Video devices.
 # BBMASK .= "|.meta-rdk/recipes-common/webconfig-framework/webconfig-framework.bb"
 
-DISTRO_FEATURES:append = " playreadycdmi_cryptanium"
 DISTRO_FEATURES:append = " widevine_hardware"
 
 DISTRO_FEATURES:append = " cgroup"
