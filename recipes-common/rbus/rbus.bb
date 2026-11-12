@@ -3,9 +3,9 @@ SUMMARY = "rbus library component"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
-SRC_URI = "git://github.com/dshett549/rbus.git;branch=topic/Mythos-Critical"
+SRC_URI = "git://github.com/dshett549/rbus.git;branch=topic/remove-privateconn"
 
-SRCREV = "4de0412a6e0dd72579b01891ca733d8e003caec5"
+SRCREV = "f98b59b9c3c4a69468fd7cad8139a54e01e1c871"
 SRCREV_FORMAT = "base"
 
 PV = "2.14.0"
