@@ -6,8 +6,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/rdk_logger;protocol=https;branch=main"
 S = "${WORKDIR}/git"
-SRCREV = "eacd6915758e48b62fbb011d94f1b0ffe67ec4ef"
-PV = "3.0.0"
+SRCREV = "85e2b32bbc0981974ff8c5c2ce39402f8d5a5a02"
+PV = "3.2.0"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
@@ -30,7 +30,5 @@ do_install:append () {
 }
 
 FILES:${PN} += "${base_libdir}/rdk/logMilestone.sh \
-                /rdkLogMileStone \
-                /rdklogctrl \
                 ${base_libdir} \
                 ${base_libdir}/rdk"
