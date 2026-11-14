@@ -24,7 +24,7 @@ inherit autotools pkgconfig
 
 INCLUDE_DIRS = " \
     -I${PKG_CONFIG_SYSROOT_DIR}/usr/include/glib-2.0 \
-    -I${PKG_CONFIG_SYSROOT_DIR}/usr/lib/glib-2.0/include \
+    -I${PKG_CONFIG_SYSROOT_DIR}/${libdir}/glib-2.0/include \
     "
 
 CXXFLAGS += " -std=c++11 -fPIC -D_REENTRANT -rdynamic -Wall -Werror ${INCLUDE_DIRS}"

@@ -8,15 +8,15 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 PKG_VERSION = "0.5.15"
 
-SRC_URI = "https://github.com/xmidt-org/xmidt-agent/releases/download/v${PKG_VERSION}/xmidt-agent_${PKG_VERSION}_rdk_armv7.ipk;name=xmidt-agent"
-SRC_URI[xmidt-agent.md5sum] = "a42eef93f5f129da6a25f1ce5386b2ee"
-SRC_URI[xmidt-agent.sha256sum] = "c4fb451d4dfbf51ae71f35bb33dfc8c85ae9ff0a2139fc46e96cac859adbf62e"
+SRC_URI = "https://github.com/xmidt-org/xmidt-agent/releases/download/v${PKG_VERSION}/xmidt-agent_${PKG_VERSION}_rdk_arm64.ipk;name=xmidt-agent"
+SRC_URI[xmidt-agent.md5sum] = "e7d188bc53aebd7a065cda34dd80c557"
+SRC_URI[xmidt-agent.sha256sum] = "619afe2f03f23876e7229392dd782e60f9f95b828bcdffcd95094d56a3584c98"
 
 S = "${WORKDIR}"
 
 do_unpack() {
     cd ${DL_DIR}
-    tar -xvf xmidt-agent_${PKG_VERSION}_rdk_armv7.ipk -C ${S}
+    tar -xvf xmidt-agent_${PKG_VERSION}_rdk_arm64.ipk -C ${S}
 }
 
 do_install() {
