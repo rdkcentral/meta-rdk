@@ -8,7 +8,7 @@ SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
 SRCREV = "5f74c2fbe0019781410be4b1160768adda96d1a4"
 SRCREV_FORMAT = "base"
 
-PV = "2.14.0"
+PV = "2.14.1"
 PR = "r0"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
