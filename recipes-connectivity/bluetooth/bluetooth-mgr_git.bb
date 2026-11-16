@@ -4,7 +4,7 @@ SECTION = "console/utils"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=175792518e4ac015ab6696d16c4f607e"
 
-PV = "btmgr-hotfix-8.6.3-r1"
+PV = "btmgr-hotfix-8.6.3-r2"
 PR = "r2"
 
 SRCREV_FORMAT = "bluetooth-mgr"
