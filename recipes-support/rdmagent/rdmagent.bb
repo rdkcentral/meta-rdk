@@ -17,6 +17,7 @@ FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
 SRCREV = "c73653ae7e4a1d6ffaf720fd9a19995557c31f16"
 SRC_URI = "${CMF_GITHUB_ROOT}/rdm-agent;${CMF_GITHUB_SRC_URI_SUFFIX};name=rdmagent"
+SRC_URI += "file://rdmDebugToolCron.sh"
 SRCREV_FORMAT = "rdmagent"
 
 # Make sure our source directory (for the build) matches the directory structure in the tarball
@@ -78,6 +79,7 @@ do_install:append () {
         install -D -m755 ${S}/scripts/downloadUtils.sh ${D}${sysconfdir}/rdm/downloadUtils.sh
         install -D -m755 ${S}/scripts/loggerUtils.sh ${D}${sysconfdir}/rdm/loggerUtils.sh
         install -D -m600 ${S}/rdm-manifest.json ${D}${sysconfdir}/rdm/rdm-manifest.json
+        install -D -m755 ${WORKDIR}/rdmDebugToolCron.sh ${D}${sysconfdir}/rdm/rdmDebugToolCron.sh
 }
 
 SYSTEMD_SERVICE:${PN} = "apps-rdm.service"
