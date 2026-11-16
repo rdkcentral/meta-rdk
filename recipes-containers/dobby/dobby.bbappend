@@ -7,4 +7,4 @@ EXTRA_OECMAKE += "${@bb.utils.contains('DISTRO_FEATURES', 'RDKTV_APP_HIBERNATE',
 # Enable plugins
 PACKAGECONFIG:append = " gpu localtime rtscheduling httpproxy ionmemory devicemapper"
 
-SRC_URI:append = " file://9999-avlog-dobby-dev-node.patch
+SRC_URI:append = " file://9999-avlog-dobby-dev-node.patch"
