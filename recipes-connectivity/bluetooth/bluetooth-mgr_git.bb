@@ -14,7 +14,7 @@ SRC_URI = "${CMF_GITHUB_ROOT}/bluetooth_mgr;${CMF_GITHUB_SRC_URI_SUFFIX}"
 SRC_URI:append = " file://btmgr.conf"
 S = "${WORKDIR}/git"
 
-DEPENDS = "bluetooth-core cjson wpeframework-clientlibraries"
+DEPENDS = "bluetooth-core cjson wpeframework-clientlibraries entservices-powercontroller"
 
 RDEPENDS:${PN}  = " bluetooth-core"
 RDEPENDS:${PN} += " cjson"
