@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
 SRC_URI = "git://github.com/dshett549/rbus.git;branch=topic/AllMythos"
 
-SRCREV = "cc4a7280b9cb8e4a20103261763a7494be36aa68"
+SRCREV = "36fcf05b4519c1c228f9b83ac63e62c88c794910"
 SRCREV_FORMAT = "base"
 
 PV = "2.14.0"
