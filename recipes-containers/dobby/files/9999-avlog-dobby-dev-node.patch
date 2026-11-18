@@ -1,0 +1,73 @@
+From: avlog <dev>
+Subject: [PATCH] DobbySpecConfig: add /dev/avlog to every container (dev only)
+
+avlog A/V metrics: give every container started from a spec the avlog
+char device (node + device cgroup allow) when /dev/avlog exists on the
+host. Uses the same ADDITIONAL_DEVICE_NODES section as the GPU/VPU
+device nodes. No effect when avlog.ko is not loaded.
+
+Needed for viper_ipa (daemon-app, no gpu/vpu access) until /dev/avlog
+is added to its app spec. Dev builds only.
+
+diff --git a/bundle/lib/include/DobbySpecConfig.h b/bundle/lib/include/DobbySpecConfig.h
+index 8d176fa1..e9ab5979 100644
+--- a/bundle/lib/include/DobbySpecConfig.h
++++ b/bundle/lib/include/DobbySpecConfig.h
+@@ -178,6 +178,8 @@ private:
+     static int64_t calculatePhysicalMemoryLimit(int64_t memLimit,
+                                                 double swapToRamRatio);
+ 
++    static void addAvlogDevNode(ctemplate::TemplateDictionary *dictionary);
++
+     static  void addVpuDevNodes(const std::shared_ptr<const IDobbySettings::HardwareAccessSettings> &settings,
+                                 ctemplate::TemplateDictionary *dict);
+ 
+diff --git a/bundle/lib/source/DobbySpecConfig.cpp b/bundle/lib/source/DobbySpecConfig.cpp
+index 99e3956f..0b99ff98 100644
+--- a/bundle/lib/source/DobbySpecConfig.cpp
++++ b/bundle/lib/source/DobbySpecConfig.cpp
+@@ -36,6 +36,7 @@
+ #include <sys/sysinfo.h>
+ #include <sys/capability.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <fstream>
+ #include <sstream>
+ 
+@@ -733,6 +734,9 @@ bool DobbySpecConfig::parseSpec(ctemplate::TemplateDictionary* dictionary,
+         dictionary->SetValue(NO_NEW_PRIVS, "true");
+     }
+ 
++    // step 5.1 - avlog (dev): give every container /dev/avlog when avlog.ko is loaded
++    addAvlogDevNode(dictionary);
++
+     // step 6 - enable the RDK plugins section
+     dictionary->ShowSection(ENABLE_RDK_PLUGINS);
+ 
+@@ -1517,6 +1521,26 @@ void DobbySpecConfig::addGpuDevNodes(const std::shared_ptr<const IDobbySettings:
+     }
+ }
+ 
++// -----------------------------------------------------------------------------
++/**
++ *  @brief avlog (dev): adds /dev/avlog to the container, node + device cgroup
++ *  allow, if the avlog A/V metrics module is loaded. Checked per container, so
++ *  it follows insmod/rmmod.
++ */
++void DobbySpecConfig::addAvlogDevNode(ctemplate::TemplateDictionary *dictionary)
++{
++    struct stat st;
++
++    if ((stat("/dev/avlog", &st) != 0) || !S_ISCHR(st.st_mode))
++        return;
++
++    ctemplate::TemplateDictionary *subDict = dictionary->AddSectionDictionary(ADDITIONAL_DEVICE_NODES);
++    subDict->SetValue(DEVICE_PATH, "/dev/avlog");
++    subDict->SetIntValue(DEVICE_MAJOR, major(st.st_rdev));
++    subDict->SetIntValue(DEVICE_MINOR, minor(st.st_rdev));
++    subDict->SetIntValue(DEVICE_FILE_MODE, st.st_mode & 0666);
++}
++
+ // -----------------------------------------------------------------------------
+ /**
+  *  @brief Adds the VPU device nodes (if any) to supplied dictionary.
