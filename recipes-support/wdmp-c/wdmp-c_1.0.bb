@@ -1,5 +1,5 @@
 SUMMARY = "C library for WebPA Data Model Parser (WDMP)"
-HOMEPAGE = "https://github.com/Comcast/wdmp-c"
+HOMEPAGE = "https://github.com/rdkcentral/wdmp-c"
 SECTION = "libs"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
