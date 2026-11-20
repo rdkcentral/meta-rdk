@@ -8,7 +8,7 @@ PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 DEPENDS = "cjson nopoll wrp-c wdmp-c trower-base64 nanomsg msgpack-c"
 
 SRCREV = "8263bb06c8c16dc114c800a3d29d0c8252f15619"
-SRC_URI = "git://github.com/rdkcentral/libparodus.git;branch=support/RDK-E"
+SRC_URI = "git://github.com/rdkcentral/libparodus.git;protocol=https;branch=support/RDK-E"
 PV ?= "1.0.0"
 PR ?= "r0"
 
