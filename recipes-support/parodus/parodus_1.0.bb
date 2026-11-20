@@ -15,7 +15,7 @@ SRCREV= "8d4c61a16faea4fc629b570542e7f29ccc27a5fa"
 #SRCREV Upated from check-ins a96ca96858535645c8fd8a12227d2e00b6bcef9e, 84a7521538b850f569cbbe9f12eb777875649822, c4c41bde1abd8bdff99fb1acba0a81316b16dce6, 963a1664cc327c62c4a2b6eee1c48b55ec4e0f77
 #PR version not changed
 
-SRC_URI = "git://github.com/rdkcentral/parodus.git;protocol=https;branch=develop"
+SRC_URI = "git://github.com/rdkcentral/parodus.git;protocol=https;branch=support/RDK-E"
 
 RDEPENDS:${PN} += "util-linux-uuidgen"
 
