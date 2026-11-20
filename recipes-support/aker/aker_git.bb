@@ -1,7 +1,7 @@
 SUMMARY = "This receipe compiles and builds aker."
 SECTION = "libs"
 DESCRIPTION = "Module for selectively blocking MAC addresses based on a succinct schedule in MsgPack"
-HOMEPAGE = "https://github.com/Comcast/aker"
+HOMEPAGE = "https://github.com/rdkcentral/aker"
 
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
