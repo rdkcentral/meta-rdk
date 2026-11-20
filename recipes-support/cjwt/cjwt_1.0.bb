@@ -1,13 +1,13 @@
 SUMMARY = "cjwt library"
 DESCRIPTION = "Recipe to build c library for processing jwt token"
-HOMEPAGE = "https://github.com/Comcast/cjwt"
+HOMEPAGE = "https://github.com/rdkcentral/cjwt"
 
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
 
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 SRCREV = "2586a5ea4594f75fe5958c88acfdd7a7f635a067"
-SRC_URI = "git://github.com/xmidt-org/cjwt.git"
+SRC_URI = "git://github.com/rdkcentral/cjwt.git;branch=support/RDK-E"
 PV ?= "1.0.0"
 PR ?= "r1"
 S = "${WORKDIR}/git"
