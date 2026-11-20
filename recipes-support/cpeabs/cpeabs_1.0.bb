@@ -1,8 +1,8 @@
 SUMMARY = "cpeabs library"
-HOMEPAGE = "https://github.com/xmidt-org/cpeabs"
+HOMEPAGE = "https://github.com/rdkcentral/cpeabs"
 SECTION = "libs"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://LICENSES/Apache-2.0.txt;md5=c846ebb396f8b174b10ded4771514fcc"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=c66d00ff35dd49691ca2c06f8c370190"
 
 PV = "2.0.0"
 PR = "r0"
@@ -12,7 +12,7 @@ DEPENDS = "cjson msgpack-c rbus wdmp-c cimplog"
 
 SRCREV = "c017d418919ac548e5c3f2d2e534261502210720"
 
-SRC_URI = "git://github.com/xmidt-org/cpeabs.git;protocol=https;branch=master"
+SRC_URI = "git://github.com/rdkcentral/cpeabs.git;protocol=https;branch=support/RDK-E"
 
 S = "${WORKDIR}/git"
 
