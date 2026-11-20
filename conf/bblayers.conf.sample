@@ -30,6 +30,8 @@ BBLAYERS ?= " \
   ${@'${RDKROOT}/meta-rdk-bluetooth' if os.path.isfile('${RDKROOT}/meta-rdk-bluetooth/conf/layer.conf') else ''} \
   "
 
+  ${@'${RDKROOT}/meta-rdk-wireless-connectivity' if os.path.isfile('${RDKROOT}/meta-rdk-wireless-connectivity/conf/layer.conf') else ''} \
+
 # CPC requires dedicated licenses, we need to support build when CPC is not
 # available. So we only add meta-rdk-comcast layer if it exists locally.
 BBLAYERS =+ "${@'${RDKROOT}/meta-rdk-comcast' if os.path.isfile('${RDKROOT}/meta-rdk-comcast/conf/layer.conf') else ''}"
