@@ -7,7 +7,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
 
 SRCREV = "ebbf31be22b1cc7928bed070fe84ecdc7191c4c2"
-SRC_URI = "git://github.com/rdkcentral/aker.git;branch=develop;protocol=https"
+SRC_URI = "git://github.com/rdkcentral/aker.git;branch=support/RDKE;protocol=https"
 SRC_URI += "file://aker-01.patch"
 SRC_URI += "file://drop_root_aker.patch"
 
