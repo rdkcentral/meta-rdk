@@ -1,5 +1,5 @@
 SUMMARY = "webconfig client library"
-HOMEPAGE = "https://github.com/xmidt-org/webcfg"
+HOMEPAGE = "https://github.com/rdkcentral/webcfg"
 SECTION = "libs"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
@@ -13,7 +13,7 @@ DEPENDS:append = "${@bb.utils.contains("DISTRO_FEATURES", "webconfig_bin", " rbu
 DEPENDS:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'aker', ' nanomsg libparodus ', '', d)}"
 
 SRCREV = "2c91a008bd7feeaea0c95c24eabd94cde11faa43"
-SRC_URI = "git://github.com/xmidt-org/webcfg.git;protocol=https;branch=master"
+SRC_URI = "git://github.com/rdkcentral/webcfg.git;protocol=https;branch=support/RDK-E"
 
 RDEPENDS:${PN} += "util-linux-uuidgen"
 
