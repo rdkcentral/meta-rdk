@@ -1,5 +1,5 @@
 SUMMARY = "C library for WebPA Data Model Parser (WDMP)"
-HOMEPAGE = "https://github.com/Comcast/wdmp-c"
+HOMEPAGE = "https://github.com/rdkcentral/wdmp-c"
 SECTION = "libs"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=e3fc50a88d0a364313df4b21ef20c29e"
 DEPENDS = "cjson cimplog"
 
 SRCREV = "f9f687b6b4b10c2b72341e792a64334f0a409848"
-SRC_URI = "git://github.com/xmidt-org/wdmp-c.git"
+SRC_URI = "git://github.com/rdkcentral/wdmp-c.git;protocol=https;branch=support/RDK-E"
 PV ?= "1.0.0"
 PR ?= "r0"
 
