@@ -3,9 +3,9 @@ SUMMARY = "rbus library component"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
-SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=release"
+SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=feature/mythos_rbus_new"
 
-SRCREV = "5f74c2fbe0019781410be4b1160768adda96d1a4"
+SRCREV = "d1b3b1334c12b97d4e056836c5a13c583a84a2ae"
 SRCREV_FORMAT = "base"
 
 PV = "2.14.0"
