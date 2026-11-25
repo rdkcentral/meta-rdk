@@ -11,12 +11,12 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=86d3f3a95c324c9479bd8986968f4327"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}:"
 
-PV = "2.2.1v2"
+PV = "2.2.1v3"
 PR = "r0"
 PACKAGE_ARCH = "${MIDDLEWARE_ARCH}"
 
 SRC_URI = "${CMF_GITHUB_ROOT}/reboot-manager;${CMF_GITHUB_SRC_URI_SUFFIX};name=reboot-manager"
-SRCREV_reboot-manager = "a4205bb99f5850eaa1e11f0bedc4484580626fa0"
+SRCREV_reboot-manager = "33272dc31691e3e5e65845ac9052b61f0b6be1de"
 
 S = "${WORKDIR}/git"
 
