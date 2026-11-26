@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=ed63516ecab9f06e324238dd2b259549"
 
 SRC_URI = "git://github.com/rdkcentral/rbus.git;branch=topic/Cri-005"
 
-SRCREV = "2ac54004f1c8bc374cd830e470771845d86cd6cc"
+SRCREV = "b0f0d9ff6c5e7026c199e7bb59053bed7497bb3d"
 SRCREV_FORMAT = "base"
 
 PV = "2.14.0"
