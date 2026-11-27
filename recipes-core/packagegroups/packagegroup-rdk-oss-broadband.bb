@@ -1,4 +1,4 @@
-SUMMARY = "Custom package group for OSS bits used in RDK-B"
+SUMMARY = "Custom package group for OSS bits used in RDK-B Testing FSI"
 
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
